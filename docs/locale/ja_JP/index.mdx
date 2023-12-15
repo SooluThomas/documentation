@@ -1,51 +1,52 @@
 ---
 title: はじめに
-description: Introduction to IBM Quantum documentation
-in_page_toc_max_heading_level: 2
+description: Introduction to the transpiler
 ---
 
 # はじめに
 
-The quantum community has explored quantum computing on the cloud since 2016.  Now the community has a new challenge: _demonstrate useful quantum computation_. 
+Transpilation is the process of rewriting a given input circuit to match the topology of a specific quantum device, and optimize the circuit instructions for execution on noisy quantum systems.  This documentation covers the tooling and workflows for local transpilation available to all Qiskit users, as well as for the cloud-based [Qiskit transpiler service](qiskit-transpiler-service) available to Premium Plan users.  If you're using primitives and are only interested in the default transpilation options provided by the Qiskit Runtime service, read the [Configure runtime compilation for Qiskit Runtime](../run/configure-runtime-compilation) topic.
 
-Through IBM Quantum, you have access to performant and utility-scale (>100-qubit) quantum systems for your work, as well as scalable and flexible quantum software. Whether you try out a no-cost plan or run your programs through a pay-as-you-go or premium plan, you can start doing useful work with quantum computing now.
+A central component of Qiskit, the transpiler is designed for modularity and extensibility. Its central goal is to write new circuit transformations (known as transpiler **passes**), and combine them with other existing passes, greatly reducing the depth and complexity of quantum circuits.  Which passes are chained together and in which order has a major effect on the final outcome. This pipeline is determined by the [`PassManager`](/api/qiskit/qiskit.transpiler.PassManager) and [`StagedPassManager`](/api/qiskit/qiskit.transpiler.StagedPassManager) objects.  The `StagedPassManager` orchestrates the execution of one or more `PassManagers` and determines the order in which they are executed, while the `PassManager` object is merely a collection of one or more passes.  Think of the `StagedPassManager` as the conductor in an orchestra, the `PassManagers` as the different instrument sections, and the `Pass`es as the individual musicians.  In this way, you can compose hardware-efficient quantum circuits that let you execute utility-scale work while keeping noise manageable.
 
-The sections at the core of our documentation are based on the stages of a typical quantum user’s journey: build quantum circuits and operators in Qiskit, then transpile and run on quantum systems using Qiskit Runtime primitives, a simplified interface for circuit execution. By pairing Qiskit with Qiskit Runtime, you benefit from seamless circuit execution powered by advanced runtime compilation, error suppression, and error mitigation techniques. 
+Find more information about the pass manager stages in the [Transpiler stages](transpiler-stages) topic.
 
-If you’re just getting started with IBM Quantum, you are in the right place. Use the topics in this section to get ready, then proceed to [Build](../build) to create your first quantum circuit. Keep working through the sections in order, following the tabs at the top of this page.
+<Admonition type="caution">
+  If you perform transpilation locally and submit the transpiled circuits to the Qiskit Runtime service, set the `skip_transpilation` option to `True` so that the service does not try to apply further transformations to your circuit. See [Advanced runtime compilation options](/run/configure-runtime-compilation#advanced-runtime-compilation-options).
+</Admonition>
 
-Already know what you’re looking for?
+## Transpiler stages
 
--   [Install](install): インストールとセットアップの手順で、私たちのツールとプラットフォームを使い始めましょう。
+Qiskit's prebuilt transpiler pipeline consists of six fundamental stages:
 
--   [Build](../build): Design and develop quantum circuits with primitives and advanced methods like dynamic circuits and mid-circuit measurements. You can also find our circuit library here.
+1.  `init` - This pass runs any initial passes that are required before we start embedding the circuit to the backend.  This typically involves unrolling custom instructions and converting the circuit to all single- and two-qubit gates. (By default this will just validate the circuit instructions and translate multi-qubit gates into single- and two-qubit gates.)
+2.  `layout` - This pass applies a _layout_, mapping/assigning the virtual qubits in your circuit to the physical qubits of a backend.
+3.  `routing` - This pass runs after a layout has been applied and will inject gates (i.e., SWAPs) in the original circuit in order to make it compatible with the backend's connectivity/coupling map.
+4.  `translation` - This pass translates the gates in the circuit to the backend's basis set of instructions.
+5.  `optimization` - This pass runs an optimization loop to find more efficient decompositions of your quantum circuit until a condition is met (such as a fixed depth).
+6.  `scheduling` - This stage is for any hardware-aware scheduling passes. If the user specifies a scheduling method, this stage accounts for all idle time in the circuit.
 
--   [Transpile](../transpile): Compile to optimize your circuits to run efficiently on hardware, with varying degrees of error awareness.
+ If you decide to customize your own transpilation workflow, we suggest using these stages as a guideline during development.
 
--   [Verify](../verify): Validate and evaluate your quantum circuits.
+## Transpile with pass managers
 
--   [Run](../run): Run on our hardware with job configuration options such as sessions.
+The recommended way to transpile a circuit is to create a staged pass manager and then execute its `run` method with your circuit as input. You can use the [`generate_preset_pass_manager`](/api/qiskit/transpiler_preset#qiskit.transpiler.preset_passmanagers.generate_preset_pass_manager) function to generate a staged pass manager with reasonable defaults.
 
--   **API reference**: Find API references for [Qiskit](/api/qiskit), [Qiskit Runtime IBM Client](/api/qiskit-ibm-runtime), [Qiskit IBM Runtime Rest API](/api/runtime/tags/programs), and [Qiskit IBM Provider](/api/qiskit-ibm-provider) in the API reference drop-down menu above. You can also find the [Error code registry](../errors) here.
+More advanced users can customize a set of `PassManager` and `StagedPassManager` objects and determine the order in which each stage is run.  This can dramatically change the final output circuit. In fact, a custom approach to transpiling a quantum algorithm often produces more efficient error suppression than the default approach.  This involves rewriting quantum circuits to match hardware constraints and suppress the effects of noise.  The flow of logic for this tool chain is quite customizable and need not be linear.  The transpilation process can even prepare iterative loops, conditional branches, and other complex behaviors.  A good starting place when developing a set of custom passes is to examine the default sequence of transformations.
 
-## Community
+For an overview of transpiling using pass managers, see [Transpile with pass managers](transpile-with-pass-managers).
 
-Join other users in our quantum community to share ideas and see what others are up to.
+## Default transpilation
 
--   Join our [Slack](https://ibm.co/joinqiskitslack)
--   Follow us on [LinkedIn](https://www.linkedin.com/showcase/ibm-quantum/) and [X](https://x.com/qiskit)
--   Start contributing at [GitHub](https://github.com/qiskit)
--   Find us on [YouTube](https://www.youtube.com/qiskit) and [Medium](https://medium.com/qiskit)
+For a simpler , but less customizable, "out-of-the-box" way to use the transpiler, use the [`qiskit.compiler.transpile`](/api/qiskit/compiler#qiskit.compiler.transpile) function.  This generates and runs one of the preset `StagedPassManager`s based on, among other options, an `optimization_level` flag that can be set to 0, 1, 2, or 3.  Higher levels generate more optimized circuits, at the expense of longer transpilation times.
 
 ## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-    - [Install and set up for Qiskit](install).
-    - [Run the Hello world program](hello-world).
-    - Explore hand-on tutorials in IBM Quantum Learning, such as:
-      - [Variational Quantum Eigensolver](https://learning.quantum.ibm.com/tutorial/variational-quantum-eigensolver)
-      - [Quantum Approximate Optimization Algorithm](https://learning.quantum.ibm.com/tutorial/quantum-approximate-optimization-algorithm)
-      - [Grover's algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm)
-    - Take the [Basics of quantum information](https://learning.quantum.ibm.com/course/basics-of-quantum-information) course.
-    - View a list of [all tutorials in IBM Quantum Learning](https://learning.quantum.ibm.com/catalog?content=tutorials).
+    - To learn how to use the `transpile` function, start with the [Transpilation default settings and configuration options](defaults-and-configuration-options) topic.
+    - Continue learning about transpilation with the [Transpiler stages](transpiler-stages) topic.
+    - Try the [Submit transpiled circuits](https://learning.quantum.ibm.com/tutorial/submit-transpiled-circuits) tutorial.
+    - Use transpilation with Qiskit Patterns in the  [Reduce transpiled circuit depth, with circuit cutting](https://learning.quantum.ibm.com/tutorial/reduce-transpiled-circuit-depth-with-circuit-cutting) tutorial.
+    - Try an end-to-end example that uses transpiled circuits in the [Variational quantum eigensolver (VQE)](https://learning.quantum.ibm.com/tutorial/variational-quantum-eigensolver) tutorial.
+    - See the [Transpile API documentation.](https://docs.quantum-computing.ibm.com/api/qiskit/transpiler)
 </Admonition>
