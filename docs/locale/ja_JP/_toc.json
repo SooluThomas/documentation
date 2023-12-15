@@ -1,84 +1,130 @@
 {
-  "title": "ビルド",
+  "title": "Run",
   "collapsed": true,
   "children": [
     {
       "title": "はじめに",
-      "url": "/build"
+      "url": "/run"
     },
     {
-      "title": "Build circuits with Qiskit",
+      "title": "Run with primitives",
       "children": [
         {
-          "title": "Circuit library",
-          "url": "/build/circuit-library"
+          "title": "Primitive 入門",
+          "url": "/run/primitives"
         },
         {
-          "title": "Construct circuits",
-          "url": "/build/circuit-construction"
+          "title": "Get started with primitives",
+          "url": "/run/primitives-get-started"
         },
         {
-          "title": "Visualize circuits",
-          "url": "/build/circuit-visualization"
-        },
-        {
-          "title": "Classical feedforward and control flow",
-          "url": "/build/classical-feedforward-and-control-flow"
-        },
-        {
-          "title": "Synthesize unitary operations",
-          "url": "/build/unitary-synthesis"
-        },
-        {
-          "title": "Bit-ordering in Qiskit",
-          "url": "/build/bit-ordering"
+          "title": "Primitives examples",
+          "url": "/run/primitives-examples"
         }
       ]
     },
     {
-      "title": "Build operators with Qiskit",
+      "title": "Configure runtime options",
       "children": [
         {
-          "title": "Operators module overview",
-          "url": "/build/operators-overview"
+          "title": "Configure runtime compilation",
+          "url": "/run/configure-runtime-compilation"
         },
         {
-          "title": "Specify observables in the Pauli basis",
-          "url": "/build/specify-observables-pauli"
+          "title": "Configure runtime error mitigation",
+          "url": "/run/configure-error-mitigation"
+        },
+        {
+          "title": "Advanced runtime options",
+          "url": "/run/advanced-runtime-options"
         }
       ]
     },
     {
-      "title": "Other circuit-building tools",
+      "title": "Execution modes",
       "children": [
         {
-          "title": "Pulse schedules",
-          "url": "/build/pulse"
+          "title": "About sessions",
+          "url": "/run/sessions"
         },
         {
-          "title": "OpenQASM",
-          "children": [
-            {
-              "title": "Introduction to OpenQASM",
-              "url": "/build/introduction-to-qasm"
-            },
-            {
-              "title": "OpenQASM 2 and Qiskit",
-              "url": "/build/interoperate-qiskit-qasm2"
-            },
-            {
-              "title": "OpenQASM 3 and Qiskit",
-              "url": "/build/interoperate-qiskit-qasm3"
-            },
-            {
-              "title": "OpenQASM 3 feature table",
-              "url": "/build/qasm-feature-table"
-            },
-            {
-              "title": "OpenQASM 3.x Live Specification",
-              "url": "https://openqasm.com/"
-            }
-          ]
+          "title": "Run jobs in a session",
+          "url": "/run/run-jobs-in-session"
+        },
+        {
+          "title": "Run jobs in a batch",
+          "url": "/run/run-jobs-batch"
+        }
+      ]
+    },
+    {
+      "title": "ジョブの管理",
+      "children": [
+        {
+          "title": "Monitor a job",
+          "url": "/run/monitor-job"
+        },
+        {
+          "title": "Estimate job run time",
+          "url": "/run/estimate-job-run-time"
+        },
+        {
+          "title": "Minimize job run time",
+          "url": "/run/minimize-time"
+        },
+        {
+          "title": "Maximum execution time",
+          "url": "/run/max-execution-time"
+        }
+      ]
+    },
+    {
+      "title": "Quantum Serverless workloads",
+      "url": "/run/quantum-serverless"
+    },
+    {
+      "title": "Hardware",
+      "children": [
+        {
+          "title": "Processor types",
+          "url": "/run/processor-types"
+        },
+        {
+          "title": "System information",
+          "url": "/run/system-information"
+        },
+        {
+          "title": "Get backend information with Qiskit",
+          "url": "/run/get-backend-information"
+        },
+        {
+          "title": "引退したシステム",
+          "url": "/run/retired-systems"
+        },
+        {
+          "title": "Hardware considerations and limitations for classical feedforward and control flow",
+          "url": "/run/dynamic-circuits-considerations"
+        }
+      ]
+    },
+    {
+      "title": "Understand the platform",
+      "children": [
+        {
+          "title": "Instances",
+          "url": "/run/instances"
+        },
+        {
+          "title": "Fair-share queue",
+          "url": "/run/fair-share-queue"
+        },
+        {
+          "title": "Manage cost",
+          "url": "/run/manage-cost"
+        },
+        {
+          "title": "Reserve system time",
+          "url": "/run/reserve-system-time"
         }
       ]
     }
