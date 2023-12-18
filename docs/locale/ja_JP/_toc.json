@@ -1,58 +1,84 @@
 {
-  "title": "Transpile",
+  "title": "Build",
   "collapsed": true,
   "children": [
     {
       "title": "Introduction",
-      "url": "/transpile"
+      "url": "/build"
     },
     {
-      "title": "Transpiler stages",
-      "url": "/transpile/transpiler-stages"
-    },
-    {
-      "title": "Transpile with pass managers",
-      "url": "/transpile/transpile-with-pass-managers"
-    },
-    {
-      "title": "Create a pass manager for dynamical decoupling",
-      "url": "/transpile/dynamical-decoupling-pass-manager"
-    },
-    {
-      "title": "Write a custom transpiler pass",
-      "url": "/transpile/custom-transpiler-pass"
-    },
-    {
-      "title": "Use the transpile function",
+      "title": "Build circuits with Qiskit",
       "children": [
         {
-          "title": "Default settings and configuration options",
-          "url": "/transpile/defaults-and-configuration-options"
+          "title": "Circuit library",
+          "url": "/build/circuit-library"
         },
         {
-          "title": "Set optimization level",
-          "url": "/transpile/set-optimization"
+          "title": "Construct circuits",
+          "url": "/build/circuit-construction"
         },
         {
-          "title": "Represent quantum computers",
-          "url": "/transpile/representing_quantum_computers"
+          "title": "Visualize circuits",
+          "url": "/build/circuit-visualization"
         },
         {
-          "title": "Commonly used parameters for transpilation",
-          "url": "/transpile/common-parameters"
+          "title": "Classical feedforward and control flow",
+          "url": "/build/classical-feedforward-and-control-flow"
+        },
+        {
+          "title": "Synthesize unitary operations",
+          "url": "/build/unitary-synthesis"
+        },
+        {
+          "title": "Bit-ordering in Qiskit",
+          "url": "/build/bit-ordering"
         }
       ]
     },
     {
-      "title": "Qiskit transpiler service",
+      "title": "Build operators with Qiskit",
       "children": [
         {
-          "title": "Transpile circuits remotely with the Qiskit transpiler service",
-          "url": "/transpile/qiskit-transpiler-service"
+          "title": "Operators module overview",
+          "url": "/build/operators-overview"
         },
         {
-          "title": "AI transpiler passes",
-          "url": "/transpile/ai-transpiler-passes"
+          "title": "Specify observables in the Pauli basis",
+          "url": "/build/specify-observables-pauli"
+        }
+      ]
+    },
+    {
+      "title": "Other circuit-building tools",
+      "children": [
+        {
+          "title": "Pulse schedules",
+          "url": "/build/pulse"
+        },
+        {
+          "title": "OpenQASM",
+          "children": [
+            {
+              "title": "Introduction to OpenQASM",
+              "url": "/build/introduction-to-qasm"
+            },
+            {
+              "title": "OpenQASM 2 and Qiskit",
+              "url": "/build/interoperate-qiskit-qasm2"
+            },
+            {
+              "title": "OpenQASM 3 and Qiskit",
+              "url": "/build/interoperate-qiskit-qasm3"
+            },
+            {
+              "title": "OpenQASM 3 feature table",
+              "url": "/build/qasm-feature-table"
+            },
+            {
+              "title": "OpenQASM 3.x Live Specification",
+              "url": "https://openqasm.com/"
+            }
+          ]
         }
       ]
     }
