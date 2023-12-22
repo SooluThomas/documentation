@@ -1,39 +1,39 @@
 ---
-title: Maximum execution time for a Qiskit Runtime job or session
-description: Describes how long a Qiskit Runtime job or session can run.
+title: Qiskit Runtime ジョブまたはセッションの最大実行時間
+description: Qiskit Runtimeのジョブまたはセッションの実行時間について説明します。
 ---
 
-# Maximum execution time
+# 最大実行時間
 
-To ensure fairness and help control costs, there is a maximum amount of time each Qiskit Runtime job and session can run. If a job exceeds this time limit, it is forcibly canceled and a `RuntimeJobMaxTimeoutError` exception is raised. If a session exceeds its limits, any queued jobs are canceled but any jobs that are already running are not. 
+公平性を確保し、コストを管理するために、Qiskit Runtimeの各ジョブとセッションが実行できる最大時間があります。 ジョブがこの時間制限を超えた場合、強制的にキャンセルされ、`RuntimeJobMaxTimeoutError` 例外が発生します。 セッションが制限を超えた場合、キューに入れられたジョブはキャンセルされますが、すでに実行されているジョブはキャンセルされません。 
 
 <span id="max-job"></span>
-## Job maximum execution time
+## ジョブの最大実行時間
 
-The maximum execution time for a job is the smaller of these values:
+ジョブの最大実行時間は、これらの値の小さい値です。
 
--   The value set for max_execution_time
--   The system-determined job timeout value
+-   max_execution_timeの値を設定
+-   システムにより決定されたジョブのタイムアウト値
 
 <Admonition type="note">
-  As of August 7, 2023, the `max_execution_time` value is based on _quantum time_ instead of wall clock time. Quantum time is the duration a quantum system is committed to fulfilling a user request.. 
+  2023年8月7日現在、`max_execution_time`は壁時計時間ではなく_量子時間に基づいています。 量子時間とは、量子システムがユーザーの要求を満たすためにコミットしている期間のことです。 
   
-  Simulator jobs continue to use wall clock time because they do not have quantum time.
+  シミュレータのジョブは、量子時間がないため、ウォールクロック時間を使用し続けます。
 </Admonition>
 
-Set the maximum execution time (in seconds) on the job options by using one of the following methods:
+次のいずれかのメソッドを使用して、ジョブオプションの最大実行時間(秒単位)を設定します。
 
 ```python
-# Initiate the Options class with parameters
-options = Options(max_execution_time=360)
+# パラメータ
+options = Options(max_execution_time=360) でOptionsクラスを開始する
 ```
 
 ```python
-# Create the options object with attributes and values
+# 属性と値を持つ options オブジェクトを作成します。
 options = {"max_execution_time": 360}
 ```
 
-You can also find how much quantum time completed jobs have used by returning the job metrics as follows:
+ジョブのメトリックを以下のように返すことで、完了したジョブがどの程度使用されているかを確認することもできます。
 
 ```python
 # Find quantum time used by the job
@@ -41,24 +41,24 @@ print(f"Quantum time used by job {job.job_id()} was {job.metrics()['usage']['qua
 ```
 
 <span id="max-system"></span>
-### System maximum execution time
+### システムの最大実行時間
 
-The system calculates an appropriate job timeout value based on the input circuits and options. This system-calculated timeout is capped at 3 hours to ensure fair device usage. If a `max_execution_time` is also specified for the job, the lesser of the two values is used.
+システムは入力回路とオプションに基づいて適切なジョブタイムアウト値を計算します。 このシステム計算タイムアウトは、公正なデバイス使用を保証するために3時間で上限されます。 ジョブに `max_execution_time` も指定されている場合は、2つの値のうちの少ない値が使用されます。
 
-For example, if you specify `max_execution_time=5000` (approximately 83 minutes), but the system determines it should not take more than 5 minutes (300 seconds) to execute the job, then the job is canceled after 5 minutes.
+例えば、`max_execution_time=5000`（約83分）を指定した場合。 しかし、システムは、仕事を遂行するのに5分(300秒)以上かかるべきではないと判断しました。 仕事は5分後に取り消されます。
 
-## Session maximum execution time
+## セッションの最大実行時間
 
-When a session is started, it is assigned a maximum session timeout value. After this timeout is reached, the session is terminated, any jobs that are already running continue running, and any queued jobs that remain in the session are put into a failed state.  For instructions to set the session maximum time, see [Specify the session length](run-jobs-in-session#specify-length).
+セッションが開始されると、最大セッションタイムアウト値が割り当てられます。 このタイムアウトに達した後、セッションは終了し、すでに実行中のジョブは継続実行されます。 セッションに残っているキューに入れられた仕事は失敗した状態に入れられます  セッションの最大時間を設定する手順については、format@@0(run-jobs-in-session#specify-length) を参照してください。
 
-## Other limitations
+## その他の制限
 
--   Inputs to jobs cannot exceed 64MB in size.
--   Open plan users can use up to 10 minutes of system execution time per month (resets at 00:00 UTC on the first of each month). System execution time is the amount of time that the system is dedicated to processing your job. You can track your monthly usage on the [Platform dashboard,](https://quantum.ibm.com/)  [Quantum Platform Jobs page,](https://quantum.ibm.com/jobs) and [Account](https://quantum.ibm.com/account) page.
+-   ジョブへの入力サイズは 64MB を超えることはできません。
+-   オープンプランのユーザーは、月あたり最大10分間のシステム実行時間を使用することができます(毎月初めの00:00UTCにリセットされます)。 システムの実行時間とは、システムがジョブの処理に専念する時間のことです。 You can track your monthly usage on the [Platform dashboard,](https://quantum.ibm.com/)  [Quantum Platform Jobs page,](https://quantum.ibm.com/jobs) and [Account](https://quantum.ibm.com/account) page.
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-    - [Estimate job run time](estimate-job-run-time).
-    - Review these tips: [Minimize job run time](minimize-time).
+    - format@@2(estimate-job-run-time)
+    - 以下のヒントをレビューします: format@@0(minimize-time)
 </Admonition>
