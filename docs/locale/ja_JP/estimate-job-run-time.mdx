@@ -1,20 +1,20 @@
 ---
-title: Estimate job run time
-description: Estimate how long a job that uses a primitive will take to run
+title: ジョブの実行時間を推定する
+description: プリミティブを使用するジョブの実行にかかる時間を見積もります
 ---
 
-# Estimate job run time
+# ジョブの実行時間を推定する
 
-After submitting a job to the IBM Quantum channel, you can see an estimation for how much _quantum time_ the job will take to run by using `job.usage_estimation`.  Alternatively, you can [view this information on the IBM Quantum Platform user interface](#view-usage).
+IBM Quantum チャンネルにジョブを送信した後 \`job を使ってジョブを実行するのにどれだけの_量子時間_がかかるか推定できます。 sage_estimation  別の方法として、[IBM Quantum Platformのユーザーインターフェースでこの情報を表示する](#view-usage) ができます。
 
-Quantum time is the duration, in seconds, a quantum system is committed to fulfilling a user request.
+量子時間とは、長さ、秒単位で、量子システムは、ユーザーの要求を満たすことを約束します。
 
 <Admonition type="note" title="Notes">
-    - This only applies to jobs that use primitives.
-    - This is not yet available on the IBM Qiskit Runtime on Cloud channel. 
+    - これはプリミティブを使用するジョブにのみ適用されます。
+    - クラウドチャンネルの IBM Qiskit Runtime ではまだ利用できません。 
 </Admonition>
 
-Example:
+例
 
 ```python
 from qiskit import QuantumCircuit
@@ -48,23 +48,23 @@ job = sampler.run(qc)
 print(job.usage_estimation)
 ```
 
-Output:
+出力:
 
 ```python
 {'quantum_seconds': 4.1058720028432445}
 ```
 
 <span id="view-usage"></span>
-## View the estimated job usage on IBM Quantum Platform
+## IBM Quantum Platformでの推定ジョブ使用状況を見る
 
-You can view the estimated usage (how much quantum time the job will take to run) in two places on IBM Quantum Platform:
+IBM Quantum Platformでは、推定使用量(ジョブが実行されるまでにどのくらいの時間がかかるか)を2箇所で確認できます。
 
--   On the [Jobs table](https://quantum.ibm.com/jobs) in the Usage column.  From the Home page, click _View all_ on the Recent jobs table.  The Usage column shows the estimated usage for pending jobs, or actual usage for completed jobs. 
--   On the job's details page. From the [Dashboard](https://quantum.ibm.com/) or [Jobs table](https://quantum.ibm.com/jobs), click the job ID to open the job details page.  The estimated usage is shown in the Status Timeline. 
+-   format@@0(https://quantum.ibm.com/jobs)のformat@@1で。  ホームページから、「最近のジョブ」テーブルの「_すべて表示_」をクリックします。  format@@0列には、保留中のジョブの推定使用量または完了済みジョブの実際の使用量が表示されます。 
+-   仕事の詳細ページで。 [Dashboard](https://quantum.ibm.com/) または format@@1(https://quantum.ibm.com/jobs) から、ジョブIDをクリックしてジョブの詳細ページを開きます。  推定使用量はformat@@0に表示されます。 
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-    - Review these tips: [Minimize job run time](minimize-time).
-    - Set the [Maximum execution time](max-execution-time).
+    - 以下のヒントを確認してください: format@@2(minimize-time)
+    - format@@0(max-execution-time) を設定します。
 </Admonition>
