@@ -1,19 +1,19 @@
 ---
-title: Transpilation defaults and configuration options
-description: Default settings and configuration options
+title: トランスパイルのデフォルトと設定オプション
+description: 既定の設定と設定オプション
 ---
 
-# Transpilation default settings and configuration options
+# トランスパイルのデフォルト設定と設定オプション
 
-Abstract circuits need to be transpiled because backends have a limited set of basis gates and cannot execute arbitrary operations. The transpiler's function is to change arbitrary circuits so that they can run on a specified backend.  This is done by translating the circuits to the supported basis gates, and by introducing SWAP gates as needed, so that the circuit's connectivity matches that of the backend. 
+バックエンドには基底ゲートが限られており、任意の操作を実行することができないため、抽象回路をトランスパイルする必要があります。 トランスパイラーの機能は、任意の回路を変更して、指定されたバックエンドで実行できるようにすることです。  これは、回路をサポートされる基底ゲートに変換することによって行われます。 必要に応じてSWAPゲートを導入することで、回路の接続がバックエンドの接続と一致するようにします。 
 
-You can pass circuits and a backend to the `transpile()` function and use all default settings, or you can use parameters to fine tune the transpilation.  
+回路とバックエンドを `transpile()` 関数に渡し、すべてのデフォルト設定を使用できます。 パラメータを使ってトランスパイルを微調整することもできます  
 
-## Basic usage without parameters
+## パラメータのない基本的な使用
 
-In this example, we pass a circuit and target backend to the transpiler without specifying any further parameters. 
+この例では、パラメータを指定せずに回路とターゲットバックエンドをトランスパイラーに渡します。 
 
-Create a circuit and view the result: 
+回路を作成し、結果を表示: 
 
 ```python
 from qiskit import transpile
@@ -37,7 +37,7 @@ qc.draw(output='mpl')
 
 ![Original circuit](/images/transpile/defaults-and-configuration-options/original-circuit.png)
 
-Transpile the circuit and view the result:
+回路を一時的に切り替え、結果を表示します。
 
 ```python
 # Specify the backend to target
@@ -50,75 +50,75 @@ transpiled_circ = transpile(qc, backend)
 transpiled_circ.draw(output='mpl')
 ```
 
-![Transpiled circuit](/images/transpile/defaults-and-configuration-options/transpiled-circuit.png)
+![Transpiled circuit](/images/transpile/defaults-and-configuration-options/transpled-circuit.png)
 
-## All available parameters
+## すべての利用可能なパラメータ
 
-Following are all of the available parameters for the `transpile()` method.  There are two classes of arguments: those that describe the target of compilation, and those that influence how the transpiler works.
+以下は、`transpile()`メソッドで利用可能なパラメータです。  引数には2つのクラスがあります:コンパイルのターゲットを記述するクラスとトランスパイラーの動作に影響を与えるクラスです。
 
-All parameters except `circuits` are optional.  For full details, see the [Transpiler API documentation](/api/qiskit/transpiler#transpiler-api).
+`circuits`以外のパラメータはすべてオプションです。  詳細については、[Transpiler API documentation](/api/qiskit/transpiler#transpiler-api)を参照してください。
 
-`circuits` (`_CircuitT`) - One or more circuits to transpile. This is the only required parameter.
+`circuits` (`_CircuitT`) - トランスパイルするための1つ以上の回路。 これは唯一必要なパラメータです。
 
-### Parameters used to describe the compilation target:
+### コンパイルのターゲットを記述するために使用されるパラメータ
 
-These arguments describe the system that the input circuit will be run on.  For example, they may be used to ensure that the returned circuit can be run on the specified backend, where the transpiler maps the circuit's virtual qubits to the physical qubits which may have limited connectivity as specified in the `coupling_map`, `basis_gates` that specify which single- and two-qubit gates are calibrated for the backend, and possibly their error rates.
+これらの引数は、入力回路が実行されるシステムを記述します。  例えば、返された回路を指定されたバックエンドで実行できるようにするために使用することができます。 ここでトランスパイラーは、`coupping_map`で指定されているように接続が制限されている物理的な量子ビットに回路の仮想量子ビットをマッピングします。 バックエンドに対してどの単一および2量子ビットゲートをキャリブレーションするか、そしておそらくそのエラー率を指定する `basis_gates` 。
 
-Many of these parameters are described in detail in [Commonly used parameters for transpilation](common-parameters).
+これらのパラメータの多くは、format@@0(common-parameters) で詳細に説明されています。
 
 <details>
   <summary>
-    **Backend parameters**
+    **バックエンドパラメータ**
   </summary>
 
-**Backend parameters** - If you specify `backend`, you don't need to specify `target` or any other backend options. Likewise, if you specify `target`, you don't need to specify `backend` or any other backend options.
+**バックエンドパラメータ** - `backend`を指定した場合、`target`や他のバックエンドオプションを指定する必要はありません。 同様に、`target` を指定した場合、バックエンドや他のバックエンドオプションを指定する必要はありません。
 
--   `backend` (Backend) - If this is set, the transpiler compiles the input circuit to this device. If any other option is set that impacts these settings, such as `coupling_map`, it overrides the settings from `backend`.
--   `target` (Target) - A backend transpiler target. Normally this is specified as part of the backend argument, but if you manually constructed a Target object, you can specify it here. This overrides the target from `backend`.
--   `backend_properties` (BackendProperties) - Properties returned by a backend, including information on gate errors, readout errors, qubit coherence times, and so on. Find a backend that provides this information by running `backend.properties()`.
--   `dt` (float | None) - Backend sample time (resolution) in seconds. If `None` is specified (default), `backend.configuration().dt` is used. 
--   `ignore_backend_supplied_default_methods` (bool) - If set to `True`, any default methods specified by a backend are ignored. Some backends specify alternative default methods to support custom compilation target-specific passes / plugins that support backend-specific compilation techniques. If you prefer that these defaults are not used, this option disables those backend-specific defaults.
--   `instruction_durations` (List\[Tuple\[str, Iterable[int], float, Iterable[float], str]] | List\[Tuple\[str, Iterable[int], float, Iterable[float]]] | List\[Tuple\[str, Iterable[int], float, str]] | List\[Tuple\[str, Iterable[int], float]] | InstructionDurations) - Durations of instructions. Applicable only if `scheduling_method` is specified. The gate lengths defined in `backend.properties` are used by default. They are overwritten if `instruction_durations` is specified. The `instruction_durations` format must be as follows. The instruction_durations must be given as a list of tuples [(instruction_name, qubits, duration, unit), …]. | \[(`cx`, [0, 1], 12.3, `ns`), (`u3`, [0], 4.56, `ns`)] | \[(`cx`, [0, 1], 1000), (`u3`, [0], 300)] If `unit` is omitted, the default is `dt`, which is a sample time depending on backend. If the time unit is `dt`, the duration must be an integer.
--   `timing_constraints` (Dict[str, int] | None) - An optional control hardware restriction on instruction time resolution. This information is provided by the backend configuration. If the backend doesn’t have any restriction on the instruction time allocation, `timing_constraints` is `None` and no adjustment is performed. A quantum computer backend might report a set of restrictions, namely:
-        \- `granularity`: An integer value representing the minimum pulse gate resolution in units of dt. A user-defined pulse gate should have duration that is a multiple of this granularity value.
-        \- `min_length`: An integer value representing the minimum pulse gate length in units of dt. A user-defined pulse gate should be longer than this length.
-        \- `pulse_alignment`: An integer value representing a time resolution of gate instruction starting time. Gate instructions should start at time that is a multiple of this value. 
-        \- `acquire_alignment`: An integer value representing a time resolution of measure instruction starting time. Measure instruction should start at time that is a multiple of this value. 
+-   `backend` (バックエンド) - これが設定されている場合、トランスパイラーは入力回路をこのデバイスにコンパイルします。 `coupping_map`のような設定に影響を与えるオプションが他に設定されている場合は、`backend`から設定を上書きします。
+-   `target` (Target) - A backend transpiler target. 通常、これはバックエンド引数の一部として指定されますが、Target オブジェクトを手動で構築する場合は、ここで指定できます。 `backend` からターゲットを上書きします。
+-   `backend_properties` (BackendProperties) - ゲートエラー、読み出しエラー、キュービットのコヒーレンス時間など、バックエンドから返されるプロパティ。 `backend.properties()`を実行して、この情報を提供するバックエンドを探します。
+-   `dt` (float | None) - バックエンドのサンプル時間 (resolution) (秒単位)。 `None` が指定されている場合 (デフォルト)、`backend.configuration().dt` が使用されます。 
+-   `ignore_backend_provided_default_methods` (bool) - `True`に設定すると、バックエンドで指定されたデフォルトのメソッドはすべて無視されます。 バックエンドによっては、バックエンド固有のコンパイルテクニックをサポートするカスタムコンパイルターゲット固有のパス / プラグインをサポートする代替のデフォルトメソッドを指定します。 これらのデフォルトが使用されないことを好む場合、このオプションはバックエンド固有のデフォルトを無効にします。
+-   `instruction_durations` (List\[Tuple\[str, Iterable[int], float, Iterable[float], str]] | List\[Tuple\[str, Iterable[int], float, Iterable[float]]] | List\[Tuple\[str, Iterable[int], float, str]] | List\[Tuple\[str, Iterable[int], float]] | InstructionDurations) - Durations of instructions. `scheduling_method` が指定されている場合にのみ適用されます。 `backend.properties` で定義されたゲートの長さはデフォルトで使用されます。 `instruction_durations` が指定されている場合、上書きされます。 `instruction_durations` 形式は以下の通りです。 instruction_durationsはタプル[(instruction_name, qubits, duration, unit), … ]のリストとして指定する必要があります。 | \[(`cx`, [0, 1], 12.3, `ns`), (`u3`, [0], 4.56, `ns`)] | \[(`cx`, [0, 1], 1000), (`u3`, [0], 300)] If `unit` is omitted, the default is `dt`, which is a sample time depending on backend. time単位が`dt`の場合、durationは整数でなければなりません。
+-   `timing_constraints` (Dict[str, int] | None) - 命令時間分解能に関する任意の制御ハードウェア制限。 この情報はバックエンドの設定によって提供されます。 バックエンドに命令時間の割り当てに制限がない場合、`timing_constraints` は `None` で調整は行われません。 量子コンピュータバックエンドは、一連の制限を報告するかもしれません。 すなわち:
+        \- `granularity`: 最小パルスゲート解像度をdt単位で表す整数値。 ユーザー定義のパルスゲートには、この粒度値の倍数の長さが必要です。
+        \- `min_length`: 最小パルスゲート長をdt単位で表す整数値。 ユーザー定義のパルスゲートは、この長さより長くする必要があります。
+        \- `pulse_alignment`: ゲート命令開始時刻の時間分解能を表す整数値。 ゲート命令は、この値の倍数である時点で開始する必要があります。 
+        \- `getre_alignment`: 測定命令開始時刻の時間分解能を表す整数値。 測定命令は、この値の倍数である時点で開始する必要があります。 
     </details>
 
 <details>
   <summary>
-    **Layout and topology parameters**
+    **レイアウトパラメータ**
   </summary>
 
--   `basis_gates` (List[str] | None) - List of basis gate names to unroll to.  For example ['u1', 'u2', 'u3', 'cx']. If `None`, do not unroll.
--   `coupling_map` (CouplingMap | List\[List[int]]) - Directed coupling map (possibly custom) to target in mapping. If the coupling map is symmetric, both directions need to be specified. These formats are supported:
-    -   CouplingMap instance
-    -   List, must be given as an adjacency matrix, where each entry specifies all directed two-qubit interactions supported by backend.  For example:\[[0, 1], [0, 3], [1, 2], [1, 5], [2, 5], [4, 1], [5, 3]]
--   `inst_map` (List[InstructionScheduleMap] | None) - Mapping of circuit operations to pulse schedules. If `None`, the backend’s `instruction_schedule_map` is used.
+-   `basis_gates` (List[str] | None) - アンロールする基底ゲート名のリスト。  例えば['u1', 'u2', 'u3', 'cx']。 `None` の場合は、展開しないでください。
+-   `coupling_map` (CouplingMap | List\[List[int]]) - マッピング内でターゲットとする方向カップリングマップ (おそらくカスタム) 。 カップリングマップが対称である場合、両方の方向を指定する必要があります。 以下の形式がサポートされています:
+    -   CouplingMap インスタンス
+    -   リストは隣接行列として与えられなければなりません。各エントリはバックエンドでサポートされるすべての指定された2量子ビット相互作用を指定します。  例:\[[0, 1], [0, 3], [1, 2], [1, 5], [4, 1], [3]]
+-   `inst_map` (List[InstructionScheduleMap] | None) - 回路動作からパルススケジュールへのマッピング。 `None` の場合、バックエンドの `instruction_schedule_map` が使用されます。
     </details>
 
-### Parameters used to influence how the transpiler works:
+### トランスパイラーの動作に影響を与えるパラメーター:
 
-These parameters impact specific transpilation stages. Some of them might impact multiple stages, but have only been listed under one stage for simplicity. If you specify an argument, such as `initial_layout`  for the qubits you want to use, that value overrides all the passes that could change it. In other words, the transpiler won't change anything that you manually specify. For details about specific stages, see [Transpiler stages](transpiler-stages).
+これらのパラメータは特定の移調段階に影響します。 それらのいくつかは、複数のステージに影響を与える可能性がありますが、単純化のために1つのステージの下にのみリストされています。 引数を指定した場合、例えば使用したい量子ビットの `initial_layout` のように、その値はそれを変更できるすべてのパスを上書きします。 言い換えれば、トランスパイラーは手動で指定したものを変更しません。 特定のステージの詳細については、format@@0(transpiler-stage) を参照してください。
 
 <details>
   <summary>
-    **Initialization stage**
+    **初期化ステージ**
   </summary>
 
--   `hls_config` (HLSConfig) - An optional configuration class `HLSConfig` that is passed directly to the `HighLevelSynthesis` transformation pass. This configuration class lets you specify the lists of synthesis algorithms and their parameters for various high-level objects.
--   `init_method` (str) - The plugin name to use for the initialization stage. By default, an external plugin is not used. You can see a list of installed plugins by running `list_stage_plugins()` with `init` for the stage name argument.
--   `unitary_synthesis_method` (str) - The name of the unitary synthesis method to use. By default, `default` is used. You can see a list of installed plugins by running `unitary_synthesis_plugin_names()`.
--   `unitary_synthesis_plugin_config` (dict) - An optional configuration dictionary that is passed directly to the unitary synthesis plugin. By default this setting has no effect because the default unitary synthesis method does not take custom configuration. Applying a custom configuration should only be necessary when a unitary synthesis plugin is specified with the `unitary_synthesis` argument. As this is custom for each unitary synthesis plugin, refer to the plugin's documentation for how to use this option.
+-   `hls_config` (HLSConfig) - `HighLevelSynthesis`変換パスに直接渡されるオプションの設定クラス`HLSConfig`。 この構成クラスでは、さまざまな高レベルオブジェクトの合成アルゴリズムとパラメータのリストを指定できます。
+-   `init_method` (str) - 初期化段階で使用するプラグイン名。 デフォルトでは、外部プラグインは使用されません。 インストールされているプラグインの一覧は `init` で `list_stage_plugins()` を実行することで確認できます。
+-   `unitary_synthesis_method` (str) - 使用する単一合成法の名前。 デフォルトでは `default` が使用されます。 インストールされているプラグインの一覧は `unitary_syn_names()` で確認できます。
+-   `unitary_themis_plugin_config` (dict) - 単一合成プラグインに直接渡されるオプションの構成辞書。 デフォルトでは、デフォルトの単一合成法ではカスタム構成が取られないため、この設定は効果がありません。 `unitary_シンセサイザー`引数でユニタリー合成プラグインが指定されている場合にのみ、カスタム構成を適用する必要があります。 これが各ユニタリー合成プラグインのカスタムなので、このオプションの使用方法についてはプラグインのドキュメントを参照してください。
     </details>
 
 <details>
   <summary>
-    **Translation stage**
+    **翻訳ステージ**
   </summary>
 
--   `translation_method` (str) - Name of translation pass (`basis_translator`, `translator`, or `synthesis`) This can also be the external plugin name to use for the translation stage. You can see a list of installed plugins by running `list_stage_plugins()` with `translation` for the `stage_name` argument. The default value is `basis_translator`.
+-   `translation_method` (str) - 翻訳パスの名前 (`basis_translator`, `translator`, `synthemis`) これは翻訳段階で使用する外部プラグイン名にもなります。 `stage_name`の引数に`translation`を付けた`list_stage_plugins()`を実行することで、インストールされているプラグインのリストを見ることができます。 デフォルト値は `basis_translator` です。
     </details>
 
 <details>
@@ -126,36 +126,36 @@ These parameters impact specific transpilation stages. Some of them might impact
     **Layout stage**
   </summary>
 
--   `initial_layout` (Layout | Dict | List) - Initial position of virtual qubits on physical qubits. If this layout makes the circuit compatible with the `coupling_map` constraints, it will be used. The final layout is not guaranteed to be the same, as the transpiler might permute qubits through swaps or other means. For full details, see the [Initial layout section.](common-parameters#initial-layout)
--   `layout_method` (str) - Name of layout selection pass (`trivial`, `dense`, `noise_adaptive`, or `sabre`). This can also be the external plugin name to use for the layout stage. You can see a list of installed plugins by running `list_stage_plugins()` with `layout` for the `stage_name` argument. The default value is `sabre`.
+-   `initial_layout` (Layout | Dict | List) - 物理キュービット上の仮想キュービットの初期位置。 このレイアウトで `coupling_map` 制約と互換性のある回路が使用されます。 トランスパイラーがスワップやその他の手段を通じてqubits を許容する可能性があるため、最終的なレイアウトが同じであることは保証されません。 詳細については、format@@0(common-parameters#initial-layout) を参照してください。
+-   `layout_method` (str) - レイアウト選択パスの名前 (`trivial`, `dense`, `noise_adaptive`, `sabre`) これは、レイアウトステージに使用する外部プラグイン名にもなります。 `stage_name` の引数に `layout` を付けた `list_stage_plugins()` を実行することで、インストールされているプラグインのリストを見ることができます。 デフォルト値は `sabre` です。
     </details>
 
 <details>
   <summary>
-    **Routing stage**
+    **ルーティングステージ**
   </summary>
 
--   `routing_method` (str) - Name of routing pass (`basic`, `lookahead`, `stochastic`, `sabre`, or  `none`). This can also be the external plugin name to use for the routing stage. You can see a list of installed plugins by running `list_stage_plugins()` with `routing` for the `stage_name` argument. The default value is `sabre`.
+-   `routing_method` (str) - ルーティングパスの名前 (`basic`, `lookahead`, `stochastic`, `sabre`, `none`) これは、ルーティングステージに使用する外部プラグイン名にもなります。 `stage_name`引数に`routing`を付けた`list_stage_plugins()`を実行することで、インストールされているプラグインのリストを見ることができます。 デフォルト値は `sabre` です。
     </details>
 
 <details>
   <summary>
-    **Optimization stage**
+    **最適化ステージ**
   </summary>
 
--   `approximation_degree` (float, in the range 0-1 | None) - Heuristic dial used for circuit approximation (1.0 = no approximation, 0.0 = maximal approximation). The default value is 1.0.  Specifying `None` sets the approximation degree to the reported error rate. See the [Approximation degree section](common-parameters#approx-degree) for more details.
--   `optimization_level` (int) - How much optimization to perform on the circuits. Integer in the range (0 - 3). Higher levels generate more optimized circuits, at the expense of longer transpilation time. The default is `1`. See the [Set optimization topic](set-optimization) for more details.
--   `optimization_method` (str) - The plugin name to use for the optimization stage. By default an external plugin is not used. You can see a list of installed plugins by running `list_stage_plugins()` with `optimization` for the `stage_name` argument.
+-   `approximation _degree` (float, in the range 0-1 | None) - 回路近似に使用されるヒューリスティックダイアル(1.0 = no approximal , 0.0 = maximum approxation). デフォルト値は 1.0 です。  `None` を指定すると、報告されるエラー率に近似度を設定します。 詳細は format@@0(common-parameters#approx-degree) を参照してください。
+-   `optimization_level` (int) - 回路でどの程度の最適化を実行するか。 範囲内の整数 (0 - 3) レベルが高いほど最適化された回路が生成され、移調時間が長くなります。 デフォルトは `1` です。 詳細は format@@0(set-optimization) をご覧ください。
+-   `optimization_method` (str) - 最適化ステージに使用するプラグイン名。 デフォルトでは外部プラグインは使用されていません。 `stage_name`引数に`optimization`を付けた`list_stage_plugins()`を実行することで、インストールされているプラグインのリストを見ることができます。
     </details>
 
 <details>
   <summary>
-    **Scheduling stage**
+    **スケジュールステージ**
   </summary>
 
--   `scheduling_method` (str) - Name of the scheduling pass. This can also be the external plugin name to use for the scheduling stage. You can see a list of installed plugins by running `list_stage_plugins()` with `scheduling` for the `stage_name` argument.
-    -   'as_soon_as_possible': Schedule instructions greedily, as early as possible on a qubit resource. (alias: `asap`) 
-    -   'as_late_as_possible': Schedule instructions late, that is, keeping qubits in the ground state when possible. (alias: `alap`).  This is the default. 
+-   `scheduling_method` (str) - スケジューリングパスの名前。 これは、スケジューリング段階で使用する外部プラグイン名にもなります。 `stage_name`の引数に`scheduling`を付けて`list_stage_plugins()`を実行することで、インストールされているプラグインのリストを見ることができます。
+    -   'as_soon_as_possible': qubit リソースでできるだけ早く命令を貪欲にスケジュールします。 (別名: `asap`) 
+    -   'as_late_as_possible': 可能な場合は、qubit をグランド状態に保ち、命令を遅くスケジュールします。 (alias: `alap`).  これがデフォルトです。 
         </details>
 
 <details>
@@ -163,21 +163,21 @@ These parameters impact specific transpilation stages. Some of them might impact
     **Transpiler execution**
   </summary>
 
-`callback` (Callable\[[BasePass, DAGCircuit, float, PropertySet, int], Any]) - A callback function is one that is called after each pass execution. This is useful for debugging. Since the transpiler substantially transforms a circuit, the callback mechanism helps you understand what the transpiler is doing after each pass. For example, if you see an unexpected circuit, you can write a callback to draw the circuit and print the pass name after each pass.
+`callback` (Callable\[[BasePass, DAGCircuit, float, PropertySet, int], Any]) - コールバック関数は、パスの実行後に呼び出される関数です。 これはデバッグに便利です。 transpiler は回路を実質的に変換するため、コールバックメカニズムは、各パスの後にトランスパイラーが行っていることを理解するのに役立ちます。 例えば、予期しない回路が表示された場合は、コールバックを記述して回路を描画し、パスごとにパス名を出力することができます。
 
-The function is called with these keyword arguments:
+関数はこれらのキーワード引数で呼び出されます:
 
--   `pass_`: the pass being run. 
--   `dag`: the dag output of the pass. 
--   `time`: the time to execute the pass. 
--   `property_set`: the property set. 
--   `count`: the index for the pass execution. 
+-   `pass_`: パスを実行します。 
+-   `dag`: パスのダグ出力。 
+-   `time`: パスを実行する時間。 
+-   `property_set`: プロパティセット。 
+-   `count`: パス実行のインデックス。 
 
 <Admonition type="note"> 
-    The arguments passed expose the internals of the pass manager and are subject to change as the pass manager internals change. If you intend to reuse a callback function over multiple releases, verify that the arguments being passed are the same. 
+    渡された引数はパスマネージャの内部を公開し、パスマネージャの内部が変更されると変更されることがあります。 複数のリリースでコールバック関数を再利用する場合は、渡される引数が同じであることを確認してください。 
   </Admonition>
   
-  To use the callback feature, define a function that will take in kwargs dict and access the variables. For example:
+  コールバック機能を使用するには、kwargs dict に取得し、変数にアクセスする関数を定義します。 例:
 
 ```python
 def callback_func(**kwargs):
@@ -190,28 +190,28 @@ def callback_func(**kwargs):
 transpile(circ, callback=callback_func)
 ```
 
--   `seed_transpiler` (int) - Sets random seeds for the stochastic parts of the transpiler.
--   `output_name` (str | List[str]) -  A list with strings to identify the output circuits. The length of the list should be the same length as the circuits parameter.
+-   `seed_transpiler` (int) - トランスパイラーの確率部分のランダムなシードを設定します。
+-   `output_name` (str | List[str]) - 出力回路を識別する文字列付きのリスト。 リストの長さは回路パラメータと同じ長さにする必要があります。
     </details>
 
 <Admonition>
-The following default values are used if you don't specify any of the above parameters.
+上記のパラメータを指定しない場合、次のデフォルト値が使用されます。
 
 ```python
-qiskit.compiler.transpile(unitary_synthesis_method='default', translation_method='basis_translator', layout_method='sabre', routing_method='sabre', approximation_degree=1.0, optimization_level=1.0, scheduling_method='as_late_as_possible')
+qiskit.compiler.transpile(unitary_synthesis_method='default', translation_method='basis_translator', layout_method='sabre', routing_method='sabre', approxation_degree=1.0, optimization_level=1.0, scheduling_method='as_late_as_possible')
 ```
 
 </Admonition>
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-    - Learn how to [Set the optimization level](set-optimization).
-    - Review more [Commonly used parameters](common-parameters).
+    - format@@2(set-optimization) の方法を学びます。
+    - format@@0(common-parameters) をレビューします。
     - Learn how to [Set the optimization level when using Qiskit Runtime.](../run/advanced-runtime-options)
     - Visit the [Transpile with pass managers](transpile-with-pass-managers) topic.
     - For examples, see [Representing quantum computers.](representing_quantum_computers)
     - Try the [Submit transpiled circuits](https://learning.quantum.ibm.com/tutorial/submit-transpiled-circuits) tutorial.
-    - Use transpilation with Qiskit Patterns in the [Reduce transpiled circuit depth, with circuit cutting](https://learning.quantum.ibm.com/tutorial/reduce-transpiled-circuit-depth-with-circuit-cutting) tutorial.
-    - Review the [Transpile API documentation](/api/qiskit/transpiler).
+    - format@@0(https://learning.quantum.ibm.com/tutorial/redule-transpiled-circuit-depth-with-circuit-cuting) チュートリアルの Qiskit パターンでトランスパレーションを使用します。
+    - [Transpile API documentation](/api/qiskit/transpiler) をレビューします。
 </Admonition>
