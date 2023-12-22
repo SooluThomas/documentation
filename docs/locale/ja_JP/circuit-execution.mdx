@@ -1,28 +1,28 @@
 ---
-title: System circuit execution
-description: Explanatory content on fixed and dynamic repetition rate execution
+title: システム回路の実行
+description: 固定および動的繰り返しレートの実行に関する説明コンテンツ
 ---
 
-# System circuit execution
+# システム回路の実行
 
-## Fixed repetition rate execution
+## 固定繰り返しレートの実行
 
-Most IBM Quantum systems execute circuits at a fixed rate. Although this _repetition rate_ varies by system, the underlying execution model is the same, and is described here. First, consider three circuits sent to a system using separate jobs, one for each circuit. The example below shows what happens for jobs of varying lengths. Because of the fixed repetition rate, there is a variable amount of _idle time_ that occurs before the start of a circuit in order to make the entire duration match that given by the system repetition rate.
+ほとんどのIBM Quantumシステムは一定の速度で回路を実行します。 この_繰り返し率_はシステムによって異なりますが、基礎となる実行モデルは同じであり、ここで説明します。 まず、3つの回路を別々のジョブを使用してシステムに送ることを考えます。 以下の例は、さまざまな長さのジョブで何が起こるかを示しています。 一定の繰り返し率のため。 システムの繰り返しレートによって与えられた期間全体が一致するようにするために、回路の開始前に発生する_アイドル時間_の可変量があります。
 
 ![../../../\_images/fixed_single_circuit1.png](/images/migration/fixed_single_circuit1.png)
 
-The situation changes somewhat when the same circuits are batched into a single job. In this case the circuits included in the job are executed by iterating over the circuits for each shot requested; the execution is column-wise over a matrix of circuits and shots (see below).
+同じ回路が単一のジョブにバッチ処理されると、状況は多少変わります。 この場合、ジョブに含まれる回路は、要求される各ショットの回路を繰り返すことによって実行されます。 実行は、回路とショットの行列に対して列単位で行われます(下記参照)。
 
 ![../../../\_images/circuits_shots_matrix1.png](/images/migration/circuits_shots_matrix1.png)
 
-Matrix of four circuits in a job showing the execution pattern over the circuits.
+ジョブ内の4つの回路の行列で、回路の実行パターンを示します。
 
-When submitting batches of circuits to the systems, the circuits are executed differently than they would be if executed separately. Namely, the initialization of the circuit, i.e. prepare the ground state, and measurements (if any) are aligned over all circuits.
+システムに回路のバッチを送信する場合、別々に実行する場合とは異なる方法で実行されます。 すなわち、回路の初期化、すなわちグランド状態の準備、および測定(もしあれば)はすべての回路上で整列されます。
 
 ![../../../\_images/fixed_batch_circuit1.png](/images/migration/fixed_batch_circuit1.png)
 
-Therefore, each circuit is equal in duration to the longest circuit in the batch, and there is a common idle time that is placed in front of all circuits to match the repetition rate.
+したがって、各回路はバッチ内の長さと長さが等しくなります。 繰り返しの速度に合うようにすべての回路の前に置かれるアイドル時間があります
 
-## Dynamic repetition rate execution
+## 動的繰り返しレートの実行
 
-Some IBM Quantum systems allow for dynamic repetition rate execution. These systems are identified in Qiskit using `backend.configuration().dynamic_reprate_enabled`, and return a value of `True`. On these systems, it is possible to manually set the above idle time by setting the `rep_delay` of the submitted job. One can see from the above figures that by reducing the idle time one can potentially see a greater throughput of circuits on the systems that support dynamic repetition rates. See the the next section on conditional reset for more detailed usage examples.
+IBM Quantum システムによっては、動的繰り返しレートの実行が可能になります。 これらのシステムは Qiskit で`backend.configuration().dynamic_reprate_enabled` を使用して識別され、`True` の値を返します。 これらのシステムでは、送信されたジョブの `rep_delay` を設定することで、上記のアイドル時間を手動で設定することができます。 上記の図から、アイドル時間を短縮することによって、動的繰り返しレートをサポートするシステム上の回路のスループットが向上する可能性があることがわかります。 詳細な使用例については、条件付きリセットの次のセクションを参照してください。
