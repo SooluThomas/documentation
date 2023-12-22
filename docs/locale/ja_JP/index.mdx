@@ -1,21 +1,51 @@
 ---
 title: はじめに
-description: ランセクションの概要。IBM Quantum システムに関する情報とジョブの実行
+description: IBM Quantum ドキュメント入門
+in_page_toc_max_heading_level: 2
 ---
 
 # はじめに
 
-IBM Quantum は、7 つの [utility-scale](https://www.ibm.com/blog/announcement/new-ibm-quantum-systems-on-the-ibm-cloud/) 量子系の世界最先端の艦隊を維持しています。 これらのシステムは比類のない信頼性を示し、量子システムの艦隊全体で95%以上の稼働時間があります。比類のない安定性です。 2量子ビットゲートの誤差変動は0以下です。 01は月単位で測定された時間スケール[^1]。
+量子コミュニティは、2016年からクラウド上で量子コンピューティングを研究しています。  今度はコミュニティに新しいチャレンジがあります:_有用な量子計算を実証_。 
 
-## ランフェーズ
+IBM Quantumを通じて、あなたの仕事のためのパフォーマンスとユーティリティスケール(>100-qubit)の量子システム、並びにスケーラブルで柔軟な量子ソフトウェアにアクセスすることができます。 無償プランを試したり、有料プランやプレミアムプランを使ってプログラムを実行したりするかどうか 量子コンピューティングで役に立つ研究ができるようになりました
 
-実行フェーズでは、量子プログラムを量子システム上で実行するように送信します。 このセクションでは、IBM Quantum ハードウェアに関する情報と、量子システムへのアクセスを提供するインスタンスへの接続方法について説明します。 ジョブの実行時間とコストの推定、セッション内での実行、システム上での時間の予約などについての詳細を見ることができます。 
+このドキュメントの核となるセクションは、一般的な量子ユーザーの旅の段階に基づいています。Qiskitで量子回路と演算子を構築します。 そして、QisKit Runtime プリミティブを使用して量子システム上でトランスパイルを実行し、回路実行のための簡素化されたインターフェイスを使用します。 Qiskit Runtime とペアリングすることで、高度なランタイムコンパイル、エラー抑制、およびエラー軽減の手法によって、シームレスな回路実行が可能になります。 
 
-実行フェーズ中のステップは次のとおりです。
+IBM Quantumを使い始めたばかりの方は、適切な場所にいらっしゃいます。 このセクションのトピックを使用して、準備をしてから、 [Build](../build) に進み、最初の量子回路を作成します。 このページの上部にあるタブに従って、セクションを順番に作業し続けます。
 
-1.  アカウントの資格情報を使用して、選択したチャネルを認証します ([IBM Quantum Platform](../start/setup-channel#ibm-quantum-platform)または[IBM Cloud](../start/setup-channel#ibm-cloud))。
-2.  バックエンドを選択
-3.  ジョブを量子システムに送信します。
-4.  ジョブの結果を表示
+お探しの内容は既にご存知ですか？
 
-[^1]: 2023年7月20日から9月20日まで、アクセス可能なすべてのイーグルプロセッサで測定された2Qゲートエラー。
+-   [Install](インストール): インストールとセットアップの手順でツールとプラットフォームの使用を開始します。
+
+-   [Build](../build): 動的回路や中間回路測定などの高度な手法やプリミティブを用いた量子回路の設計・開発。 回路ライブラリはこちらもご覧いただけます。
+
+-   [Transpile](../transpile): エラー認識度が異なり、ハードウェア上で効率的に動作するように回路を最適化するようにコンパイルします。
+
+-   [Verify](../verify): 量子回路の検証と評価を行います。
+
+-   [Run](../run): セッションなどのジョブ設定オプションを使用してハードウェア上で実行します。
+
+-   **APIリファレンス**: [Qiskit](/api/qiskit), [Qiskit Runtime IBM Client](/api/qiskit-ibm-runtime), 上記のAPIリファレンスドロップダウンメニューの[Qiskit IBM Runtime Rest API](/api/runtime/tags/programs)、[Qiskit IBM Provider](/api/qiskit-ibm-provider) format@@0(../errors) もここにあります。
+
+## コミュニティ
+
+量子コミュニティの他のユーザーと一緒にアイデアを共有し、他のユーザーが何をしているかを確認しましょう。
+
+-   [Slack](https://ibm.co/joinqiskitslack) に参加する
+-   [LinkedIn](https://www.linkedin.com/showserve/ibm-quantum/) および [X](https://x.com/qiskit)
+-   [GitHub](https://github.com/qiskit) で貢献を開始する
+-   [YouTube](https://www.youtube.com/qiskit) と [Medium](https://medium.com/qiskit) で検索してください。
+
+## 次のステップ
+
+<Admonition type="tip" title="Recommendations">
+    - format@@2(install)
+    - format@@0(hello-world)
+    - Explore hand-on tutorials in IBM Quantum Learning, such as:
+      - [Variational Quantum Eigensolver](https://learning.quantum.ibm.com/tutorial/variational-quantum-eigensolver)
+      - [Quantum Approximate Optimization Algorithm](https://learning.quantum.ibm.com/tutorial/quantum-approximate-optimization-algorithm)
+      - [Grover's algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm)
+    - Take the [Basics of quantum information](https://learning.quantum.ibm.com/course/basics-of-quantum-information) course.
+    - format@@0(https://learning.quantum.ibm.com/catalog?content=tutorials) の一覧を表示します。
+</Admonition>
