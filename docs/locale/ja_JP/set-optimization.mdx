@@ -1,20 +1,20 @@
 ---
-title: Set transpiler optimization level
-description: Learn how to set the optimization level
+title: トランスパイラーの最適化レベルを設定
+description: 最適化レベルを設定する方法を学ぶ
 ---
 
-# Set the optimization level
+# 最適化レベルを設定する
 
-Decomposing quantum circuits into the basis gate set of the target device and the addition of SWAP gates needed to match hardware topology causes an increase in the depth and gate count of quantum circuits. To mitigate this increased complexity, you can set the `optimization_level`.  Setting this value calls an optimization routine that optimizes the transpilation process by combining or eliminating gates and by optionally using algorithms to find an optimal layout (depending on the level chosen). 
+対象デバイスの基底ゲートセットに量子回路を分解し、ハードウェアトポロジーに合わせてSWAPゲートを追加すると、量子回路の深度とゲートカウントが増加します。 この複雑さを軽減するために、 `optimization_level` を設定します。  この値を設定すると、(選択されたレベルに応じて)最適なレイアウトを見つけるためにアルゴリズムを使用してゲートを組み合わせるか除去することによって、トランスパイルプロセスを最適化する最適化ルーチンが呼び出されます。 
 
-In some cases these methods are so effective the output circuits have lower depth than the inputs. In other cases, not much can be done, and the computation may be difficult to perform on noisy devices. Choosing the best optimization level might take trial and error, as it depends heavily on the circuit being transpiled and the backend being targeted.
+場合によっては、これらの方法が非常に有効であるため、出力回路は入力よりも深度が低くなります。 また、ノイズの多いデバイスでは計算が困難な場合もあります。 最適化レベルを選択すると、最適化レベルが試行錯誤する可能性があります。これは、回路がトランスパイルされ、バックエンドがターゲットにされていることに大きく依存するためです。
 
-Higher optimization levels generate more optimized circuits at the expense of longer compile times.  By default, `optimization_level=1` is used. 
+最適化レベルが高いほど、コンパイル時間が長くなるため、より多くの最適化回路が生成されます。  デフォルトでは `optimization_level=1` が使用されます。 
 
--   `optimization_level=0`: Trivial optimization, which maps the circuit to the backend with no explicit optimization.
--   `optimization_level=1-3`: Increasingly complex optimization, with heuristic algorithms that are used to find a layout and insert SWAP gates, with the goal of improving the overall performance of the circuit.  The number of iterations that these algorithms run increases with higher optimization levels. 
+-   `optimization_level=0`: 明示的な最適化なしでバックエンドに回路をマップするトリビアル最適化。
+-   `optimization_level=1-3`: ますます複雑な最適化を行い、レイアウトを見つけてSWAPゲートを挿入するために使用されるヒューリスティックアルゴリズムを使用します。 回路全体のパフォーマンスを向上させることを目標にしています  これらのアルゴリズムが実行される反復回数は、最適化レベルが高いほど増加します。 
 
-Because finding the best layout is an NP-hard problem, it is the most time-consuming part of the transpilation process.  However, Qiskit uses stochastic algorithms that have been refactored into Rust, resulting in significant speedup.  Therefore, optimization levels 1-3 all use the same layout algorithms.  There are some slight differences in how the circuits are translated into basis gates, as described in the following table:
+最適なレイアウトを見つけることはNP難しい問題であるため、移調プロセスの中で最も時間のかかる部分です。  しかし、QiskitはRustにリファクタリングされた確率アルゴリズムを使用し、結果として大幅なスピードアップをもたらします。  したがって、最適化レベル1~3はすべて同じレイアウトアルゴリズムを使用します。  回路が基底ゲートに変換される方法には、以下の表のように若干の違いがあります。
 
 <Table>
   <thead>
@@ -36,7 +36,7 @@ Because finding the best layout is an NP-hard problem, it is the most time-consu
       <Td>1</Td>
       <Td>
         Light optimization (default):
-        -   Layout/Routing: Layout is first attempted with `TrivialLayout`. If additional SWAPs are required, a layout with a minimum number of SWAPs is found by using `SabreSWAP`, then it uses `VF2LayoutPostLayout` to try to select the best qubits in the graph.
+        -   Layout/Routing: Layout is first attempted with `TrivialLayout`. 追加のSWAPが必要な場合は、 `SabreSWAP`を使って最低限のSWAP数のレイアウトを見つけることができます。 次に、`VF2LayoutPostLayout` を使って、グラフ内の最適な量子ビットを選択します。
         -   InverseCancellelation
         -   1Q gate optimization
       </Td>
@@ -46,7 +46,7 @@ Because finding the best layout is an NP-hard problem, it is the most time-consu
       <Td>
         Medium optimization:
           - Layout/Routing: Optimization level 1 (without trivial) + heuristic optimized with greater
-        search depth and trials of optimization function.  Because `TrivialLayout` is not used, there is no attempt to use the same physical and virtual qubit numbers. 
+        search depth and trials of optimization function.  `TrivialLayout` は使用されないため、同じ物理的な qubit 番号と仮想的な qubit 番号を使用しようとする試みはありません。 
         -   Commutative cancelation
       </Td>
     </Tr>
@@ -64,11 +64,11 @@ Because finding the best layout is an NP-hard problem, it is the most time-consu
   </tbody>
 </Table>
 
-## Optimization level in action
+## アクションの最適化レベル
 
-Since CX is the noisiest gate, we can quantify the transpilation's "hardware efficiency" by counting the CX gates in the resulting circuit. We will compare the default transpilation levels given the same circuit. 
+CXは最もノイズの高いゲートなので、CXゲートを計算することでトランスパイルの「ハードウェア効率」を定量化することができます。 同じ回路を与えられたデフォルトのトランスパイルレベルを比較します。 
 
-First, import the necessary libraries:
+まず、必要なライブラリをインポートします。
 
 ```python
 from qiskit import transpile, QuantumCircuit
@@ -80,7 +80,7 @@ from qiskit.quantum_info.synthesis.two_qubit_decompose import trace_to_fid
 import numpy as np
 ```
 
-Next we build a quantum circuit consisting of a random unitary followed by a SWAP gate. The `random_unitary` method is seeded to ensure reproducible results.
+次に、ランダムなユニタリーとSWAPゲートで構成される量子回路を構築します。 `random_unitary` メソッドは再現性のある結果を保証するためにシードされます。
 
 ```python
 UU = random_unitary(4, seed=12345)
@@ -94,76 +94,76 @@ qc.draw('mpl')
 
 ![Original abstract circuit](/images/transpile/defaults-and-configuration-options/abstract-circ.png)
 
-We use `FakeTokyo` as the backend and transpile using `optimization_level=1` (the default). To avoid considering the effect of idle qubits, We override the backend's coupling map so that the transpiled circuit returns to a two-qubit circuit.
+バックエンドとして `FakeTokyo` を使用し、トランスパイルは `optimization_level=1` (デフォルト) を使用します。 アイドル量子ビットの影響を考慮しないように、トランスパイルされた回路が2量子ビット回路に戻るように、バックエンドのカップリングマップをオーバーライドします。
 
 ```python
 backend = FakeTokyo()
-qc_t1_exact = transpile(qc, backend, optimization_level=1, coupling_map=[[0, 1], [1, 0]], seed_transpiler=12345)
+qc_t1_exact = transpile(qc, backend, optimization_level=1, coupling_map=[[0, 1, 0]], seed_transpiler=12345)
 qc_t1_exact.draw('mpl', style='iqp')
 ```
 
-![Circuit transpiled with optimization level 1](/images/transpile/defaults-and-configuration-options/circ-opt-level-1.png)
+![Circuit transpiled with optimization level 1](/images/transpile/defaults-and-configuration-opt-level-1.png)
 
-The transpiled circuit has six CX gates and several `U3` gates, which have much lower error than CX's, so we don't need to count them. 
+トランスパイルされた回路には6つのCXゲートといくつかの`U3`ゲートがあり、CXよりもはるかに低い誤差を持っているため、カウントする必要はありません。 
 
-Repeat for optimization level 2: 
+最適化レベル2の繰り返し: 
 
 ```python
-qc_t2_exact = transpile(qc, backend, optimization_level=2, coupling_map=[[0, 1], [1, 0]], seed_transpiler=12345)
+qc_t2_exact = transpile(qc, backend, optimization_level=2, coupling_map=[[0, 1, 0]], seed_transpiler=12345)
 qc_t2_exact.draw('mpl', style='iqp')
 ```
 
-![Circuit transpiled with optimization level 2](/images/transpile/defaults-and-configuration-options/circ-opt-level-2.png)
+![Circuit transpiled with optimization level 2](/images/transpile/defaults-and-configuration-opt-level-2.png)
 
-This yields the same results as optimization level 1. Note that increasing the level of optimization does not always make a difference. 
+これにより、最適化レベル1と同じ結果が得られます。 最適化のレベルを上げると必ずしも違いはないことに注意してください。 
 
-Repeat again, with optimization level 3:
+最適化レベル3でもう一度繰り返します。
 
 ```python
-qc_t3_exact = transpile(qc, backend, optimization_level=3, coupling_map=[[0, 1], [1, 0]], seed_transpiler=12345)
+qc_t3_exact = transpile(qc, backend, optimization_level=3, coupling_map=[[0, 1, 0]], seed_transpiler=12345)
 qc_t3_exact.draw('mpl', style='iqp')
 ```
 
-![Circuit transpiled with optimization level 3](/images/transpile/defaults-and-configuration-options/circ-opt-level-3.png)
+![Circuit transpiled with optimization level 3](/images/transpile/defaults-and-configuration-opt-level-3.png)
 
-Now there are only three CX gates. This is because with optimization level 3, Qiskit tries to re-synthesize two-qubit blocks of gates. Since any two-qubit gate requires at most three CX gates, we get the above result. We can get even fewer CX gates if we sacrifice the fidelity of this synthese by setting `approximation_degree` to a value less than 1:
+今CXゲートは3つしかありません。 これは、最適化レベル3の場合、Qiskitは2量子ビットのゲートブロックを再合成しようとするためです。 2量子ビットゲートは最大3つのCXゲートを必要とするため、上記の結果を得ることができます。 `approximation _degree` を 1 より小さい値に設定することで、このシンセの忠実度を犠牲にすると、CXゲートの数はさらに少なくなります。
 
 ```python
-qc_t3_approx = transpile(qc, backend, optimization_level=3, approximation_degree=0.99, coupling_map=[[0, 1], [1, 0]], seed_transpiler=12345)
+qc_t3_approx = transpile(qc, backend, optimization_level=3, approxilation_degree=0.99, coupping_map=[[0, 1, 0]], seed_transpiler=12345)
 qc_t3_approx.draw('mpl', style='iqp')
 ```
 
-This circuit has only two CX gates. However, this is an approximate circuit, so we need to understand the difference in fidelity to the desired circuit with the incurred error from running on noisy qubits. We can calculate the fidelity of the approximate circuit:
+この回路には2つのCXゲートしかありません。 しかし、これはおおよその回路です。 ノイズ量子ビット上を走ることで発生した誤差を持つ所望の回路と忠実度の違いを理解する必要があります 近似回路の忠実度を計算することができます:
 
 ```python
 exact_fid = trace_to_fid(np.trace(np.dot(Operator(qc_t3_exact).adjoint().data, UU)))
-approx_fid = trace_to_fid(np.trace(np.dot(Operator(qc_t3_approx).adjoint().data, UU)))
-print(f'Synthesis fidelity\nExact: {exact_fid:.3f}\nApproximate: {approx_fid:.3f}')
+approx_fid = trace_to_fid(np.trace(np.dot(Operator(qc_t3_approx).adjoint().adjoint().data())))
+print(f'Synthesis fidity\nExact: {exact_fid:.3f}\n想定値: {approx_fid:.3f}')
 ```
 
 ```text
-Synthesis fidelity
-Exact: 1.000
-Approximate: 0.992
+合成忠実度
+正確: 1.000
+近似: 0.992
 ```
 
-Adjusting the optimization level can change other aspects of the circuit too, not just the number of CX gates. For examples of how setting optimization level changes the layout, see [Representing quantum computers](representing_quantum_computers).
+最適化レベルを調整すると、CXゲートの数だけでなく、回路の他の側面も変化する可能性があります。 最適化レベルがレイアウトにどのように変化するかについては、format@@0(representing_quantum_computers)を参照してください。
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendation">
-    - [Default options and configuration settings](defaults-and-configuration-options)
-    - [Commonly used parameters](common-parameters)
-    - Try the [Submit transpiled circuits](https://learning.quantum.ibm.com/tutorial/submit-transpiled-circuits) tutorial.
+    - [Default options and configurations settings](defaults-and-configuration-options)
+    - [Common-parameters](common-parameters)
+    - [Submit transpiled circuits](https://learning.quantum.ibm.com/tutorial/submit-transpiled-circuits) チュートリアルを試してみてください。
 
 </Admonition>
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-    - To learn how to use the `transpile` function, start with the [Transpilation default settings and configuration options](defaults-and-configuration-options) topic.
-    - Continue learning about transpilation with the [Transpiler stages](transpiler-stages) topic.
-    - Try the [Submit transpiled circuits](https://learning.quantum.ibm.com/tutorial/submit-transpiled-circuits) tutorial.
-    - Try the [Build repetition codes](https://learning.quantum.ibm.com/tutorial/build-repetition-codes) tutorial.
-    - See the [Transpile API documentation.](/api/qiskit/transpiler)
-</Admonition>
+    - `transpile` 関数の使い方を学ぶには、[Transpilation default settings and configuration-options](defaults-and-configuration-options) トピックから始めます。
+    - format@@0(transpiler-stages) トピックで移調について学び続けましょう。
+    - format@@0(https://learning.quantum.ibm.com/tutorial/submit-transpled-circuits) チュートリアルを試してみてください。
+    - format@@0(https://learning.quantum.ibm.com/tutorial/build-反復コード) チュートリアルを試してみてください。
+    - [Transpile API documentation.](/api/qiskit/transpiler)
+</Admonition> を参照してください。
