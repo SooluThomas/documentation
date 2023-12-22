@@ -1,21 +1,22 @@
 ---
-title: Introduction
-description: Introduction to the Verify phase
+title: はじめに
+description: Qiskit量子回路、演算子、波形パルス、またはOpenQASMを使用して量子プログラムを構築します。
 ---
 
-# Introduction
+# はじめに
 
-In the verify phase, you test your quantum programs by running them on simulated devices and exploring their performance under realistic device noise models. This allows you to validate them before sending them to a physical system.
+ビルドフェーズでは、問題を表す量子プログラムを作成します。 量子プログラムの基盤は、ゲートを含む操作で構成される量子回路です。 測定とリセット - 量子コンピュータの量子ビットを操作します。  ニーズに応じて、Qiskit または OpenQASM を使用して回路を作成できます。 
 
-Because the cost of classically simulating quantum circuits scales exponentially with the number of qubits, circuits that are larger than 50 qubits or so generally cannot be directly verified. For such circuits, you can:
+すべてのタスクには、1つ以上のformat@@0(circuit-construction)を構築する必要があります。 さらにいくつかのタスクでは、format@@0(operators-overview)を構築して、推定または測定したい量子状態のプロパティを定義する必要があります。
 
--   Test smaller versions of the circuits that can be simulated classically.
--   Modify the circuits so that they become classically simulable and test these modified circuits.
+Qiskit では、抽象プログラム、仮想プログラム、物理プログラム、スケジュールプログラム、パルスプログラムなど、さまざまな抽象レベルで回路(およびある程度、演算子)を操作することができます。 最も抽象的なレベルは、format@@0(circuit-library)のタスク指向レンズです。 演算子、等値関数、古典/ブール関数を使用して、抽象的な数学用語の演算を表現することもできます。 仮想回路では、数学的抽象化は、具体的なゲートセットという観点から具体的な表現をとる。 物理レベルでは、これらの命令は特定の物理キュービットにマッピングされます。 ターゲットハードウェアプラットフォームの接続とネイティブゲートセットを反映するように命令を書き直しています スケジュール回路はタイミング情報を、format@@0(pulse)はチャンネル上の信号を表します。
 
-Stabilizer circuits are a useful tool for accomplishing this latter goal. These are a restricted class of quantum circuits that can be efficiently simulated classically. Specialized simulators can easily simulate stabilizer circuits with thousands of qubits. See [Efficient simulation of stabilizer circuits with Qiskit Aer primitives](stabilizer-circuit-simulation) for an overview of stabilizer circuits and how to simulate them efficiently.
+Qiskit と [OpenQASM](introduction-to-qasm) は拡張回路の概念をさらにサポートします。これにより、許容される一連の演算を古典値のリアルタイム計算に含めることができます。 このより豊かな回路ファミリーを扱うためのQiskitのツールは、format@@0(classical-feedforward-control-flow)のセクションにあります。
 
-For general quantum circuits, the following tools are available for you to verify your quantum programs:
+## 次のステップ
 
--   For exact simulation of small quantum circuits, you can use the reference primitives included with Qiskit. See [Exact simulation with Qiskit primitives](simulate-with-qiskit-primitives).
--   For higher-performance simulation that can handle larger circuits, or to incorporate noise models into your simulation, use [Qiskit Aer](https://qiskit.org/ecosystem/aer/), a project that is part of the [Qiskit Ecosystem](https://qiskit.github.io/ecosystem/). See [Exact and noisy simulation with Qiskit Aer primitives](simulate-with-qiskit-aer).
--   To build your own custom noise models, use the [`noise`](https://qiskit.org/ecosystem/aer/apidocs/aer_noise.html) module of Qiskit Aer. See [Building noise models](building_noise_models).
+<Admonition type="tip" title="Recommendations">
+  - 回路ライブラリ(circuit-library)のトピックを探索して回路の構築を開始します。
+  - format@@0(https://learning.quantum.ibm.com/tutorial/grovers-algorithm) チュートリアルで使用されている回路の例を参照してください。
+  - format@@0(https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) チュートリアルで簡単な回路を操作します。
+</Admonition>
