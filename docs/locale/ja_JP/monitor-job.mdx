@@ -1,49 +1,49 @@
 ---
-title: Monitor a job
-description: How to monitor a job submitted to IBM Quantum Platform or IBM Quantum on IBM Cloud
+title: ジョブの監視
+description: IBM Quantum Platform または IBM Quantum に提出されたジョブを監視する方法
 ---
 
-# Monitor a job
+# ジョブの監視
 
-Jobs are listed on the Jobs page for your quantum service channel:
+ジョブは、量子サービスチャネルのformat@@0ページにリストされます。
 
--   IBM Cloud channel: From the IBM Cloud console quantum [Instances page](https://cloud.ibm.com/quantum/instances), click the name of your instance, then click the Jobs tab.
--   IBM Quantum channel: In IBM Quantum Platform, open the [Jobs page](https://quantum.ibm.com/jobs).
+-   IBM Cloud チャンネル: IBM Cloud コンソールの量子format@@0(https://cloud.ibm.com/quantum/instances)から、インスタンスの名前をクリックし、format@@1タブをクリックします。
+-   IBM Quantum channel: IBM Quantum Platformでformat@@0(https://quantum.ibm.com/jobs)を開きます。
 
-Use the job instance to check the job status or retrieve the results by calling the appropriate command:
+ジョブインスタンスを使用して、ジョブのステータスを確認したり、適切なコマンドを呼び出して結果を取得したりします。
 
-|                               |                                                                                                                                                                                                               |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| job.result()                  | Review job results immediately after the job completes. Job results are available after the job completes. Therefore, job.result() is a blocking call until the job completes.                                |
-| job.job_id()                  | Return the ID that uniquely identifies that job. Retrieving the job results at a later time requires the job ID. Therefore, it is recommended that you save the IDs of jobs you might want to retrieve later. |
-| job.status()                  | Check the job status.                                                                                                                                                                                         |
-| job = service.job(\<job_id>)  | Retrieve a job you previously submitted. This call requires the job ID.                                                                                                                                       |
+|                               |                                                                                                                                                                                                      |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| job.result()                  | ジョブが完了した直後にジョブの結果を確認します。 ジョブの結果は、ジョブが完了した後に表示されます。 そのため、job.result() はジョブが完了するまでブロックされた呼び出しです。                                                                                                       |
+| job.job_id()                  | そのジョブを一意に識別する ID を返します。 ジョブの結果を後で取得するには、ジョブ ID が必要です。 したがって、後で取得したいジョブのIDを保存することをお勧めします。                                                                                                             |
+| job.status()                  | ジョブの状態を確認します。                                                                                                                                                                                        |
+| job = service.job(\<job_id>)  | 以前に送信したジョブを取得します。 この通話にはジョブ ID が必要です。                                                                                                                                                                |
 
 <span id="retrieve-later"></span>
-## Retrieve job results at a later time
+## 後でジョブの結果を取得する
 
-Call `service.job(\<job\how_toID>)` to retrieve a job you previously submitted. If you don’t have the job ID, or if you want to retrieve multiple jobs at once; including jobs from retired systems, call `service.jobs()` with optional filters instead. See [QiskitRuntimeService.jobs](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.QiskitRuntimeService#jobs).
+以前に送信したジョブを取得するには、 `service.job(\<job\how_toID>)`を呼び出します。 ジョブIDを持っていない場合、または一度に複数のジョブを取得したい場合は、引退したシステムからのジョブを含め、`serviceを呼び出します。 obs()`にはオプションのフィルタがあります。 [QiskitRuntimeService.jobs](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.QiskitRuntimeService#jobs) を参照してください。
 
 <Admonition type="note">
-  service.jobs() returns only Qiskit Runtime jobs. To retrieve other jobs, use [qiskit-ibm-provider](../api/qiskit-ibm-provider/qiskit_ibm_provider.IBMBackend#ibmbackend) instead.
+  service.jobs() は Qiskit Runtime ジョブのみを返します。 他のジョブを取得するには、代わりに [qiskit-ibm-provider](../api/qiskit-ibm-provider/qiskit_ibm_provider.IBMBackend#ibmbackend) を使用してください。
 </Admonition>
 
-## Example
+## 例
 
-This example returns the 10 most recent runtime jobs that were run on `my_backend`:
+この例では、`my_backend` で実行された最新の 10 のランタイムジョブを返します。
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
 
-# Initialize the account first.
+# 最初にアカウントを初期化します。
 service = QiskitRuntimeService()
 
 service.jobs(backend_name=my_backend)
 ```
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-    - Try the [Grover's algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm) tutorial.
-    - Review the [Qiskit tools documentation](/api/qiskit/tools) in the Qiskit Terra API reference.
+    - format@@2(https://learning.quantum.ibm.com/tutorial/grovers-algorithm) チュートリアルを試してみてください。
+    - Qiskit Terra API リファレンスの [Qiskit tools documentation](/api/qiskit/tools) をレビューします。
 </Admonition>
