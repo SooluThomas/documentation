@@ -1,26 +1,26 @@
 ---
-title: Bit-ordering in Qiskit
-description: Learn about Qiskit's ordering conventions and why we chose them
+title: Qiskit のビットオーダーメント
+description: Qiskitの注文規則と私たちがそれらを選んだ理由について学ぶ
 ---
 
-# Bit-ordering in Qiskit
+# Qiskit のビットオーダーメント
 
-If you have a set of $n$ bits (or qubits), you'll usually label each bit $0
-\\rightarrow n-1$. Different softwares and resources must choose how they order
-these bits both in computer memory and when displayed on-screen.
+$n$ ビット（または量子ビット）の集合がある場合は、通常 $0
+\\rightarrow n-1$ というラベルになります。 異なるソフトウェアやリソースは、コンピュータメモリと画面上に表示されるときに、
+ビットをどのように並べるかを選択する必要があります。
 
-## Qiskit conventions
+## Qiskitの規則
 
-Here's how Qiskit orders bits in different scenarios.
+Qiskit はさまざまなシナリオでビット注文を行います。
 
 ### Quantum circuits
 
-The `QuantumCircuit` class stores its qubits in a list
-(`QuantumCircuit.qubits`). The index of a qubit in this list defines the
-qubit's label.
+`QuantumCircuit`クラスは、その量子ビットをリスト
+(`QuantumCircuit.qubits`)に格納します。 このリストの量子ビットのインデックスは、
+qubitのラベルを定義します。
 
 ```python
-from qiskit import QuantumCircuit
+from qisKit import QuantumCircuit
 qc = QuantumCircuit(2)
 qc.qubits[0]  # qubit "0"
 ```
@@ -29,12 +29,12 @@ qc.qubits[0]  # qubit "0"
 Qubit(QuantumRegister(2, 'q'), 0)
 ```
 
-### Circuit diagrams
+### 回路図
 
 On a circuit diagram, qubit $0$ is the topmost qubit, and qubit $n$ the
-bottommost qubit. You can change this with the `reverse_bits` argument of
-`QuantumCircuit.draw` (see [Change ordering in
-Qiskit](#change-ordering-in-qiskit)).
+bottommost qubit. これは
+`QuantumCircuit.draw` の `reverse_bits` 引数で変更できます（[
+Qiskitの順序変更](#change-ordering-in-qiskit)を参照してください）。
 
 ```python
 qc.x(1)
@@ -42,18 +42,18 @@ qc.draw()
 ```
 
 ```
-q_0: ─────
-     ┌───┐
-q_1: ┤ X ├
-     └───┘
+q_0: ────
+     <unk> ────<unk>
+q_1: <unk> X <unk>
+     └────<unk>
 ```
 
-### Integers
+### 整数
 
-When interpreting bits as a number, bit $0$ is the least significant bit, and
-bit $n$ the most significant. This is helpful when coding because each bit has
-the value $2^\\text{label}$ (label being the qubit's index in
-`QuantumCircuit.qubits`). For example, the following circuit execution ends
+ビットを数値として解釈する場合、ビット $0$ は最も重要なビットであり、
+ビット $n$ は最も重要なビットです。 これは、各ビットが
+の値 $2^\\text{label}$ (ラベルは
+`QuantumCircuit.qubits` の量子ビットインデックス) を持つため、コーディングに役立ちます。 For example, the following circuit execution ends
 with bit $0$ being `0`, and bit $1$ being `1`. This is interpreted as the
 decimal integer `2` (measured with probability `1.0`).
 
@@ -67,15 +67,15 @@ Sampler().run(qc).result().quasi_dists[0]
 {2: 1.0}
 ```
 
-### Strings
+### 文字列
 
-When displaying or interpreting a list of bits (or qubits) as a string, bit
-$n$ is the leftmost bit, and bit $0$ is the rightmost bit. This is because we
+ビット(または量子ビット)のリストを文字列として表示または解釈する場合 ビット
+$n$ が一番左側、ビット $0$ が一番右側です。 This is because we
 usually write numbers with the most significant digit on the left, and in
 Qiskit, bit $n$ is interpreted as the most significant bit.
 
-For example, the following cell defines a `Statevector` from a string of
-single-qubit states. In this case, qubit $0$ is in state $|{+}\\rangle$, and
+例えば、以下のセルは、
+シングルキュービット状態の文字列から `Statevector` を定義します。 この場合、qubit $0$ は状態 $|{+}\\rangle$, および
 qubit $1$ in state $|0\\rangle$.
 
 ```python
@@ -88,19 +88,19 @@ sv.probabilities_dict()
 {'00': 0.4999999999999999, '01': 0.4999999999999999}
 ```
 
-This occasionally causes confusion when interpreting a string of bits, as you
-might expect the leftmost bit to be bit $0$, whereas it usually represents bit
-$n$.
+これはビットの文字列を解釈するときに混乱を招くことがある。
+が期待する左端のビットはビット $0$ですが、通常はビット
+$n$ を表します。
 
-### Statevector matrices
+### ステートベクトル行列
 
-When representing a statevector as a list of complex numbers (amplitudes),
-Qiskit orders these amplitudes such that the amplitude at index $x$ represents
-the computational basis state $|x\\rangle$.
+複素数(振幅)のリストとして状態ベクトルを表す場合
+Qiskit は、 $x$ の振幅が
+計算基準状態 $|x\\r角度$を表すように、これらの振幅を注文します。
 
 ```python
-print(sv[1])  # amplitude of state |01>
-print(sv[2])  # amplitude of state |10>
+print(sv[1]) 状態の # 振幅|01>
+print(sv[2]) # 振幅の状態 |10>
 ```
 
 ```
@@ -108,49 +108,49 @@ print(sv[2])  # amplitude of state |10>
 0j
 ```
 
-### Gates
+### ゲート
 
-Each gate in Qiskit can interpret a list of qubits in its own way, but
-controlled gates usually follow the convention `(control, target)`.
+Qiskit の各ゲートは独自の方法でキュービットのリストを解釈できますが、
+制御されたゲートは通常 `(control, target)` に従います。
 
-For example, the following cell adds a controlled-X gate where qubit $0$ is
-the control and qubit $1$ is the target.
+例えば、次のセルでは、制御されたXゲートを追加します。ここでは、量子ビット $0$ が
+制御され、量子ビット $1$ がターゲットです。
 
 ```python
-from qiskit import QuantumCircuit
+from qisKit import QuantumCircuit
 qc = QuantumCircuit(2)
 qc.cx(0, 1)
 qc.draw()
 ```
 
 ```
-q_0: ──■──
-     ┌─┴─┐
-q_1: ┤ X ├
-     └───┘
+q_0: ───
+     <unk> ─<unk> ─<unk>
+q_1: <unk> X <unk>
+     └────<unk>
 ```
 
-Following all the previously mentioned conventions in Qiskit, this CX-gate
-performs the transformation $|01\\rangle \\leftrightarrow |11\\rangle$, so has the
-following matrix.
+Qiskitで以前に述べたすべての規約に従ってください この CX-gate
+は変換 $|01\\r角度 \\leftrightarrow |11\\rangle$を実行するため、
+は行列に続く。
 
-$$
+$
 \\begin{pmatrix}
  1 & 0 & 0 & 0 \\
  0 & 0 & 0 & 1 \\
  0 & 0 & 1 & 0 \\
- 0 & 1 & 0 & 0 \\
+ 0 0 & 1 & 0 & 0 \\
 \\end{pmatrix}
 $$
 
-## Change ordering in Qiskit
+## Qiskit の順序を変更
 
-To draw a circuit with qubits in reversed order (that is, qubit $0$ at the
-bottom), use the `reverse_bits` argument. This only affects the generated
-diagram and does not affect the circuit; the X-gate still acts on qubit $0$.
+逆順（つまり、 $0$ の下にある量子ビット
+）で量子ビットを持つ回路を描くには、引数`reverse_bits`を使います。 これは生成された
+ダイアグラムにのみ影響し、回路には影響しません。Xゲートは量子ビット $0$に対して動作します。
 
 ```python
-from qiskit import QuantumCircuit
+from qisKit import QuantumCircuit
 qc = QuantumCircuit(2)
 qc.x(0)
 qc.draw(reverse_bits=True)
@@ -158,30 +158,30 @@ qc.draw(reverse_bits=True)
 
 ```
 q_1: ─────
-     ┌───┐
-q_0: ┤ X ├
-     └───┘
+     <unk> ────<unk>
+q_0: <unk> X <unk>
+     └────<unk>
 ```
 
-You can use the `reverse_bits` method to return a new circuit with the
-qubits' labels reversed (this does not mutate the original circuit).
+`reverse_bits` メソッドを使って、
+qubitsのラベルを逆にした新しい回路を返すことができます（これは元の回路を変更しません）。
 
 ```python
 qc.reverse_bits().draw()
 ```
 
 ```
-q_0: ─────
-     ┌───┐
-q_1: ┤ X ├
-     └───┘
+q_0: ────
+     <unk> ────<unk>
+q_1: <unk> X <unk>
+     └────<unk>
 ```
 
-Note that in this new circuit, the X-gate acts on qubit $1$.
+この新しい回路では、Xゲートは量子ビット $1$に作用することに注意してください。
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-  -  See an example of using circuits in the [Grover's Algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm) tutorial.
-  -  Explore the [QuantumCircuit API](/api/qiskit/qiskit.circuit.QuantumCircuit#quantumcircuit) reference.
+  - format@@2format@@3(https://learning.quantum.ibm.com/tutorial/grovers-algorithm) チュートリアルで回路の使用例を参照してください。
+  - [QuantumCircuit API](/api/qiskit/qiskit.circuit.QuantumCircuit#quantumcircuit) リファレンスを探索します。
 </Admonition>
