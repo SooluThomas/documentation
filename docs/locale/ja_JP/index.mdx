@@ -1,51 +1,52 @@
 ---
 title: はじめに
-description: IBM Quantum ドキュメント入門
-in_page_toc_max_heading_level: 2
+description: トランスパイラーの紹介
 ---
 
 # はじめに
 
-量子コミュニティは、2016年からクラウド上で量子コンピューティングを研究しています。  今度はコミュニティに新しいチャレンジがあります:_有用な量子計算を実証_。 
+format@@0は、特定の量子デバイスのトポロジーに一致するように、特定の入力回路を書き換えるプロセスです。 ノイズの多い量子システムでの実行のための回路命令を最適化しました  このドキュメントでは、すべての Qiskit ユーザーが利用できるローカル移調のためのツールとワークフローについて説明します。 また、プレミアムプランのユーザーが利用できるクラウドベースのformat@@0(qiskit-transpiler-service)も利用できます。  プリミティブを使用していて、Qiskit Runtime サービスによって提供されるデフォルトのトランスパイルオプションにのみ関心がある場合。 format@@0()を読んでください。 /run/configure-runtime-compilation) トピック。
 
-IBM Quantumを通じて、あなたの仕事のためのパフォーマンスとユーティリティスケール(>100-qubit)の量子システム、並びにスケーラブルで柔軟な量子ソフトウェアにアクセスすることができます。 無償プランを試したり、有料プランやプレミアムプランを使ってプログラムを実行したりするかどうか 量子コンピューティングで役に立つ研究ができるようになりました
+Qiskitの中心的なコンポーネントであるトランスパイラーは、モジュール性と拡張性のために設計されています。 その中心的な目標は、新しい回路変換(transpiler **passes**として知られる)を記述することです。 既存のパスと組み合わせることで量子回路の深さや複雑さを大幅に減らすことができます  どのパスが鎖でつながれ、最終的な結果に大きな影響を与えます。 このパイプラインは、[`PassManager`](/api/qiskit/qiskit.transpiler.PassManager) および [`StagedPassManager`](/api/qiskit/qiskit.transpiler.StagedPassManager) オブジェクトによって決定されます。  `StagedPassManager` は、1つまたは複数の `PassManager` の実行をオーケストレーションし、実行される順序を決定します。 一方、 `PassManager` オブジェクトは、単なる1つまたは複数のパスのコレクションです。  オーケストラの指揮者である「StagedPassManager」、異なる楽器セクションである「PassManager」、個々のミュージシャンである「Pass」を考えてみてください。  このようにして、ノイズを管理しながらユーティリティスケールの作業を実行できるハードウェア効率の高い量子回路を構成することができます。
 
-このドキュメントの核となるセクションは、一般的な量子ユーザーの旅の段階に基づいています。Qiskitで量子回路と演算子を構築します。 そして、QisKit Runtime プリミティブを使用して量子システム上でトランスパイルを実行し、回路実行のための簡素化されたインターフェイスを使用します。 Qiskit Runtime とペアリングすることで、高度なランタイムコンパイル、エラー抑制、およびエラー軽減の手法によって、シームレスな回路実行が可能になります。 
+format@@0(transpiler-stages) のトピックでパスマネージャーのステージの詳細についてはこちらをご覧ください。
 
-IBM Quantumを使い始めたばかりの方は、適切な場所にいらっしゃいます。 このセクションのトピックを使用して、準備をしてから、 [Build](../build) に進み、最初の量子回路を作成します。 このページの上部にあるタブに従って、セクションを順番に作業し続けます。
+<Admonition type="caution">
+  ローカルでトランスパイルを実行し、移調された回路を Qiskit Runtime サービスに送信する場合。 `skip_transpilation` オプションを `True` に設定すると、サービスが回路にさらに変換を適用しないようになります。 format@@0(/run/configure-runtime-compilation#advanced-runtime-compilation-options) を参照してください。
+</Admonition>
 
-お探しの内容は既にご存知ですか？
+## トランスパイラーステージ
 
--   [Install](インストール): インストールとセットアップの手順でツールとプラットフォームの使用を開始します。
+Qiskitの事前に構築されたトランスパイラーパイプラインは6つの基本的な段階で構成されています:
 
--   [Build](../build): 動的回路や中間回路測定などの高度な手法やプリミティブを用いた量子回路の設計・開発。 回路ライブラリはこちらもご覧いただけます。
+1.  `init` - このパスは、バックエンドに回路を埋め込む前に必要なすべての初期パスを実行します。  これは通常、カスタム命令をアンロールし、回路をすべてのシングルビットおよび2量子ビットゲートに変換することを含みます。 (デフォルトでは、回路命令を検証し、マルチ量子ビットゲートを単一および2量子ビットゲートに変換します。
+2.  `layout` - このパスは _layout_ を適用し、バックエンドの物理キュービットに回路内の仮想キュービットをマッピング/割り当てます。
+3.  `routing` - このパスは、レイアウトが適用された後に実行され、ゲートを挿入します。 バックエンドの接続/結合マップと互換性を持たせるために、元の回路でSWAPs)。
+4.  `translation` - このパスは、回路内のゲートをバックエンドの指示セットに変換します。
+5.  `optimization` - このパスは最適化ループを実行して、条件(深さ固定など)が満たされるまで、量子回路のより効率的な分解を見つけます。
+6.  `scheduling` - このステージはハードウェアを意識したスケジューリングパス用です。 ユーザがスケジューリング方法を指定した場合、このステージは回路内のすべてのアイドル時間を占めます。
 
--   [Transpile](../transpile): エラー認識度が異なり、ハードウェア上で効率的に動作するように回路を最適化するようにコンパイルします。
+ 独自の移調ワークフローをカスタマイズする場合は、開発中にこれらのステージをガイドラインとして使用することをお勧めします。
 
--   [Verify](../verify): 量子回路の検証と評価を行います。
+## パスマネージャーとの<unk>
 
--   [Run](../run): セッションなどのジョブ設定オプションを使用してハードウェア上で実行します。
+回路を移調するための推奨方法は、ステージングされたパスマネージャーを作成し、回路を入力として`run`メソッドを実行することです。 [`generate_preset_pass_manager`](/api/qiskit/transpiler_preset#qiskit.transpiler.preset_passmanager.generate_preset_pass_manager) 関数を使用して、妥当なデフォルト値を持つステージパスマネージャを生成できます。
 
--   **APIリファレンス**: [Qiskit](/api/qiskit), [Qiskit Runtime IBM Client](/api/qiskit-ibm-runtime), 上記のAPIリファレンスドロップダウンメニューの[Qiskit IBM Runtime Rest API](/api/runtime/tags/programs)、[Qiskit IBM Provider](/api/qiskit-ibm-provider) format@@0(../errors) もここにあります。
+より高度なユーザーは `PassManager` と `StagedPassManager` オブジェクトのセットをカスタマイズし、各ステージが実行される順序を決定できます。  これにより、最終出力回路を劇的に変更することができます。 実際、量子アルゴリズムをトランスパリングするカスタムアプローチは、多くの場合、デフォルトのアプローチよりも効率的なエラー抑制を生成します。  これには、ハードウェア制約に適合し、ノイズの影響を抑制するために量子回路を書き換えることが含まれます。  このツールチェーンのロジックフローは非常にカスタマイズ可能で、直線的である必要はありません。  移調プロセスは、反復ループ、条件分岐、およびその他の複雑な動作を準備することさえできます。  カスタムパスを開発する際に良い出発点は、デフォルトの変換シーケンスを調べることです。
 
-## コミュニティ
+パスマネージャーを使用したトランスパイルの概要については、format@@0(transpile-with-pass-managers) を参照してください。
 
-量子コミュニティの他のユーザーと一緒にアイデアを共有し、他のユーザーが何をしているかを確認しましょう。
+## 既定の移調設定
 
--   [Slack](https://ibm.co/joinqiskitslack) に参加する
--   [LinkedIn](https://www.linkedin.com/showserve/ibm-quantum/) および [X](https://x.com/qiskit)
--   [GitHub](https://github.com/qiskit) で貢献を開始する
--   [YouTube](https://www.youtube.com/qiskit) と [Medium](https://medium.com/qiskit) で検索してください。
+簡単ではありますが、カスタマイズ不可能な「out-of-the-box」という方法でトランスパイラーを使用するには、[`qiskit.compiler.transpile`](/api/qiskit/compiler#qiskit.compiler.transpile) 関数を使用します。  これによりプリセットの `StagedPassManager` のいずれかが生成され実行されます。 他のオプションの中で、0、1、2、または 3 に設定できる `optimization_level` フラグ。  レベルが高いほど最適化された回路が生成され、移調時間が長くなります。
 
 ## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-    - format@@2(install)
-    - format@@0(hello-world)
-    - Explore hand-on tutorials in IBM Quantum Learning, such as:
-      - [Variational Quantum Eigensolver](https://learning.quantum.ibm.com/tutorial/variational-quantum-eigensolver)
-      - [Quantum Approximate Optimization Algorithm](https://learning.quantum.ibm.com/tutorial/quantum-approximate-optimization-algorithm)
-      - [Grover's algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm)
-    - Take the [Basics of quantum information](https://learning.quantum.ibm.com/course/basics-of-quantum-information) course.
-    - format@@0(https://learning.quantum.ibm.com/catalog?content=tutorials) の一覧を表示します。
+    - `transpile` 関数の使い方を学ぶには、[Transpilation default settings and configuration-options](defaults-and-configuration-options) トピックから始めます。
+    - format@@0(transpiler-stages) トピックで移調について学び続けましょう。
+    - format@@0(https://learning.quantum.ibm.com/tutorial/submit-transpled-circuits) チュートリアルを試してみてください。
+    - format@@0(https://learning.quantum.ibm.com/tutorial/redule-transpiled-circuit-depth-with-circuit-cuting) チュートリアルの Qiskit パターンでトランスパレーションを使用します。
+    - [Variational quantum eigensolver (VQE)](https://learning.quantum.ibm.com/tutorial/variational-quantitum-eigensolver)チュートリアルでトランスパイル回路を使用するエンドツーエンドの例を試してみてください。
+    - [Transpile API documentation.](https://docs.quantum-computing.ibm.com/api/qiskit/transpiler)
 </Admonition>
