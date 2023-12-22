@@ -1,84 +1,130 @@
 {
-  "title": "ビルド",
+  "title": "実行",
   "collapsed": true,
   "children": [
     {
       "title": "はじめに",
-      "url": "/build"
+      "url": "/run"
     },
     {
-      "title": "Qiskit で回路を構築",
+      "title": "プリミティブで実行",
       "children": [
         {
-          "title": "回路ライブラリ",
-          "url": "/build/circuit-library"
+          "title": "プリミティブの紹介",
+          "url": "/run/primitives"
         },
         {
-          "title": "回路を構築",
-          "url": "/build/circuit-constructions"
+          "title": "プリミティブを始めましょう",
+          "url": "/run/primitives-get-started"
         },
         {
-          "title": "回路の表示",
-          "url": "/build/circuit-visibility"
-        },
-        {
-          "title": "古典的なフィードフォワードと制御フロー",
-          "url": "/build/classical-feedforward-control-flow"
-        },
-        {
-          "title": "単一操作の合成",
-          "url": "/build/unitary-composition"
-        },
-        {
-          "title": "Qiskit のビットオーダーメント",
-          "url": "/build/bit-ordering"
+          "title": "プリミティブの例",
+          "url": "/run/primitives-examples"
         }
       ]
     },
     {
-      "title": "Qiskit で演算子を構築",
+      "title": "実行時オプションの設定",
       "children": [
         {
-          "title": "演算子モジュールの概要",
-          "url": "/build/operators-overview"
+          "title": "実行時のコンパイルを構成",
+          "url": "/run/configure-runtime-compile"
         },
         {
-          "title": "パウリ基準で観察可能を指定します",
-          "url": "/build/specify-observables-pauli"
+          "title": "実行時エラーの軽減を構成する",
+          "url": "/run/configure-error-mitigation"
+        },
+        {
+          "title": "高度な実行時オプション",
+          "url": "/run/advanced-runtime-options"
         }
       ]
     },
     {
-      "title": "その他の回路構築ツール",
+      "title": "実行モード",
       "children": [
         {
-          "title": "Pulseのスケジュール",
-          "url": "/build/pulse"
+          "title": "セッションについて",
+          "url": "/run/sessions"
         },
         {
-          "title": "OpenQASM",
-          "children": [
-            {
-              "title": "OpenQASM入門",
-              "url": "/build/introduction-to-qasm"
-            },
-            {
-              "title": "OpenQASM 2 と Qiskit",
-              "url": "/build/interoperate-qiskit-qasm2"
-            },
-            {
-              "title": "OpenQASM 3 と Qiskit",
-              "url": "/build/interoperate-qiskit-qasm3"
-            },
-            {
-              "title": "OpenQASM 3 フィーチャーテーブル",
-              "url": "/build/qasm-feature-table"
-            },
-            {
-              "title": "OpenQASM 3.x ライブ仕様",
-              "url": "https://openqasm.com/"
-            }
-          ]
+          "title": "セッションでジョブを実行",
+          "url": "/run/run-jobs-in-session"
+        },
+        {
+          "title": "一括処理でジョブを実行",
+          "url": "/run/run-jobs-batch"
+        }
+      ]
+    },
+    {
+      "title": "ジョブの管理",
+      "children": [
+        {
+          "title": "ジョブの監視",
+          "url": "/run/monitor-job"
+        },
+        {
+          "title": "ジョブの実行時間を推定する",
+          "url": "/run/estimate-job-run-time"
+        },
+        {
+          "title": "ジョブの実行時間を最小化する",
+          "url": "/run/minimize-time"
+        },
+        {
+          "title": "最大実行時間",
+          "url": "/run/max-execution-time"
+        }
+      ]
+    },
+    {
+      "title": "Quantum Serverless ワークロード",
+      "url": "/run/quantum-serverless"
+    },
+    {
+      "title": "ハードウェア",
+      "children": [
+        {
+          "title": "プロセッサタイプ",
+          "url": "/run/processor-types"
+        },
+        {
+          "title": "システム情報",
+          "url": "/run/system-information"
+        },
+        {
+          "title": "Qiskit でバックエンド情報を取得する",
+          "url": "/run/get-backend-information"
+        },
+        {
+          "title": "退職制度",
+          "url": "/run/retired-systems"
+        },
+        {
+          "title": "ハードウェアの考慮事項と従来のフィードフォワードと制御フローの制限",
+          "url": "/run/dynamic-circuits-considations"
+        }
+      ]
+    },
+    {
+      "title": "プラットフォームを理解する",
+      "children": [
+        {
+          "title": "インスタンス",
+          "url": "/run/instances"
+        },
+        {
+          "title": "Fair-shareのキュー",
+          "url": "/run/fair-share-queue"
+        },
+        {
+          "title": "コストの管理",
+          "url": "/run/manage-cost"
+        },
+        {
+          "title": "システム時間を予約する",
+          "url": "/run/reserve-system-time"
         }
       ]
     }
