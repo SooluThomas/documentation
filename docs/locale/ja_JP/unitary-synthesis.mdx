@@ -1,22 +1,22 @@
 ---
-title: Synthesize unitary operations
-description: On the implementation of arbitrary unitary matrices on qubits
+title: 単一操作の合成
+description: qubits上の任意のユニタリー行列の実装
 ---
 
-# Synthesize unitary operations
+# 単一操作の合成
 
-A unitary operation describes a norm-preserving change to a quantum system.
+単一演算は、量子系への標準保存の変更を記述します。
 For $n$ qubits this change is described by a $2^n \\times 2^n$ dimensional, complex matrix $U$ whose adjoint equals the inverse, that is $U^\\dagger U = \\mathbb{1}$.
 
-Synthesizing specific unitary operations into a set of quantum gates is a fundamental task used, for example, in the design and application of quantum algorithms or in compiling quantum circuits.
+特定のユニタリー演算を一連の量子ゲートに合成することは、基本的な作業です。 例えば量子アルゴリズムの設計や応用や量子回路のコンパイルなどです
 
-While efficient synthesis is possible for certain classes of unitaries – like those composed of Clifford gates or having a tensor product structure – most unitaries do not fall into these categories.
-For general unitary matrices, synthesis is a complex task with computational costs that increase exponentially with the number of qubits.
-Therefore, if you know an efficient decomposition for the unitary you would like to implement, it will likely be better than a general synthesis.
+Cliffordゲートで構成されるものやテンソル製品構造を持つものなど、特定のクラスのユニットで効率的な合成が可能ですが、ほとんどのユニットはこれらのカテゴリに該当しません。
+一般的な単一行列の場合、合成は量子ビットの数とともに指数関数的に増加する計算コストを持つ複雑な作業です。
+したがって、実装したいユニタリーのための効率的な分解を知っている場合は、一般的な合成よりも良いでしょう。
 
 <Admonition type="note">
-    If no decomposition is available, Qiskit provides you with the tools to find one. 
-    However, note that this generally generates deep circuits that may be unsuitable to run on noisy quantum computers.
+    分解ができない場合、Qiskitは見つけるためのツールを提供します。 
+    しかし、これは一般的にノイズの多い量子コンピュータ上では実行できない深い回路を生成することに注意してください。
 </Admonition>
 
 ```python
@@ -34,13 +34,13 @@ circuit = QuantumCircuit(2)
 circuit.unitary(U, circuit.qubits)
 ```
 
-## Re-synthesis for circuit optimization
+## 回路最適化のための再合成
 
-Sometimes it is beneficial to re-synthesize a long series of single- and two-qubit gates, if the length can be reduced. For example, the following circuit uses three two-qubit gates.
+長さを減らすことができる場合は、時にはそれはシングルと2量子ビットゲートの長いシリーズを再合成することが有益です。 例えば、以下の回路は3つの2量子ゲートを使用します。
 
-![output](/images/build/unitary-synthesis/unitary_target.png)
+![output](/images/build/unitary-s合成/unitary_target.png)
 
-However, after re-synthesizing with the following code, it only needs a single CX gate.
+しかし、以下のコードで再合成した後は、単一のCXゲートしか必要ありません。
 
 ```python
 from qiskit.quantum_info import Operator
@@ -54,13 +54,13 @@ better_circuit.unitary(U, range(2))
 better_circuit.decompose().draw()
 ```
 
-![output](/images/build/unitary-synthesis/unitary_resynth.png)
+![output](/images/build/unitary-synth.png)
 
-Qiskit's [transpile](../api/qiskit/compiler#qiskit.compiler.transpile) function automatically performs this re-synthesis for a sufficiently high optimization level.
+Qiskitの [transpile](../api/qiskit/compiler#qiskit.compiler.transpile) 関数は、この再合成を十分に高い最適化レベルで自動的に実行します。
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-  -  See an example of circuit decomposition in the [Grover's Algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm) tutorial.
-  -  For more information about the Qiskit transpiler, visit the [Transpile section](../transpile/index).
+  - [Grover's Algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm) チュートリアルで回路分解の例を参照してください。
+  - Qiskit トランスパイラーの詳細については、format@@0(../transpile/index) をご覧ください。
 </Admonition>
