@@ -1,25 +1,25 @@
 ---
-title: Introduction to OpenQASM
-description: An introduction to OpenQASM (Open quantum assembly language)
+title: OpenQASM入門
+description: OpenQASM(オープン量子アセンブリ言語)の紹介
 ---
 
-# Introduction to OpenQASM
+# OpenQASM入門
 
-OpenQASM (open quantum assembly language), a machine-independent programming interface compatible with IBM Quantum systems, is an imperative programming language for describing quantum circuits. OpenQASM uses the quantum circuit model to express quantum programs as ordered sequences of parameterized operations (such as gates, measurements, and resets) and real-time classical computation. In addition to quantum algorithms, OpenQASM can describe circuits intended to characterize, validate, or debug quantum systems.
+IBM Quantum システムと互換性のあるマシンに依存しないプログラミングインターフェイスである OpenQASM (オープン量子アセンブリ言語) は、量子回路を記述するための必須プログラミング言語です。 OpenQASMは、量子回路モデルを使用して、パラメータ化された演算(ゲートなど)の順序付けられたシーケンスとして量子プログラムを表現する。 測定とリセット)とリアルタイム古典計算。 量子アルゴリズムに加えて、OpenQASMは量子システムの特徴付け、検証、デバッグを目的とした回路を記述することができます。
 
-As the needs of quantum system development have evolved, OpenQASM's feature list has expanded in response; the latest version, [OpenQASM 3,](https://arxiv.org/abs/2104.14722) incorporates extensions including classical feed-forward flow control, gate modifiers, and pulse implementations. 
+量子システム開発のニーズが進化するにつれて、OpenQASMの機能リストが拡張されました。最新バージョン[OpenQASM 3,]\(https://arxiv. rg/abs/2104.1472) は、従来のフィードフォワードフロー制御、ゲート修飾子、パルス実装などの拡張機能を搭載しています。 
 
-OpenQASM is the choice for a variety of audiences because of its versatility. The introduction to the OpenQASM 3 paper[^1] gives examples: 
+OpenQASMは、その多様性のためにさまざまな観客のための選択肢です。 OpenQASM 3ペーパー[^1]の紹介には以下のようなものがあります。 
 
->   "Although OpenQASM is not a high-level language, many users would like to write simple quantum circuits by hand using an expressive domain-specific language. Researchers who study circuit compiling need high-level information recorded in the intermediate representations to inform the optimization and synthesis algorithms. Experimentalists prefer the convenience of writing circuits at a relatively high level but often need to manually modify timing or pulse-level gate descriptions at various points in the circuit. Hardware engineers who design the classical controllers and waveform generators prefer languages that are practical to compile given the hardware constraints and make explicit circuit structure that the controllers can take advantage of."
+>   「OpenQASMは高レベル言語ではありませんが、ドメイン固有の言語を用いて手作業で単純な量子回路を作成したいと考えるユーザーも多いでしょう。 回路のコンパイルを研究する研究者は、最適化アルゴリズムと合成アルゴリズムに通知するために中間表現に記録された高レベルの情報が必要です。 実験者は、比較的高いレベルで回路を書くことの利便性を好みますが、多くの場合、回路内のさまざまな点でタイミングやパルスレベルのゲート記述を手動で変更する必要があります。 古典的なコントローラと波形ジェネレータを設計するハードウェアエンジニアは、ハードウェアの制約を考慮してコンパイルし、コントローラが利用できる明示的な回路構造を作成するのに実用的な言語を好みます。
 
-OpenQASM is the common interchange format among independent quantum software tools. For developers that prefer one tool for circuit construction, another for transpilation, and so forth, OpenQASM is the _lingua franca_ that acts as a bridge among them.  
+OpenQASMは、独立した量子ソフトウェアツール間の共通の交換形式です。 回路構築のための1つのツールを好む開発者のために、移調のための別のツール。 そのため、OpenQASMはその間の橋渡しとして機能する_リングア・フランカ_です。  
 
- Qiskit provides ways to convert between OpenQASM and the [`QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) class (see [OpenQASM 2 and Qiskit](interoperate-qiskit-qasm2) and [OpenQASM 3 and Qiskit](interoperate-qiskit-qasm3) for instructions).  
+ QiskitはOpenQASMと[`QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit)クラス([OpenQASM 2 and Qiskit](interoperate-qiskit-qasm2)と[OpenQASM 3とQiskit](interoperate-qiskit-qasm3)を参照)を変換する方法を提供しています。  
 
-For more information, view the [OpenQASM live specification.](https://openqasm.com/)
+詳細については、format@@0(https://openqasm.com/) を参照してください。
 
-## OpenQASM code example: cat state
+## OpenQASM のコード例: cat の状態
 
 ```qasm3
 
@@ -38,15 +38,15 @@ for k in [0:n-1] {
 c = measure q; // measure quantum register
 ```
 
-[^1]: Andrew W. Cross et al. "OpenQASM 3: A broader and deeper quantum assembly language," _ACM Transactions on Quantum Computing_, Volume 3, Issue 3 (2022). https://doi.org/10.48550/arXiv.2104.14722
+[^1]: Andrew W. Crossら. "OpenQASM 3: より広く深い量子アセンブリ言語" _量子コンピューティング_、第3巻3号(2022)でのACMトランザクション。 https://doi.org/10.48550/arXiv.2104.14722
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
 
--   Learn how to generate OpenQASM code in the [Explore gates and circuits with the Quantum Composer](https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) tutorial.
--   Review the [OpenQASM 3 feature table](qasm-feature-table).
--   Read the [OpenQASM 3 Qiskit API](/api/qiskit/qasm3) reference.
--   Read the [OpenQASM 2 Qiskit API](/api/qiskit/qasm2) reference.
--   Visit the [OpenQASM Live Specification](https://openqasm.com/).
+-   format@@0(https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) チュートリアルでOpenQASMコードを生成する方法を学びます。
+-   format@@0(qasm-feature-table) をレビューします。
+-   format@@0(/api/qiskit/qasm3) のリファレンスを読んでください。
+-   format@@0(/api/qiskit/qasm2) のリファレンスを読んでください。
+-   format@@0(https://openqasm.com/) をご覧ください。
     </Admonition>
