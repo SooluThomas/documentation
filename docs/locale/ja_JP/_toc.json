@@ -1,37 +1,84 @@
 {
-  "title": "Verify",
+  "title": "ビルド",
   "collapsed": true,
   "children": [
     {
-      "title": "Introduction",
-      "url": "/verify"
+      "title": "はじめに",
+      "url": "/build"
     },
     {
-      "title": "Exact simulation with Qiskit primitives",
-      "url": "/verify/simulate-with-qiskit-primitives"
-    },
-    {
-      "title": "Exact and noisy simulation with Qiskit Aer primitives",
-      "url": "/verify/simulate-with-qiskit-aer"
-    },
-    {
-      "title": "Build noise models",
-      "url": "/verify/building_noise_models"
-    },
-    {
-      "title": "Efficient simulation of stabilizer circuits with Qiskit Aer primitives",
-      "url": "/verify/stabilizer-circuit-simulation"
-    },
-    {
-      "title": "IBM Quantum cloud-based simulators",
+      "title": "Qiskit で回路を構築",
       "children": [
         {
-          "title": "Using IBM Quantum cloud-based simulators",
-          "url": "/verify/using-ibm-quantum-simulators"
+          "title": "回路ライブラリ",
+          "url": "/build/circuit-library"
         },
         {
-          "title": "Available IBM Quantum simulators",
-          "url": "/verify/cloud-based-simulators"
+          "title": "回路を構築",
+          "url": "/build/circuit-constructions"
+        },
+        {
+          "title": "回路の表示",
+          "url": "/build/circuit-visibility"
+        },
+        {
+          "title": "古典的なフィードフォワードと制御フロー",
+          "url": "/build/classical-feedforward-control-flow"
+        },
+        {
+          "title": "単一操作の合成",
+          "url": "/build/unitary-composition"
+        },
+        {
+          "title": "Qiskit のビットオーダーメント",
+          "url": "/build/bit-ordering"
+        }
+      ]
+    },
+    {
+      "title": "Qiskit で演算子を構築",
+      "children": [
+        {
+          "title": "演算子モジュールの概要",
+          "url": "/build/operators-overview"
+        },
+        {
+          "title": "パウリ基準で観察可能を指定します",
+          "url": "/build/specify-observables-pauli"
+        }
+      ]
+    },
+    {
+      "title": "その他の回路構築ツール",
+      "children": [
+        {
+          "title": "Pulseのスケジュール",
+          "url": "/build/pulse"
+        },
+        {
+          "title": "OpenQASM",
+          "children": [
+            {
+              "title": "OpenQASM入門",
+              "url": "/build/introduction-to-qasm"
+            },
+            {
+              "title": "OpenQASM 2 と Qiskit",
+              "url": "/build/interoperate-qiskit-qasm2"
+            },
+            {
+              "title": "OpenQASM 3 と Qiskit",
+              "url": "/build/interoperate-qiskit-qasm3"
+            },
+            {
+              "title": "OpenQASM 3 フィーチャーテーブル",
+              "url": "/build/qasm-feature-table"
+            },
+            {
+              "title": "OpenQASM 3.x ライブ仕様",
+              "url": "https://openqasm.com/"
+            }
+          ]
         }
       ]
     }
