@@ -1,20 +1,20 @@
 ---
-title: Configure runtime compilation
-description: How to use runtime compilation techniques
+title: 実行時のコンパイルを構成
+description: ランタイムコンパイル技術の使い方
 ---
 
-# Configure runtime compilation for Qiskit Runtime
+# Qiskit Runtimeのランタイムコンパイルを設定します
 
-Runtime compilation techniques optimize and transform your circuit to minimize errors. Runtime compilation adds some classical pre-processing overhead to your overall runtime. Therefore, it is important to achieve a balance between perfecting your results and ensuring that your job completes in a reasonable amount of time.
+ランタイムコンパイル技術は、エラーを最小限に抑えるために回路を最適化し、変換します。 ランタイムコンパイルでは、全体的なランタイムにいくつかの古典的な前処理オーバーヘッドが追加されます。 したがって、あなたの結果を完成させることと、あなたの仕事が妥当な時間内に完了することを確実にすることのバランスを達成することが重要です。
 
-Primitives let you employ runtime compilation by setting the optimization level (`optimization_level` option) and by choosing advanced runtime compilation options.
+プリミティブでは、最適化レベル (`optimization_level` オプション) を設定し、高度なランタイムコンパイルオプションを選択することで、ランタイムコンパイルを使用できます。
 
-## Set the optimization level
+## 最適化レベルを設定する
 
-The `optimization_level` setting specifies how much optimization to perform on the circuits. Higher levels generate more optimized circuits, at the expense of longer compile times.
+`optimization_level` 設定は、回路で実行する最適化の量を指定します。 より高いレベルでは、コンパイル時間が長くなるため、より最適化された回路が生成されます。
 
 <Admonition>
-  In current primitive versions, optimization levels 2 and 3 behave identically to level 1.
+  現在の原始バージョンでは、最適化レベル2と3はレベル1と同じように動作します。
 </Admonition>
 
 <Table>
@@ -53,24 +53,24 @@ The `optimization_level` setting specifies how much optimization to perform on t
 </Table>
 
 <Admonition>
-  The primitives expect circuits in a form suitable to execute on the target system. You may use the Qiskit transpiler locally to translate abstract circuits into this target circuit form. 
+  プリミティブは、ターゲットシステムで実行するのに適した形式の回路を期待します。 Qiskitトランスパイラーをローカルで使用して抽象回路をこのターゲット回路形式に変換することができます。 
   
-At present, the primitives will attempt low-cost transformations if given a circuit that is not already in target form, but in the future, primitives will error on such circuits. It is therefore recommended that users take advantage of the local compilation capabilities of the Qiskit transpiler wherever possible.
+現在、プリミティブは、ターゲット形式ではない回路が与えられた場合、低コストの変換を試みます。 しかし今後原始人はそのような回路でエラーになるでしょう そのため、可能な限り、Qiskit transpiler のローカルコンパイル機能を利用することをお勧めします。
   
-  For instructions on preparing circuits for primitive queries, see the [Submit pre-transpiled circuits](https://learning.quantum.ibm.com/tutorial/submitting-user-transpiled-circuits-using-primitives) tutorial.
+  プリミティブクエリの回路準備については、format@@0(https://learning.quantum.ibm.com/tutorial/submiting-user-transpiled-circuits-using-primitives)チュートリアルを参照してください。
 </Admonition>
 
 <Admonition type="note">
-  If using an IBM Cloud Qiskit Runtime service instance with Q-CTRL performance management enabled, there is no need to specify runtime optimization or resilience levels, as the strategy includes an automatic preset.
+  Q-CTRLパフォーマンス管理が有効なIBM Cloud Qiskit Runtime サービスインスタンスを使用する場合 戦略に自動プリセットが含まれているので、ランタイム最適化や回復力レベルを指定する必要はありません。
   
-  Q-CTRL defaults to `optimization_level=3` and `resilience_level=1`.
-  Setting `optimization_level` or `resilience_level` equal to 0 will result in an
-  execution error. Levels 1, 2, and 3 are permitted but will not impact performance.
-  Setting other options will likewise not impact performance, and it may result in a
-  runtime warning. For more information visit the [Q-CTRL documentation](https://docs.q-ctrl.com/q-ctrl-embedded).
+  Q-CTRLのデフォルトは `optimization_level=3` と `resilience_level=1` です。
+  `optimization_level` または `resilience_level` を 0 に設定すると、
+  実行エラーになります。 レベル1、2、3は許可されていますが、パフォーマンスに影響を与えることはありません。
+  他のオプションを設定するとパフォーマンスにも影響しなくなり、
+  ランタイム警告が発生する可能性があります。 詳細については、format@@0(https://docs.q-ctrl.com/q-ctrl-embedded)をご覧ください。
 </Admonition>
 
-### Example: configure Estimator with optimization levels
+### 例: 最適化レベルで推定値を設定する
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService, Estimator, Options
@@ -92,10 +92,10 @@ psi1_H1 = job.result()
 ```
 
 <Admonition type="note">
-  If the optimization level is not specified, the service uses `optimization_level = 1`.
+  最適化レベルが指定されていない場合、サービスは `optimization_level = 1` を使用します。
 </Admonition>
 
-### Example: configure Sampler with optimization levels
+### 例: 最適化レベルでサンプラーを構成する
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService, Sampler, Options
@@ -104,26 +104,26 @@ service = QiskitRuntimeService()
 backend = service.backend("ibmq_qasm_simulator")
 options = Options(optimization_level=1)
 
-sampler = Sampler(options=options, backend=backend)
+samler = Sampler(options=options, backend=backend)
 ```
 
 <span id="transpilation-table"></span>
-## Advanced runtime compilation options
+## 拡張ランタイムコンパイルオプション
 
-You also have the ability to tune a variety of advanced options to configure your runtime compilation strategy further. These methods can be used alongside optimization levels. They allow you to change the options of interest and let your optimization level manage the rest.
+また、ランタイムコンパイル戦略をさらに構成するためのさまざまな高度なオプションを調整することもできます。 これらのメソッドは最適化レベルとともに使用できます。 彼らはあなたが関心のオプションを変更し、あなたの最適化レベルが残りを管理させることができます。
 
-| Options                                                         | Description                                                                                                                                                                  |
-| --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| options.transpilation.skip_transpilation (bool)                 | Directs the service to execute the primitive query with the bare minimum about of runtime compilation necessary                                                              |
-| options.transpilation.initial_layout(Union\[dict, List, None])  | (Deprecated) Initial position of virtual qubits on physical qubits.                                                                                                          |
-| options.transpilation.layout_method (Optional\[str])            | (Deprecated) Name of layout selection pass. One of `trivial`, `dense`, `noise_adaptive`, `sabre`.                                                                            |
-| options.transpilation.routing_method (Optional\[str])           | (Deprecated) Name of routing pass: `basic`, `lookahead`, `stochastic`, `sabre`, `none`.                                                                                      |
-| options.transpilation.approximation_degree (Optional\[float])   | (Deprecated) Heuristic dial used for circuit approximation (1.0=no approximation, 0.0=maximal approximation). Defaults to no approximation for all optimization levels       |
+| オプション                                                          | 説明                                                                                                                                                                  |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| options.transpilation.skip_transpilation (bool)                | 必要なランタイムコンパイルについて最低限必要なプリミティブクエリを実行するようにサービスを指示します。                                                                                                                 |
+| options.transpilation.initial_layout(Union\[dict, List, None]) | (非推奨) 物理量子ビット上の仮想量子ビットの初期位置。                                                                                                                                        |
+| options.transpilation.layout_method (省略可能:[str])               | (非推奨) レイアウト選択パスの名前。 `trivial`, `dense`, `noise_adaptive`, `sabre`の一つ。                                                                                               |
+| options.transpilation.routing_method (省略可能:[str])              | (非推奨) ルーティングパスの名前: `basic` 、 `lookahead` 、 `stochastic` 、 `sabre` 、 `none` 。                                                                                        |
+| options.transpilation.approximation_degree（オプション[float]）       | (非推奨) 回路近似のために使用されるヒューリスティックダイアル(1.0=無近似、0.0=最大近似)。 デフォルトでは、すべての最適化レベルの近似がありません                                                                                     |
 
-## Next steps
+## 次のステップ
 
 <Admonition type="tip" title="Recommendations">
-    - Try a tutorial that uses optimization levels, such as the [Variational quantum eigensolver](https://learning.quantum.ibm.com/tutorial/variational-quantum-eigensolver) tutorial.
-    - Learn how to transpile locally in the [Transpile](../transpile/) section.
-    - Try the [Submit pre-transpiled circuits](https://learning.quantum.ibm.com/tutorial/submitting-user-transpiled-circuits-using-primitives) tutorial.
+    - [Variational quantum eigensolver](https://learning.quantum.ibm.com/tutorial/variational-quantum-eigensolver)など、最適化レベルを使用するチュートリアルを試してみてください。
+    - [Transpile](../transpile/) セクションでローカルに移調する方法を学びます。
+    - format@@0(https://learning.quantum.ibm.com/tutorial/submiting-user-transpiled-circuits-using-primitives) チュートリアルを試してみてください。
 </Admonition>
