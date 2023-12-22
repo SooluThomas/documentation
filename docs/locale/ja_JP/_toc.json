@@ -1,130 +1,38 @@
 {
-  "title": "実行",
+  "title": "開始",
   "collapsed": true,
   "children": [
     {
       "title": "はじめに",
-      "url": "/run"
+      "url": "/start"
     },
     {
-      "title": "プリミティブで実行",
+      "title": "インストール",
       "children": [
         {
-          "title": "プリミティブの紹介",
-          "url": "/run/primitives"
+          "title": "Qiskitをインストールして設定",
+          "url": "/start/install"
         },
         {
-          "title": "プリミティブを始めましょう",
-          "url": "/run/primitives-get-started"
-        },
-        {
-          "title": "プリミティブの例",
-          "url": "/run/primitives-examples"
+          "title": "IBM Quantum チャンネルを選択して設定",
+          "url": "/start/setup-channel"
         }
       ]
     },
     {
-      "title": "実行時オプションの設定",
-      "children": [
-        {
-          "title": "実行時のコンパイルを構成",
-          "url": "/run/configure-runtime-compile"
-        },
-        {
-          "title": "実行時エラーの軽減を構成する",
-          "url": "/run/configure-error-mitigation"
-        },
-        {
-          "title": "高度な実行時オプション",
-          "url": "/run/advanced-runtime-options"
-        }
-      ]
+      "title": "Hello world",
+      "url": "/ja/start/hello-world"
     },
     {
-      "title": "実行モード",
+      "title": "高度なセットアップ",
       "children": [
         {
-          "title": "セッションについて",
-          "url": "/run/sessions"
+          "title": "Qiskit をソースからインストール",
+          "url": "/start/install-qiskit-source"
         },
         {
-          "title": "セッションでジョブを実行",
-          "url": "/run/run-jobs-in-session"
-        },
-        {
-          "title": "一括処理でジョブを実行",
-          "url": "/run/run-jobs-batch"
-        }
-      ]
-    },
-    {
-      "title": "ジョブの管理",
-      "children": [
-        {
-          "title": "ジョブの監視",
-          "url": "/run/monitor-job"
-        },
-        {
-          "title": "ジョブの実行時間を推定する",
-          "url": "/run/estimate-job-run-time"
-        },
-        {
-          "title": "ジョブの実行時間を最小化する",
-          "url": "/run/minimize-time"
-        },
-        {
-          "title": "最大実行時間",
-          "url": "/run/max-execution-time"
-        }
-      ]
-    },
-    {
-      "title": "Quantum Serverless ワークロード",
-      "url": "/run/quantum-serverless"
-    },
-    {
-      "title": "ハードウェア",
-      "children": [
-        {
-          "title": "プロセッサタイプ",
-          "url": "/run/processor-types"
-        },
-        {
-          "title": "システム情報",
-          "url": "/run/system-information"
-        },
-        {
-          "title": "Qiskit でバックエンド情報を取得する",
-          "url": "/run/get-backend-information"
-        },
-        {
-          "title": "退職制度",
-          "url": "/run/retired-systems"
-        },
-        {
-          "title": "ハードウェアの考慮事項と従来のフィードフォワードと制御フローの制限",
-          "url": "/run/dynamic-circuits-considations"
-        }
-      ]
-    },
-    {
-      "title": "プラットフォームを理解する",
-      "children": [
-        {
-          "title": "インスタンス",
-          "url": "/run/instances"
-        },
-        {
-          "title": "Fair-shareのキュー",
-          "url": "/run/fair-share-queue"
-        },
-        {
-          "title": "コストの管理",
-          "url": "/run/manage-cost"
-        },
-        {
-          "title": "システム時間を予約する",
-          "url": "/run/reserve-system-time"
+          "title": "Qiskit のローカル設定",
+          "url": "/start/configure-qiskit-local"
         }
       ]
     }
