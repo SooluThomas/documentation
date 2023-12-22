@@ -1,58 +1,37 @@
 {
-  "title": "Transpile",
+  "title": "確認する",
   "collapsed": true,
   "children": [
     {
       "title": "はじめに",
-      "url": "/transpile"
+      "url": "/verify"
     },
     {
-      "title": "トランスパイラーステージ",
-      "url": "/transpile/transpiler-stage"
+      "title": "Qiskit プリミティブによる正確なシミュレーション",
+      "url": "/verify/simulate-with-qiskit-primitives"
     },
     {
-      "title": "パスマネージャーとの<unk>",
-      "url": "/transpile/transpile-with-pass-managers"
+      "title": "Qiskit Aer プリミティブによる正確でノイズの多いシミュレーション",
+      "url": "/verify/simulate-with-qiskit-aer"
     },
     {
-      "title": "ダイナミックデカップリング用のパスマネージャーを作成",
-      "url": "/transpile/dynamical-decoupling-pass-manager"
+      "title": "ノイズモデルを構築",
+      "url": "/verify/building_noise_models"
     },
     {
-      "title": "カスタムトランスパイラーパスを書く",
-      "url": "/transpile/custom-transpiler-pass"
+      "title": "Qiskit Aer プリミティブによるスタビライザ回路の効率的なシミュレーション",
+      "url": "/verify/stabilizer-circuit-simulation"
     },
     {
-      "title": "トランスパイル機能を使用する",
+      "title": "IBM Quantum クラウドベースのシミュレーション",
       "children": [
         {
-          "title": "既定の設定と設定オプション",
-          "url": "/transpile/defaults-and-configuration-options"
+          "title": "IBM Quantum クラウドベースのシミュレータの使用",
+          "url": "/verify/using-ibm-quantum-simulator"
         },
         {
-          "title": "最適化レベルを設定",
-          "url": "/transpile/set-optimization"
-        },
-        {
-          "title": "量子コンピュータの概要",
-          "url": "/transpile/representing_quantum_computers"
-        },
-        {
-          "title": "トランスパイルに一般的に使用されるパラメータ",
-          "url": "/transpile/common-parameters"
-        }
-      ]
-    },
-    {
-      "title": "Qiskit transpiler service",
-      "children": [
-        {
-          "title": "Qiskit transpiler サービスを使用したトランスパイル回路の遠隔操作",
-          "url": "/transpile/qiskit-transpiler-service"
-        },
-        {
-          "title": "AI transpiler passes",
-          "url": "/transpile/ai-transpiler-passes"
+          "title": "利用可能なIBM Quantum シミュレーター",
+          "url": "/verify/cloud-based-simulator"
         }
       ]
     }
