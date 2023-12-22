@@ -1,38 +1,38 @@
 ---
-title: Run workloads remotely with Quantum Serverless
-description: Run workloads remotely with Quantum Serverless
+title: Quantum Serverless を使用してワークロードをリモートで実行
+description: Quantum Serverless を使用してワークロードをリモートで実行
 ---
 
-# Run workloads remotely with Quantum Serverless
+# Quantum Serverless を使用してワークロードをリモートで実行
 
-Premium users can build, deploy, and run their workloads remotely on classical compute made available through the IBM Quantum Platform.
+プレミアムユーザーは、IBM Quantum Platformを通じて利用可能な古典的な計算で、ワークロードをリモートでビルド、デプロイ、および実行できます。
 
-Try out the tutorials in [IBM Quantum Learning](https://learning.quantum.ibm.com/catalog/tutorials?topics=qiskit-patterns) (note: these are accessible in the Premium Plan once you have logged into your IBM Quantum account) and explore more of the features of Quantum Serverless in the [documentation](https://qiskit-extensions.github.io/quantum-serverless/).
+[IBM Quantum Learning](https://learning.quantum.ibm)でチュートリアルを試してみてください。 om/catalog/tutorials? opics=qiskit-patterns) (注:IBM Quantum アカウントにログインするとプレミアムプランでアクセスでき、 [documentation](https://qiskit-extensions) でQuantum Serverless の機能をさらに詳しく調べることができます。 ithub.io/quantum-serverless/).
 
 <Admonition type="note">
-    This is an experimental feature, subject to change.
+    これは実験的な機能であり、変更される可能性があります。
 </Admonition>
 
-## Qiskit Patterns with Quantum Serverless
+## Quantum Serverless の Qiskit パターン
 
-Creating utility-scale quantum applications generally requires a variety of compute resource requirements. You can use Quantum Serverless to easily submit quantum workflows for remote, managed execution. These quantum workflows can typically be implemented within a common pattern, called a Qiskit Pattern. A Qiskit Pattern is an intuitive, repeatable set of steps for implementing a quantum computing workflow.
+ユーティリティスケールの量子アプリケーションを作成するには、一般的に、さまざまなコンピューティングリソース要件が必要です。 Quantum Serverless を使用すると、リモートで管理された実行のための量子ワークフローを簡単に送信できます。 これらの量子ワークフローは通常、Qiskit Patternと呼ばれる共通パターン内で実装することができます。 Qiskit Pattern は、量子コンピューティングワークフローを実装するための直感的で繰り返し可能な一連のステップです。
 
-Steps in a Qiskit Pattern:
+Qiskit パターン内のステップ:
 
-1.  Map classical inputs to a quantum problem
-2.  Optimize problem for quantum execution
-3.  Execute using Qiskit Runtime primitives
-4.  Post-process, return result in classical format
+1.  古典入力を量子問題にマップする
+2.  量子実行の問題を最適化する
+3.  Qiskit Runtime プリミティブを使用して実行
+4.  ポストプロセス、古典的なフォーマットで結果を返します
 
-Once you have built a Qiskit Pattern, you can use Quantum Serverless to deploy it and submit it for managed execution. Overall, the process of creating quantum software and submitting it for managed execution on a remote cluster can be broken down into three steps:
+Qiskit Patternをビルドしたら、Quantum Serverlessを使用してデプロイし、管理された実行のために送信することができます。 全体として、量子ソフトウェアを作成し、リモートクラスターで管理された実行のために送信するプロセスを3つのステップに分けることができます。
 
-1.  Build the Qiskit Pattern
-2.  Deploy to the Quantum Serverless
-3.  Run remotely on Quantum Serverless
+1.  Qiskit パターンを構築する
+2.  Quantum Serverless にデプロイする
+3.  Quantum Serverless でリモートで実行
 
-## Build a Qiskit Pattern
+## Qiskit パターンを構築する
 
-Here is an example of computing the expectation value using the Qiskit Runtime Estimator primitive. This Python script should be saved in your working directory. (Warning! All contents of the working directory will be shipped to the cluster for execution.)
+QisKit Runtime Estimate プリミティブを使用して期待値を計算する例を以下に示します。 この Python スクリプトは作業ディレクトリに保存する必要があります。 (警告! 作業ディレクトリのすべての内容は、実行のためにクラスタに出荷されます。
 
 ```python
 # source_files/my_qiskit_pattern.py
@@ -68,9 +68,9 @@ print(result)
 save_result(result.values)
 ```
 
-Please refer to our guides on how to configure your pattern to [accept input arguments](https://qiskit-extensions.github.io/quantum-serverless/getting_started/basic/02_arguments_and_results.html) and [handle external python dependencies](https://qiskit-extensions.github.io/quantum-serverless/getting_started/basic/03_dependencies.html).
+パターンをformat@@0(https://qiskit-extensions.github.io/quantum-serverless/getting_started/basic/02_arguments_and_results.html)と[外部python依存関係を処理する](https://qiskit-extensions.github.io/quantum-serverless/getting_started/basic/03_dependencies.html)に設定する方法については、ガイドを参照してください。
 
-After creating a workflow, authenticate to the `IBMServerlessProvider` with your IBM Quantum token, which can be obtained from your [IBM Quantum account](https://quantum.ibm.com/account), and upload the script.
+ワークフローを作成した後、IBM Quantum トークンを使用して `IBMServerlessProvider` を認証し、format@@0(https://quantum) から取得できます。 bm.com/account)、スクリプトをアップロードします。
 
 ```python
 # Authenticate to the IBM serverless provider
@@ -88,35 +88,35 @@ serverless.upload(
 )
 ```
 
-## Run a Qiskit Pattern remotely on Quantum Serverless
+## Quantum Serverless で Qiskit Pattern をリモートで実行する
 
-Finally, the pattern is ready to run remotely.
+最後に、パターンはリモートで実行する準備ができています。
 
 ```python
-# Run pattern remotely
+# リモートで
 job = serverless.run("My-Qiskit-Pattern")
 
-# Retrieve status, logs, results
+# ステータス、ログ、結果
 job.status()
 job.logs()
 job.result()
 ```
 
-## Migration guide
+## 移行ガイド
 
-Qiskit Runtime custom programs can be easily migrated to Quantum Serverless via this [migration guide](https://qiskit-extensions.github.io/quantum-serverless/migration/migration_from_qiskit_runtime_programs.html).
+Qiskit ランタイムのカスタムプログラムは、このformat@@0(https://qiskit-extensions.github.io/quantum-serverless/migration/migration_from_qiskit_runtime_programs.html)を介して、簡単にQuantum Serverlessに移行できます。
 
-## Resource management (alpha)
+## リソース管理 (アルファ)
 
-Premium Plan users have access to an alpha release of resource management functionality through Quantum Serverless. This enables automatic selection of quantum hardware for your workloads.
+プレミアムプランのユーザーは、Quantum Serverless を介してリソース管理機能のアルファリリースにアクセスできます。 これにより、ワークロード用の量子ハードウェアの自動選択が可能になります。
 
-The example below demonstrates how to use `IBMQPUSelector` to automate the process of selecting which qubits will be used from a set of available backends. This illustrates how the selectors can be used within a four-step Qiskit Pattern. 
+以下の例では、利用可能なバックエンドのセットから使用する qubit を選択するプロセスを自動化するために `IBMQPUSelector` を使用する方法を示します。 ここでは、4ステップの Qiskit パターン内でセレクターを使用する方法を示します。 
 
-Instead of manually selecting a backend, step 2 of the Qiskit Pattern optimizes the circuits for execution by using the QPU selectors from Quantum Serverless to automatically allocate a backend according to desired criteria. Here, `IBMLeastNoisyQPUSelector` finds the backend, among the ones available to you through your IBM Quantum account, that yields the least-noisy qubit subgraph for the input circuit. You can also use the `IBMLeastBusyQPUSelector` to find a backend that can support the circuit width but with the shortest queue.
+バックエンドを手動で選択するかわりに。 QisKit Pattern のステップ2では、Quantum Serverless の QPUセレクタを使用して、必要な条件に応じてバックエンドを自動的に割り当てることで、実行のための回路を最適化します。 ここで、`IBMLeastNoisyQPUSelector`は、IBM Quantumアカウントを通じて利用可能なバックエンドを見つけます。 これにより、入力回路のノイズの少ない量子ビットサブグラフが得られます。 `IBMLeastBusyQPUSelector` を使用して、回路の幅をサポートできるバックエンドを見つけることもできますが、キューの最短です。
 
-For each `IBMQPUSelector`, the context is set in the constructor. All `IBMQPUSelectors` require Qiskit Runtime credentials. The `IBMLeastNoisyQPUSelector` requires a circuit and transpile options specifying how the circuit should be optimized for each backend when determining the most optimal QPU and qubit layout. All `IBMQPUSelector`s implement a `get_backend` method, which retrieves the optimal backend with respect to the given context. The `get_backend` method also allows for additional filtering of the backends. It is implemented using the same interface as the [QiskitRuntimeService.backends method](/api/qiskit-ibm-runtime/qiskit_ibm_runtime.QiskitRuntimeService#backends).
+それぞれの `IBMQPUSelector` に対して、コンテキストはコンストラクタで設定されます。 すべての `IBMQPUSelectors` には Qiskit Runtime 資格情報が必要です。 `IBMLeastNoisyQPUSelector` では、最適なQPUとQPUレイアウトを決定する際に、各バックエンドに対して回路を最適化する方法を指定する回路とトランスパイルオプションが必要です。 すべての `IBMQPUSelector` は `get_backend` メソッドを実装しており、与えられたコンテキストに対して最適なバックエンドを取得します。 `get_backend` メソッドはバックエンドをフィルタリングすることもできます。 これは、[QiskitRuntimeService.backends メソッド](/api/qiskit-ibm-runtime/qiskit_ibm_runtime.QiskitRuntimeService#backends)と同じインターフェースを使用して実装されています。
 
-Then, in step 3 of the pattern, you execute the target circuit on the backend chosen by the selector. Since you optimized your circuit for the backend in step 2, you can skip transpilation in the primitives by setting `skip_transpilation=True`. 
+次に、パターンのステップ3で、セレクタが選択したバックエンドでターゲット回路を実行します。 ステップ2でバックエンド用の回路を最適化したので、`skip_transpilation=True`を設定することで、プリミティブ内のトランスパイルをスキップできます。 
 
 ```python
 # source_files/my_qiskit_pattern_resource_management.py
@@ -164,4 +164,4 @@ print(result)
 save_result(result)
 ```
 
-After creating this pattern, you can deploy and run it remotely with Quantum Serverless as described above.
+このパターンを作成したら、上記のように Quantum Serverless を使用してリモートで実行できます。
