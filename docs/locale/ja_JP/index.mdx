@@ -1,22 +1,21 @@
 ---
 title: はじめに
-description: Qiskit量子回路、演算子、波形パルス、またはOpenQASMを使用して量子プログラムを構築します。
+description: ランセクションの概要。IBM Quantum システムに関する情報とジョブの実行
 ---
 
 # はじめに
 
-ビルドフェーズでは、問題を表す量子プログラムを作成します。 量子プログラムの基盤は、ゲートを含む操作で構成される量子回路です。 測定とリセット - 量子コンピュータの量子ビットを操作します。  ニーズに応じて、Qiskit または OpenQASM を使用して回路を作成できます。 
+IBM Quantum は、7 つの [utility-scale](https://www.ibm.com/blog/announcement/new-ibm-quantum-systems-on-the-ibm-cloud/) 量子系の世界最先端の艦隊を維持しています。 これらのシステムは比類のない信頼性を示し、量子システムの艦隊全体で95%以上の稼働時間があります。比類のない安定性です。 2量子ビットゲートの誤差変動は0以下です。 01は月単位で測定された時間スケール[^1]。
 
-すべてのタスクには、1つ以上のformat@@0(circuit-construction)を構築する必要があります。 さらにいくつかのタスクでは、format@@0(operators-overview)を構築して、推定または測定したい量子状態のプロパティを定義する必要があります。
+## ランフェーズ
 
-Qiskit では、抽象プログラム、仮想プログラム、物理プログラム、スケジュールプログラム、パルスプログラムなど、さまざまな抽象レベルで回路(およびある程度、演算子)を操作することができます。 最も抽象的なレベルは、format@@0(circuit-library)のタスク指向レンズです。 演算子、等値関数、古典/ブール関数を使用して、抽象的な数学用語の演算を表現することもできます。 仮想回路では、数学的抽象化は、具体的なゲートセットという観点から具体的な表現をとる。 物理レベルでは、これらの命令は特定の物理キュービットにマッピングされます。 ターゲットハードウェアプラットフォームの接続とネイティブゲートセットを反映するように命令を書き直しています スケジュール回路はタイミング情報を、format@@0(pulse)はチャンネル上の信号を表します。
+実行フェーズでは、量子プログラムを量子システム上で実行するように送信します。 このセクションでは、IBM Quantum ハードウェアに関する情報と、量子システムへのアクセスを提供するインスタンスへの接続方法について説明します。 ジョブの実行時間とコストの推定、セッション内での実行、システム上での時間の予約などについての詳細を見ることができます。 
 
-Qiskit と [OpenQASM](introduction-to-qasm) は拡張回路の概念をさらにサポートします。これにより、許容される一連の演算を古典値のリアルタイム計算に含めることができます。 このより豊かな回路ファミリーを扱うためのQiskitのツールは、format@@0(classical-feedforward-control-flow)のセクションにあります。
+実行フェーズ中のステップは次のとおりです。
 
-## 次のステップ
+1.  アカウントの資格情報を使用して、選択したチャネルを認証します ([IBM Quantum Platform](../start/setup-channel#ibm-quantum-platform)または[IBM Cloud](../start/setup-channel#ibm-cloud))。
+2.  バックエンドを選択
+3.  ジョブを量子システムに送信します。
+4.  ジョブの結果を表示
 
-<Admonition type="tip" title="Recommendations">
-  - 回路ライブラリ(circuit-library)のトピックを探索して回路の構築を開始します。
-  - format@@0(https://learning.quantum.ibm.com/tutorial/grovers-algorithm) チュートリアルで使用されている回路の例を参照してください。
-  - format@@0(https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) チュートリアルで簡単な回路を操作します。
-</Admonition>
+[^1]: 2023年7月20日から9月20日まで、アクセス可能なすべてのイーグルプロセッサで測定された2Qゲートエラー。
