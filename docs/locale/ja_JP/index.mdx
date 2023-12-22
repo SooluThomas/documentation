@@ -1,52 +1,21 @@
 ---
 title: はじめに
-description: トランスパイラーの紹介
+description: 確認フェーズの紹介
 ---
 
 # はじめに
 
-format@@0は、特定の量子デバイスのトポロジーに一致するように、特定の入力回路を書き換えるプロセスです。 ノイズの多い量子システムでの実行のための回路命令を最適化しました  このドキュメントでは、すべての Qiskit ユーザーが利用できるローカル移調のためのツールとワークフローについて説明します。 また、プレミアムプランのユーザーが利用できるクラウドベースのformat@@0(qiskit-transpiler-service)も利用できます。  プリミティブを使用していて、Qiskit Runtime サービスによって提供されるデフォルトのトランスパイルオプションにのみ関心がある場合。 format@@0()を読んでください。 /run/configure-runtime-compilation) トピック。
+検証フェーズでは、シミュレートされたデバイス上で実行し、現実的なデバイスノイズモデルの下でその性能を検証することによって、量子プログラムをテストします。 これにより、物理システムに送信する前に検証することができます。
 
-Qiskitの中心的なコンポーネントであるトランスパイラーは、モジュール性と拡張性のために設計されています。 その中心的な目標は、新しい回路変換(transpiler **passes**として知られる)を記述することです。 既存のパスと組み合わせることで量子回路の深さや複雑さを大幅に減らすことができます  どのパスが鎖でつながれ、最終的な結果に大きな影響を与えます。 このパイプラインは、[`PassManager`](/api/qiskit/qiskit.transpiler.PassManager) および [`StagedPassManager`](/api/qiskit/qiskit.transpiler.StagedPassManager) オブジェクトによって決定されます。  `StagedPassManager` は、1つまたは複数の `PassManager` の実行をオーケストレーションし、実行される順序を決定します。 一方、 `PassManager` オブジェクトは、単なる1つまたは複数のパスのコレクションです。  オーケストラの指揮者である「StagedPassManager」、異なる楽器セクションである「PassManager」、個々のミュージシャンである「Pass」を考えてみてください。  このようにして、ノイズを管理しながらユーティリティスケールの作業を実行できるハードウェア効率の高い量子回路を構成することができます。
+量子回路を古典的にシミュレートするためのコストは量子ビットの数に応じて指数関数的に縮小するためです 50量子ビット以上の回路は、一般的に直接検証することはできません。 このような回路では、次のことができます。
 
-format@@0(transpiler-stages) のトピックでパスマネージャーのステージの詳細についてはこちらをご覧ください。
+-   古典的にシミュレートできる回路の小さいバージョンをテストします。
+-   回路を古典的にシミュレートできるように変更し、これらの変更された回路をテストします。
 
-<Admonition type="caution">
-  ローカルでトランスパイルを実行し、移調された回路を Qiskit Runtime サービスに送信する場合。 `skip_transpilation` オプションを `True` に設定すると、サービスが回路にさらに変換を適用しないようになります。 format@@0(/run/configure-runtime-compilation#advanced-runtime-compilation-options) を参照してください。
-</Admonition>
+スタビライザ回路は、この後者の目標を達成するための有用なツールです。 これらは、古典的に効率的にシミュレートすることができる制限されたクラスの量子回路です。 特殊なシミュレータは、数千量子ビットでスタビライザ回路を簡単にシミュレートできます。 スタビライザ回路の概要とそれらを効率的にシミュレートする方法については、[Qiskit Aer プリミティブによるスタビライザ回路の効率的なシミュレーション](stabilizer-circuit-simulation)を参照してください。
 
-## トランスパイラーステージ
+一般的な量子回路では、以下のツールを使用して量子プログラムを検証することができます。
 
-Qiskitの事前に構築されたトランスパイラーパイプラインは6つの基本的な段階で構成されています:
-
-1.  `init` - このパスは、バックエンドに回路を埋め込む前に必要なすべての初期パスを実行します。  これは通常、カスタム命令をアンロールし、回路をすべてのシングルビットおよび2量子ビットゲートに変換することを含みます。 (デフォルトでは、回路命令を検証し、マルチ量子ビットゲートを単一および2量子ビットゲートに変換します。
-2.  `layout` - このパスは _layout_ を適用し、バックエンドの物理キュービットに回路内の仮想キュービットをマッピング/割り当てます。
-3.  `routing` - このパスは、レイアウトが適用された後に実行され、ゲートを挿入します。 バックエンドの接続/結合マップと互換性を持たせるために、元の回路でSWAPs)。
-4.  `translation` - このパスは、回路内のゲートをバックエンドの指示セットに変換します。
-5.  `optimization` - このパスは最適化ループを実行して、条件(深さ固定など)が満たされるまで、量子回路のより効率的な分解を見つけます。
-6.  `scheduling` - このステージはハードウェアを意識したスケジューリングパス用です。 ユーザがスケジューリング方法を指定した場合、このステージは回路内のすべてのアイドル時間を占めます。
-
- 独自の移調ワークフローをカスタマイズする場合は、開発中にこれらのステージをガイドラインとして使用することをお勧めします。
-
-## パスマネージャーとの<unk>
-
-回路を移調するための推奨方法は、ステージングされたパスマネージャーを作成し、回路を入力として`run`メソッドを実行することです。 [`generate_preset_pass_manager`](/api/qiskit/transpiler_preset#qiskit.transpiler.preset_passmanager.generate_preset_pass_manager) 関数を使用して、妥当なデフォルト値を持つステージパスマネージャを生成できます。
-
-より高度なユーザーは `PassManager` と `StagedPassManager` オブジェクトのセットをカスタマイズし、各ステージが実行される順序を決定できます。  これにより、最終出力回路を劇的に変更することができます。 実際、量子アルゴリズムをトランスパリングするカスタムアプローチは、多くの場合、デフォルトのアプローチよりも効率的なエラー抑制を生成します。  これには、ハードウェア制約に適合し、ノイズの影響を抑制するために量子回路を書き換えることが含まれます。  このツールチェーンのロジックフローは非常にカスタマイズ可能で、直線的である必要はありません。  移調プロセスは、反復ループ、条件分岐、およびその他の複雑な動作を準備することさえできます。  カスタムパスを開発する際に良い出発点は、デフォルトの変換シーケンスを調べることです。
-
-パスマネージャーを使用したトランスパイルの概要については、format@@0(transpile-with-pass-managers) を参照してください。
-
-## 既定の移調設定
-
-簡単ではありますが、カスタマイズ不可能な「out-of-the-box」という方法でトランスパイラーを使用するには、[`qiskit.compiler.transpile`](/api/qiskit/compiler#qiskit.compiler.transpile) 関数を使用します。  これによりプリセットの `StagedPassManager` のいずれかが生成され実行されます。 他のオプションの中で、0、1、2、または 3 に設定できる `optimization_level` フラグ。  レベルが高いほど最適化された回路が生成され、移調時間が長くなります。
-
-## 次のステップ
-
-<Admonition type="tip" title="Recommendations">
-    - `transpile` 関数の使い方を学ぶには、[Transpilation default settings and configuration-options](defaults-and-configuration-options) トピックから始めます。
-    - format@@0(transpiler-stages) トピックで移調について学び続けましょう。
-    - format@@0(https://learning.quantum.ibm.com/tutorial/submit-transpled-circuits) チュートリアルを試してみてください。
-    - format@@0(https://learning.quantum.ibm.com/tutorial/redule-transpiled-circuit-depth-with-circuit-cuting) チュートリアルの Qiskit パターンでトランスパレーションを使用します。
-    - [Variational quantum eigensolver (VQE)](https://learning.quantum.ibm.com/tutorial/variational-quantitum-eigensolver)チュートリアルでトランスパイル回路を使用するエンドツーエンドの例を試してみてください。
-    - [Transpile API documentation.](https://docs.quantum-computing.ibm.com/api/qiskit/transpiler)
-</Admonition>
+-   小さな量子回路の正確なシミュレーションには、Qiskitに含まれるリファレンスプリミティブを使用できます。 format@@0(simulate-with-qiskit-primitives) を参照してください。
+-   より大きな回路を処理したり、シミュレーションにノイズモデルを組み込んだりできる高性能なシミュレーションには、[Qiskit Aer](https://qiskit) を使用してください。 rg/ecosystem/aer/), [Qiskit Ecosystem](https://qiskit.github.io/ecosystem/)の一部であるプロジェクト. format@@0(simulate-with-qiskit-aer) を参照してください。
+-   独自のカスタムノイズモデルを作成するには、Qiskit Aer の [`noise`](https://qiskit.org/ecosystem/aer/apidocs/aer_noise.html) モジュールを使用してください。 format@@0(building_noise_models) を参照してください。
