@@ -1,15 +1,15 @@
 ---
-title: Processor types
-description: Information on IBM Quantum hardware and features of different processors
+title: プロセッサタイプ
+description: IBM Quantum ハードウェアとさまざまなプロセッサーの機能に関する情報
 ---
 
-# Processor types
+# プロセッサタイプ
 
-Processor types are named for the general technology qualities that go into builds, consisting of the family and revision. Family (e.g., Falcon) refers to the size and scale of circuits possible on the chip. This is primarily determined by the number of qubits and the connectivity graph. Revisions (e.g., r1) are design variants within a given family, often leading to performance improvements or tradeoffs. Segments are comprised of chip sub-sections, and are defined within a given family. For instance, segment H of a Falcon consists of seven qubits arranged as seen in the illustration below. Segment H on a Hummingbird, if implemented, could be entirely different.
+プロセッサの種類は、ファミリーとリビジョンからなるビルドに入る一般的な技術的資質にちなんで名付けられます。 ファミリ(例:Falcon)とは、チップ上で可能な回路のサイズとスケールを指します。 これは主に量子ビット数と接続グラフによって決定されます。 リビジョン(例:r1)は、特定のファミリー内のデザインバリアントであり、パフォーマンスの向上やトレードオフにつながることがよくあります。 セグメントはチップサブセクションで構成され、特定のファミリー内で定義されます。 例えば、ファルコンのセグメントHは、以下の図に示すように配置された7量子ビットで構成されています。 実装されれば、Hummingbird上のセグメントHは完全に異なる可能性があります。
 
 ![../../../\_images/seg-h.png](/images/migration/seg-h.png)
 
-Illustration of segment H on a Falcon processor.
+ファルコンプロセッサ上のセグメントHのイラスト。
 
 ## Heron
 
@@ -17,34 +17,34 @@ Illustration of segment H on a Falcon processor.
 
 Quantum volume: 512
 
-At 133 qubits, Heron is an [Eagle](#eagle)-sized upgrade to [Egret](#egret) that pulls in substantial innovations in signal delivery that were previously deployed in [Osprey](#osprey). The signals required to enable the fast, high-fidelity two-qubit and single-qubit control are delivered with high-density flex cabling.
+At 133 qubits, Heron is an [Eagle](#eagle)-sized upgrade to [Egret](#egret) that pulls in substantial innovations in signal delivery that were previously deployed in [Osprey](#osprey). 高速、高忠実度の2量子ビットおよび単一量子ビット制御を可能にするために必要な信号は、高密度フレックスケーブルによって供給されます。
 
--   [View available Heron systems](https://quantum.ibm.com/services/resources?tab=systems&type=Heron)
+-   format@@0(https://quantum.ibm.com/services/resources?tab=systems&type=Heron)
 
 ## Osprey
 
 ![Osprey processor icon](/images/migration/osprey.svg)
 
-Osprey is nearly quadruple the size of Eagle at 433 qubits. The larger chip sizes have required further enhancements to device packaging, as well as custom flex cabling in the cryostat to fit the greater I/O requirements within the same wiring footprint.
+オスプレイは433量子ビットのイーグルの4倍近くの大きさです。 より大きなチップサイズには、デバイスパッケージのさらなる機能強化が必要になりました。 同じ配線フットプリント内でより大きなI/O要件に適合するように、クライオスタット内のカスタムフレックスケーブルも使用できます。
 
--   [View available Osprey systems](https://quantum.ibm.com/services/resources?tab=systems&type=Osprey)
+-   format@@0(https://quantum.ibm.com/services/resources?tab=systems&type=Osprey)
 
 ## Eagle
 
-![Eagle processor icon](/images/migration/eagle.svg)
+format@@0(/images/migration/eagle.svg)
 
 Quantum volume: 128
 
-At 127 qubits, the Eagle processor family incorporates more scalable packaging technologies than previous generations. In particular, signals pass through multiple chip layers so as to allow for high-density I/O without sacrificing performance.
+127量子ビットのEagleプロセッサファミリーには、以前の世代よりもスケーラブルなパッケージング技術が組み込まれています。 特に、信号は複数のチップ層を通過するため、性能を犠牲にすることなく高密度I/Oを可能にします。
 
-See [this blog post](https://research.ibm.com/blog/127-qubit-quantum-processor-eagle) for more about the Eagle processor family.
+イーグルプロセッサファミリーの詳細については、format@@0(https://research.ibm.com/blog/127-qubit-quantum-processor-eagle)を参照してください。
 
--   [View available Eagle systems](https://quantum.ibm.com/services/resources?tab=systems&type=Eagle)
+-   format@@0(https://quantum.ibm.com/services/resources?tab=systems&type=Eagle)
 
 <Admonition type="info" title="Revisions">
-  `r3` (December 2022) Eagle r3 is a version of the 127-qubit processor with enhanced coherence properties but otherwise similar design parameters to Eagle r1.
+  `r3` (2022年12月) Eagle r3は127-qubitプロセッサのバージョンで、コヒーレンス特性が強化されていますが、Eagle r1と同様の設計パラメータがあります。
 
-  `r1` (December 2021) At the qubit level, Eagle r1 uses similar design elements and parameters to Falcon r5.11, enabling similarly fast readout. Gate speeds and error rates should also be similar.
+  `r1` (2021年12月) qubit レベルでは、Eagle r1はFalcon r5.11と同様のデザイン要素とパラメータを使用し、同様の高速な読み出しを可能にします。 ゲート速度とエラーレートも同様にする必要があります。
 
 </Admonition>
 
@@ -54,16 +54,16 @@ See [this blog post](https://research.ibm.com/blog/127-qubit-quantum-processor-e
 
 Quantum volume: 128
 
-Using a heavy-hexagonal qubit layout, the Hummingbird family allows up to 65 qubits.
+ヘビー六角形のキュービットレイアウトを使用することで、Hummingbird ファミリーは最大 65 量子ビットを使用できます。
 
--   [View available Hummingbird systems](https://quantum.ibm.com/services/resources?tab=systems&type=Hummingbird)
+-   format@@0(https://quantum.ibm.com/services/resources?tab=systems&type=Hummingbird)
 
 <Admonition type="info" title="Revisions">
-  `r3` (December 2021) This version of Hummingbird with 65 qubits has enhanced coherence properties.
+  `r3` (2021年12月) このHummingbird は 65 qubit のコヒーレンス特性を強化しました。
 
-  `r2` (August 2020) Released in 3Q 2020, this revision contains 65 qubits. Improvements previously demonstrated on Falcons, like readout multiplexing, space-efficient qubit-qubit couplers, and flip-chip technology enhanced the capabilities of the Hummingbird family and led to a scalable 65Q design.
+  `r2` (2020年8月) 2020年第3四半期にリリースされたこの改訂には65量子ビットが含まれています。 読み出し多重化、スペース効率の高い量子ビットカプラなど、Falconsで以前に実証された改善。 フリップチップ技術により、Hummingbirdファミリーの機能が強化され、スケーラブルな65Q設計が可能になりました。
 
-  `r1` (October 2019) This revision is the first attempt at supporting a large (>50) number of qubits on a chip.
+  `r1` (October 2019) このリビジョンは、チップ上の大きな数(>50)の量子ビットをサポートする最初の試みです。
 
 </Admonition>
 
@@ -73,12 +73,12 @@ Using a heavy-hexagonal qubit layout, the Hummingbird family allows up to 65 qub
 
 Quantum volume: 512
 
-Egret brings the innovations of tunable couplers onto a 33-qubit platform, resulting in faster and higher-fidelity two-qubit gates.
+Egretは、調整可能なカプラの革新を33量子ビットプラットフォームにもたらし、より高速でより忠実な2量子ビットゲートを実現します。
 
--   [View available Egret systems](https://quantum.ibm.com/services/resources?tab=systems&type=Egret)
+-   format@@0(https://quantum.ibm.com/services/resources?tab=systems&type=Egret)
 
 <Admonition type="info" title="Revisions">
-  `r1` (December 2022) The first realization of the Egret processor has demonstrated the highest Quantum Volume among IBM Quantum systems and a substantial improvement in two-qubit gate error rates ([https://research.ibm.com/blog/quantum-volume-256](https://research.ibm.com/blog/quantum-volume-256)). This new quantum processor boasts a substantial speedup and fidelity improvement (many gates approaching 99.9%) in two-qubit gates while reducing spectator errors.
+  `r1` (2022年12月) 最初のEgretプロセッサの実現は、IBM Quantumシステムの中で最も高い量子ボリュームを示し、2量子ゲートのエラーレートの大幅な向上を実現しました([https://research)。 bm.com/blog/quantum-volume-256](https://research.ibm.com/blog/quantum-volume-256) この新しい量子プロセッサは、観客の誤差を軽減しながら、2量子ゲートで大幅な高速化と忠実度向上(99.9%に近づく多くのゲートがあります)を実現します。
 </Admonition>
 
 ## Falcon
@@ -87,36 +87,36 @@ Egret brings the innovations of tunable couplers onto a 33-qubit platform, resul
 
 Quantum volume: 128 
 
-The Falcon family of devices offers a valuable platform for medium-scale circuits, and also serves as a valuable platform for demonstrating performance and scalability improvements before they’re pushed onto the larger devices.
+ファルコンデバイスファミリーは、中規模回路にとって貴重なプラットフォームを提供します。 さらに、より大きなデバイスに移行する前に、パフォーマンスとスケーラビリティの向上を実証するための有益なプラットフォームとしても役立ちます。
 
--   [View available Falcon systems](https://quantum.ibm.com/services/resources?tab=systems&type=Falcon)
+-   format@@0(https://quantum.ibm.com/services/resources?tab=systems&type=Falcon)
 
 <Admonition type="info" title="Revisions">
-  `r8` (September 2021) In addition to the features of r5.11, Falcon r8 has enhanced coherence properties.
+  `r8` (2021年9月) r5.11の機能に加えて、Falcon r8はコヒーレンス特性を強化しました。
 
-  `r5.11` (January 2021) In addition to the filtering in r5.10, design improvements target speed-ups in qubit state readout. An essential requirement for quantum error correction demonstrations is fast readout. To enable this, the paradoxical requirements of stronger readout coupling yet protection from qubit relaxation is accomplished with advanced filtering techniques and fine tuning of various components’ couplings on-chip. This revision, combined with the latest in control electronics, enables mid-circuit measurements.
+  `r5.11` (2021年1月) r5.10のフィルタリングに加えて、量子状態の読み出しにおけるスピードアップを目標とした設計改善が行われました。 量子エラー訂正のデモンストレーションに不可欠な要件は、高速な読み出しです。 これを有効にするには より強力な読み出し結合でもクビットリラックスから保護するという逆説的な要件は、高度なフィルタリング技術とチップ上の様々なコンポーネントのカップリングの微調整によって達成されます。 最新の制御エレクトロニクスと組み合わせることで、中規模の測定が可能になります。
 
-  `r5.10` (December 2020) This revision pioneered advanced on-chip filtering techniques that eventually led to the faster qubit state readout in r5.11. The filters reduce qubit relaxation and preserve lifetime. Additionally, space-saving “direct-couplers” are used to couple qubits together, essential for scaling to larger bird families.
+  `r5.10` (2020年12月) このリビジョンは、最終的にr5.11でより高速な量子ビット状態の読み出しにつながった高度なオンチップフィルタリング技術を開拓しました。 フィルタは、クビットの緩和を減らし、寿命を維持します。 さらに、スペースを節約する「ダイレクトカプラ」は、キュービットを結合するために使用されます。これは、大規模な鳥のファミリーにスケーリングするために不可欠です。
 
-  `r4` (April 2020) Adding to the capabilities of r1, the r4 is the first revision in the large birds to deploy multiplexed readout. Previous designs required an independent signal pathway on the chip, as well as in the dilution refrigerator and control electronics for qubit state readout.
+  `r4` (2020年4月) r1の機能に加えて、r4は多重読み出しを展開する最初のリビジョンです。 以前の設計では、チップ上に独立した信号経路が必要でした。また、希釈冷蔵庫や量子状態の読み出しのための電子制御も必要でした。
 
-  `r1` (February 2020) The first generation of the Falcon family, r1 is a 28Q offering independent readout, contrasting to the multiplexed configurations in the other revisions. The flip-chip technology allowed scaling to a larger number of qubits. The heavy-hex connectivity graph is employed for the first time here, optimal for our two-qubit gate of choice, cross-resonance.
+  `r1` (2020年2月) ファルコンファミリーの第一世代、r1は独立した読み出しを提供する28Qです。 他のリビジョンにおける多重化設定と対照的になっています。 フリップチップ技術により、より多くの量子ビットにスケーリングすることができました。 ヘビーヘックス・コネクティビティー・グラフはここで初めて採用されており、我々の選択肢である2量子ビットゲート、クロス共振に最適です。
 
 </Admonition>
 
-## Canary
+## カナリー
 
 ![Canary processor icon](/images/migration/canary.svg)
 
-The Canary family comprises small designs containing anywhere from 5 to 16 qubits. It uses an optimized 2D lattice.  That is, all of the qubits and readout resonators are on the same layer.
+カナリアファミリーは、5~16個の小さなデザインで構成されています。 最適化された2D格子を使用します。  つまり、すべての量子ビットと読み出し共振器は同じ層にあります。
 
--   [View available Canary systems](https://quantum.ibm.com/services/resources?tab=systems&type=Canary)
+-   format@@0(https://quantum.ibm.com/services/resources?tab=systems&type=Canary)
 
 <Admonition type="info" title="Revisions">
-  `r1.3` (December 2019) A stripped-down offering containing only a single qubit.
+  `r1.3` (2019年12月) 単一量子ビットのみを含む、削除されたオファー。
 
-  `r1.1` (May 2017) Using the similar design processes to r1, r1.1 extends the design to include 16 qubits.
+  `r1.1` (2017年5月) 同様の設計プロセスをr1に使用すると、r1.1 は16個のキュービットを含めるように設計を拡張します。
 
-  `r1` (January 2017) Initial 5Q design with resonators and qubits all on a single lithography layer.
+  `r1` (2017年1月) 共振器と量子ビットを備えた最初の5Qデザインはすべて単一の露光層にあります。
 
 </Admonition>
