@@ -1,37 +1,37 @@
 ---
-title: 利用可能なIBM Quantum シミュレーター
-description: 利用可能なIBM Quantumクラウドベースのシミュレータの概要
+title: Available IBM Quantum simulators
+description: Overview of available IBM Quantum cloud-based simulators
 ---
 
-# 利用可能なIBM Quantum シミュレーター
+# Available IBM Quantum simulators
 
 <Admonition type="note">
-このページでは、IBM Quantum クラウドベースのシミュレータについて詳しく説明します。 Qiskit ビルトインシミュレーターの詳細については、[API リファレンスの Python ベースのシミュレーター] ページを参照してください。 api/qiskit/providers_basicaer) ローカルの状態ベクトルシミュレーションには、[Qiskit reference primitives](simulate-with-qiskit-primitives)を使用することもできます。
+This page gives details about the IBM Quantum cloud-based simulators. For information about the Qiskit built-in simulator, see the [Python-based simulators page in the API reference.](../api/qiskit/providers_basicaer) You can also use the [Qiskit reference primitives](simulate-with-qiskit-primitives) for local statevector simulation.
 </Admonition>
 
-IBM Quantumは、量子回路とアルゴリズムのプロトタイピングのための高性能シミュレータのコレクションを備えています。
+IBM Quantum features a collection of high-performance simulators for prototyping quantum circuits and algorithms.
 
-利用可能なシミュレータを表示するには、画面の右上隅にあるアプリケーションスイッチャー(![switcher](/images/migration/switcher-small2)をクリックします。 ng) ), **リソースを計算** を選択して format@@0(https://quantum.ibm.com/services/resources?services=simulators) を表示し、すべてのシミュレータをクリックします。
+To view available simulators, on the upper right corner of the screen, click the Application switcher ( ![switcher](/images/migration/switcher-small2.png) ), select **Compute resources** to view the [Compute resources page,](https://quantum.ibm.com/services/resources?services=simulators) then click All simulators.
 
-以下のシミュレーション方法は、ジョブあたり最大300個の回路と8192個のショットをサポートしています。 以下に示す各シミュレータの詳細については、そのタイプ、説明、シミュレートする量子ビットの数などを参照してください。 ノイズモデリング、サポートされているゲートのリスト、および Qiskit Runtime を使用して呼び出す方法が含まれているかどうか。 `simulator_stateevector` は汎用ソリューションメソッドであるため、デフォルトでは良い選択です。 
+The following simulation methods support a maximum of 300 circuits and 8192 shots per job. Find more information on each simulator below, including its type, a description, the number of qubits it simulates, whether it includes noise modeling, a list of supported gates, and how to call it using Qiskit Runtime. The `simulator_statevector` is a good default choice since it is a general-purpose solution method. 
 
 <Admonition type="info" title="Simulator timeout limit">
-  シミュレータが処理を妥当な時間で完了しないジョブを処理するのを防ぐため。 シミュレータに送信されるジョブは、10,000 秒以内の実行時間に制限されます(\~2)。 5時間)。
+  To prevent the simulators from processing jobs that would otherwise not finish processing in a reasonable amount of time, jobs sent to the simulators are limited to run times under 10,000 seconds (\~2.75 hours).
 </Admonition>
 
-## ステートベクトルシミュレーション
+## Statevector simulator
 
-**タイプ:** Schro<unk> dinger wavefunction
+**Type:** Schrödinger wavefunction
 
-**名前:** simulator_statevector
+**Name:** simulator_statevector
 
-量子回路を、量子ビットの状態ベクトルの波動係数をゲートと命令が適用されるように計算します。 一般的なノイズモデリングに対応しています。
+Simulates a quantum circuit by computing the wavefunction of the qubit’s statevector as gates and instructions are applied. Supports general noise modeling.
 
 **Qubits:** 32
 
-**ノイズモデリング:** はい
+**Noise modeling:** Yes
 
-**サポートされているゲート/指示**
+**Supported gates / instructions**
 
 ```python
 ['u1', 'u2', 'u3', 'u', 'p', 'r', 'rx', 'ry', 'rz', 'id',
@@ -43,7 +43,7 @@ IBM Quantumは、量子回路とアルゴリズムのプロトタイピングの
 'multiplexer', 'initialize', 'kraus', 'roerror', 'delay']
 ```
 
-**コード例**
+**Code example**
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -51,26 +51,26 @@ service = QiskitRuntimeService()
 backend = service.get_backend("simulator_statevector")
 ```
 
-## スタビライザシミュレーション
+## Stabilizer simulator
 
-**タイプ:** Clifford
+**Type:** Clifford
 
-**名前:** simulator_stabilizer
+**Name:** simulator_stabilizer
 
-Clifford回路の効率的なシミュレータ。 ノイズオペレータがCliffordゲートでもある場合、ノイズの多い進化をシミュレートできます。
+An efficient simulator of Clifford circuits. Can simulate noisy evolution if the noise operators are also Clifford gates.
 
 **Qubits:** 5000
 
-**ノイズモデリング:** はい (Clifford only)
+**Noise modeling:** Yes (Clifford only)
 
-**サポートされているゲート/指示**
+**Supported gates / instructions**
 
 ```python
 ['cx', 'cy', 'cz', 'id', 'x', 'y', 'z', 'h',
 's', 'sdg', 'sx', 'swap', 'delay', 'roerror']
 ```
 
-**コード例**
+**Code example**
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -78,27 +78,27 @@ service = QiskitRuntimeService()
 backend = service.get_backend("simulator_stabilizer")
 ```
 
-## 拡張スタビライザーシミュレーション
+## Extended stabilizer simulator
 
-**タイプ:** Clifford拡張（例：Clifford+T）
+**Type:** Extended Clifford (e.g., Clifford+T)
 
-**名前:** simulator_extended_stablizer
+**Name:** simulator_extended_stabilizer
 
-ランク付けされたスタビライザー分解を使用して量子回路の動作を近似します。 Clifford以外のゲートの数がスタビライザの用語の数を決定します。
+Approximates the action of a quantum circuit using a ranked-stabilizer decomposition. The number of non-Clifford gates determines the number of stabilizer terms.
 
 **Qubits:** 63
 
-**ノイズモデリング:** いいえ
+**Noise modeling:** No
 
-**サポートされているゲート/指示**
+**Supported gates / instructions**
 
 ```python
 ['u0', 'u1', 'cx', 'cz', 'id', 'x', 'y', 'z', 'h',
-'t', 'tdg', 's', 'sdg', 'sdg', 'sx', 'swap', 'p', 'ccx', 'ccz',
+'t', 'tdg', 's', 'sdg', 'sx', 'swap', 'p', 'ccx', 'ccz',
 'delay', 'roerror']
 ```
 
-**コード例**
+**Code example**
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -106,27 +106,27 @@ service = QiskitRuntimeService()
 backend = service.get_backend("simulator_extended_stabilizer")
 ```
 
-## MPSシミュレーション
+## MPS simulator
 
-**タイプ:** マトリクス製品の状態
+**Type:** Matrix Product State
 
-**名前:** simulator_mps
+**Name:** simulator_mps
 
-状態にマトリックス製品状態(MPS)表現を使用するテンソルネットワークシミュレータ。 この表現は、エンタングルメントが弱い状態ではしばしばより効率的です。
+A tensor-network simulator that uses a Matrix Product State (MPS) representation for states. This representation is often more efficient for states with weak entanglement.
 
 **Qubits:** 100
 
-**ノイズモデリング:** いいえ
+**Noise modeling:** No
 
-**サポートされているゲート/指示**
+**Supported gates / instructions**
 
 ```python
-['unitary', 't', 'tdg', 'id', 'cp', 'u1', 'u2', 'u3', 'u', 'u',
-'cx', 'cz', 'x', 'y', 'z', 'h', 'sdg', 'sx', 'swap',
+['unitary', 't', 'tdg', 'id', 'cp', 'u1', 'u2', 'u3', 'u',
+'cx', 'cz', 'x', 'y', 'z', 'h', 's', 'sdg', 'sx', 'swap',
 'p', 'ccx', 'delay', 'roerror']
 ```
 
-**コード例**
+**Code example**
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -134,19 +134,19 @@ service = QiskitRuntimeService()
 backend = service.get_backend("simulator_mps")
 ```
 
-## QASMシミュレーション
+## QASM simulator
 
-**タイプ:** 一般的なコンテキスト対応
+**Type:** General, context-aware
 
-**名前:** ibmq_qasm_Simulator
+**Name:** ibmq_qasm_simulator
 
-理想的にはノイズモデリングを行う量子回路をシミュレートするための汎用シミュレータです。 シミュレーション方法は、入力回路とパラメータに基づいて自動的に選択されます。
+A general-purpose simulator for simulating quantum circuits both ideally and subject to noise modeling. The simulation method is automatically selected based on the input circuits and parameters.
 
 **Qubits:** 32
 
-**ノイズモデリング:** はい
+**Noise modeling:** Yes
 
-**サポートされているゲート/指示**
+**Supported gates / instructions**
 
 ```python
 ['u1', 'u2', 'u3', 'u', 'p', 'r', 'rx', 'ry', 'rz', 'id',
@@ -158,7 +158,7 @@ backend = service.get_backend("simulator_mps")
 'multiplexer', 'initialize', 'kraus', 'roerror', 'delay']
 ```
 
-**コード例**
+**Code example**
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -166,11 +166,11 @@ service = QiskitRuntimeService()
 backend = service.get_backend("ibmq_qasm_simulator")
 ```
 
- Qiskit組み込みシミュレータは、[PythonベースのシミュレータAPI](/api/qiskit/providers_basicaer) リファレンスを参照してください。 
+ Qiskit built-in simulator, see the [Python-based simulators API](/api/qiskit/providers_basicaer) reference. 
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-  - [PythonベースのシミュレータAPI](/api/qiskit/providers_basicaer) リファレンスでQiskitに組み込まれたシミュレータについて学びます。
-  - format@@0(../run/system-information) のトピックから利用可能なシステムを見つけます。
+  - Learn about simulators built into Qiskit in the [Python-based simulators API](/api/qiskit/providers_basicaer) reference.
+  - Discover available systems in the  [System information](../run/system-information) topic.
 </Admonition>
