@@ -1,19 +1,19 @@
 ---
-title: OpenQASM 3 と Qiskit
-description: OpenQASM 3とQiskit 間のコード変換
+title: OpenQASM 3 and Qiskit
+description: Convert code between OpenQASM 3 and Qiskit
 ---
 
-# OpenQASM 3 と Qiskit
+# OpenQASM 3 and Qiskit
 
-Qiskitは、量子プログラムのOpenQASM表現とQuantumCircuitクラス間で変換するためのツールを提供しています。 これらのツールはまだ開発の探索段階にあり、QiskitのOpenQASM 3で表現される動的回路機能のサポートとして進化し続けるでしょう。
+Qiskit provides some tools for converting between OpenQASM representations of quantum programs, and the QuantumCircuit class. Note these tools are still in an exploratory phase of development and will continue to evolve as Qiskit’s support for dynamic circuit capabilities expressed by OpenQASM 3 increases.
 
 <Admonition type="note">
-この関数はまだ探索段階にあります。  したがって、構文や機能が進化する可能性が高いです。
+This function is still in the exploratory phase.  Therefore, it is likely that the syntax and capabilities will evolve.
 </Admonition>
 
-## OpenQASM 3 プログラムを Qiskit にインポート
+## Import an OpenQASM 3 program into Qiskit
 
-現在、OpenQASM 3 から Qiskit へのインポートには 2 つの高レベル機能が利用できます。 これらの関数はファイル名を取る`load()`で、プログラム自体を文字列とする`loads()`です。 
+Currently two high-level functions are available for importing from OpenQASM 3 into Qiskit. These functions are `load()`, which takes a file name, and `loads()`, which takes the program itself as a string: 
 
 ```python
 qiskit.qasm3.load(file_name)
@@ -23,13 +23,13 @@ qiskit.qasm3.load(file_name)
 qiskit.qasm3.loads(program-string)
 ```
 
-この関数を使用するには、パッケージ `qiskit_qasm3_import ` をインストールする必要があります。  例:  
+You must install the package `qiskit_qasm3_import ` to use this function.  For example:  
 
 ```python
 pip install qiskit-qasm3-import
 ```
 
-この例では、OpenQASM 3 を使用して量子プログラムを定義し、`loads()` を使用して直接量子回路に変換します。
+In this example, we define a quantum program using OpenQASM 3, and use `loads()` to directly convert it into a QuantumCircuit:
 
 ```python
 import qiskit.qasm3
@@ -80,15 +80,15 @@ circuit.draw("mpl")
 
 ![output](/images/build/interoperate-qiskit-qasm3/qasm3circ.png)
 
-## OpenQASM 3にエクスポート
+## Export to OpenQASM 3
 
-Qiskitコードは、文字列にエクスポートされる`dumps()`でOpenQASM 3にエクスポートするか、ファイルにエクスポートされる`dump()`でエクスポートすることができます。 
+You can export Qiskit code to OpenQASM 3 with `dumps()`, which exports to a string, or `dump()`, which exports to a file. 
 
-### `dumps()`の例
+### Example with `dumps()`
 
 ```python
-from qisKit import QuantumCircuit
-from qiskit.qasm3 import dump
+from qiskit import QuantumCircuit
+from qiskit.qasm3 import dumps
 
 qc = QuantumCircuit(2)
 qc.h(0)
@@ -98,11 +98,11 @@ qc.measure_all()
 dumps(qc)
 ```
 
-出力:
+Output:
 
 `'OPENQASM 3;\ninclude "stdgates.inc";\nbit[2] meas;\nqubit[2] q;\nh q[0];\ncx q[0], q[1];\nbarrier q[0], q[1];\nmeas[0] = measure q[0];\nmeas[1] = measure q[1];\n'`
 
-### `dump()`の例
+### Example with `dump()`
 
 ```python
 from qiskit import QuantumCircuit
@@ -118,13 +118,13 @@ dump(qc, f)
 f.close()
 ```
 
-詳細については、API リファレンスの format@@0(/api/qiskit/qasm3#exporting-to-openqasm-3) セクションを参照してください。
+For more information, see the [Exporting to OpenQASM 3](/api/qiskit/qasm3#exporting-to-openqasm-3) section of the API reference.
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - format@@2(https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer)チュートリアルでOpenQASMコードを生成する方法を学びます。
-    - [OpenQASM 3 Qiskit API](/api/qiskit/qasm3) リファレンスをレビューします。
-    - format@@0(../verify/) のトピックを参照してください。
-    - format@@0(https://openqasm.com/) を確認してください。
+    - Learn how to generate OpenQASM code in the [Explore gates and circuits with the Quantum Composer](https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) tutorial.
+    - Review the [OpenQASM 3 Qiskit API](/api/qiskit/qasm3) reference.
+    - Visit the [Verify your program](../verify/) topic.
+    - Review the [OpenQASM Live Specification](https://openqasm.com/).
 </Admonition>
