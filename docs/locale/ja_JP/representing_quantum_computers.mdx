@@ -1,33 +1,33 @@
 ---
-title: 量子コンピューターを表現する
-description: マップ、基礎ゲート、およびバックエンドエラーの結合について学ぶ
+title: Representing quantum computers
+description: Learn about coupling maps, basis gates and backend errors for transpiling
 ---
 
-# 量子コンピュータの概要
+# Represent quantum computers
 
-特定のバックエンドで実行できる等価回路を構築するには、トランスパイラーはバックエンドについて特定の詳細を必要とします。  通常、この情報は `backend` クラスまたは `target = backend.target` クラスで見つかるので、トランスパイラーにこれ以上何も渡す必要はありません。 しかし、より多くの情報が提供される場合、トランスパイラーはそれを使用して、そのハードウェア上で実行するための最良の回路を生成することができます。  
+To construct an equivalent circuit that can run on a specific backend, the transpiler needs certain details about the backend.  Typically, this information is found in the `backend` or `target = backend.target` class, so you don't need to pass anything further to the transpiler. However, if more infomation is provided, the transpiler can use it to try to produce the best circuit to run on that hardware.  
 
 <Admonition type="note">
-基礎となるトランスパイルアルゴリズムの多くは確率的であるため、より良い回路が見つかる保証はありません。 
+Because many of the underlying transpilation algorithms are stochastic, there is no guarantee that a better circuit will be found. 
 </Admonition>
 
 <span id="default-config"></span>
-## デフォルト設定
+## Default configuration
 
-トランスパイラーの最も単純な使い方は、`backend` または `target` を指定することで、バックエンド情報をすべて提供することです。 トランスパイラーがどのように動作するかをよりよく理解するために、回路を構築し、異なる情報を使用してトランスパイルします。
+The simplest use of the transpiler is to provide all the backend information by providing the `backend` or `target`. To better understand how the transpiler works, construct a circuit and transpile it with different information:
 
-必要なライブラリをインポートし、バックエンドをインスタンス化します。
+Import the necessary libraries and instantiate the backend:
 
 ```python
-from qisKit import transpile
-from qiskit.circuit.Library import EfficientSU2
+from qiskit import transpile
+from qiskit.circuit.library import EfficientSU2
 from qiskit.providers.fake_provider import FakeSherbrooke
 
 backend = FakeSherbrooke()
 target = backend.target
 ```
 
-`EfficientSU2`回路は、`SU(2)`と`CX`のエンタングルメントで構成される単一の量子ビット演算の層で構成されています。 これはヒューリスティックなパターンで、変動量子アルゴリズムや機械学習のための分類回路の試験波関数を準備するために使用できます。
+The `EfficientSU2` circuit consists of layers of single qubit operations spanned by `SU(2)` and `CX` entanglements. This is a heuristic pattern that can be used to prepare trial wave functions for variational quantum algorithms or classification circuits for machine learning.
 
 ```python
 qc = EfficientSU2(12, entanglement='circular', reps=1)
@@ -36,76 +36,76 @@ qc.decompose(reps=1).draw('mpl', style='iqp')
 
 ![The 12-qubit test circuit](/images/transpile/representing_quantum_computers/qc-circular.png)
 
-### 回路をバックエンドターゲットにトランスパイル
+### Transpile the circuit to backend target
 
-この例ではデフォルトの `optimization_level=1` を使用して、 `backend` `target` に移行します。 バックエンドで動作するように回路を変換するのに必要なトランスパイラーにすべての情報を提供する
+This example uses the default `optimization_level=1` to transpile to the `backend` `target`, which providers all the information to the transpiler that is necessary to convert circuit to one that will run on the backend.
 
 ```python
 qc_t_target = transpile(qc, target=target, seed_transpiler=12345)
 qc_t_target.draw('mpl', style='iqp', idle_wires=False)
 ```
 
-![The transpled 12-qubit ansatz using Target information](/images/transpile/representing_quantum_computers/qc_t_target.png)
+![The transpiled 12-qubit ansatz using Target information](/images/transpile/representing_quantum_computers/qc_t_target.png)
 
-この例は、このトピックの後のセクションで使用されています。カップリング・マップとベース・ゲートは、最適な回路構築のためにトランスパイラに渡すために不可欠な情報の部分であることを示します。 バックエンドは通常、渡されない他の情報(タイミングやスケジュールなど)についてデフォルトの設定を選択できます。
+This example is used in later sections of this topic to illustrate that the coupling map and basis gates are the essential pieces of information to pass to the transpiler for optimal circuit construction. The backend can usually select default settings for other information that is not passed in, such as timing and scheduling.
 
-ゲートのエラー率を含むバックエンドプロパティを提供することで、トランスパイラーはバックエンド上で最適な qubit を選択することができます。
+Providing the backend properties, including the gates' error rates, allows the transpiler to select the best set of qubits on the backend.
 
-## カップリングマップ
+## Coupling map
 
-カップリングマップは、どの量子ビットが接続されているかを示すグラフであり、それらの間に2量子ビットゲートがあります。 このグラフは方向になることがあります。つまり、2量子ビットゲートは一方向にしか行えないことになります。 ただし、トランスパイラーは追加の1量子ビットゲートを追加することで、常にゲートの方向を反転させることができます。 抽象量子回路は、接続性が限られていても、このグラフでは常に表現することができます。 SWAPゲートを導入して量子情報を移動させます 
+The coupling map is a graph that shows which qubits are connected and hence have 2-qubit gates between them. Sometimes this graph is directional, meaning that the 2-qubit gates can only go in one direction. However, the transpiler can always flip a gate's direction by adding additional 1-qubit gates. An abstract quantum circuit can always be represented on this graph, even if its connectivity is limited, by introducting SWAP gates to move the quantum information around. 
 
-抽象回路の量子ビットは _virtual qubits_ と呼ばれ、カップリングマップの量子ビットは _physical qubits_ と呼ばれます。 トランスパイラーは仮想キュービットと物理キュービット間のマッピングを提供します。 移調の最初のステップの一つである _routing_ ステージは、このマッピングを実行します。
+The qubits from our abstract circuits are called _virtual qubits_ and those on the coupling map are _physical qubits_. The transpiler provides a mapping between virtual and physical qubits. One of the first steps in transpilation, the _routing_ stage, performs this mapping.
 
 <Admonition type="note">
-ルーティングステージは _layout_ ステージと絡み合っています。 実際の量子ビットを選択しますが、それらを単純化のための別の段階として検討します。 ルーティングとレイアウトの組み合わせは _qubit mapping_と呼ばれます。  format@@0(transpiler-stages) のトピックで、これらのステージの詳細をご覧ください。
+Although the routing stage is intertwined with the _layout_ stage, which selects the actual qubits, we will consider them as separate stages for simplicity. The combination of routing and layout is called _qubit mapping_.  Learn more about these stages in the [Transpiler stages](transpiler-stages) topic.
 </Admonition>
 
-`coupping_map` キーワード引数を渡してトランスパイラーに影響を与えます。
+Pass the `coupling_map` keyword argument to see its effect on the transpiler:
 
 ```python
-coupping_map = target.build_coupping_map()
+coupling_map = target.build_coupling_map()
 
-qc_t_cm_lv0 = transpile(qc, coupling_map=coupping_map, optimization_level=0, seed_transpiler=11)
+qc_t_cm_lv0 = transpile(qc, coupling_map=coupling_map, optimization_level=0, seed_transpiler=11)
 qc_t_cm_lv0.draw('mpl', style='iqp', idle_wires=False)
 ```
 
 ![Ansatz transpiled to coupling map with optimization level 0](/images/transpile/representing_quantum_computers/qc_t_cm_lv0.png)
 
-上記のように、複数のSWAPゲート(それぞれ3つのCXゲートからなる)が挿入され、現在のデバイスでは多くのエラーが発生します。 実際の量子トポロジでどの量子ビットが選択されているかを確認するには、Qiskit Visualizationの「plot_circuit_layout」を使用します。
+As shown above, several SWAP gates were inserted (each consisting of three CX gates), which will cause a lot of errors on current devices. To see which qubits are selected on the actual qubit topology, use `plot_circuit_layout` from Qiskit Visualizations:
 
 ```python
-from qiskit.visibility import plot_circuit_layout
+from qiskit.visualization import plot_circuit_layout
 
 plot_circuit_layout(qc_t_cm_lv0, backend, view='physical')
 ```
 
 ![Circuit Layout for optimization level 0](/images/transpile/representing_quantum_computers/circ_layout_lv0.png)
 
-これは、仮想量子ビット0-11が物理的な量子ビット0-11の行にささやかにマッピングされていることを示しています。 必要に応じて`VF2Layout`を使用するデフォルト（`optimization_level=1`）に戻りましょう。
+This shows that our virtual qubits 0-11 were trivially mapped to the line of physical qubits 0-11. Let's return to the default (`optimization_level=1`), which uses `VF2Layout` if any routing is required.
 
 ```python
-qc_t_cm_lv1 = transpile(qc, coupling_map=coupping_map, seed_transpiler=11)
+qc_t_cm_lv1 = transpile(qc, coupling_map=coupling_map, seed_transpiler=11)
 qc_t_cm_lv1.draw('mpl', style='iqp', idle_wires=False)
 ```
 
 ![Ansatz transpiled to coupling map with optimization level 1](/images/transpile/representing_quantum_computers/qc_t_cm_lv1.png)
 
-SWAP ゲートが挿入されておらず、`target` クラスを使用して選択された物理キュービットも同じです。
+Now there are no SWAP gates inserted and the physical qubits selected are the same when using the `target` class.
 
 ```python
-from qiskit.visibility import plot_circuit_layout
+from qiskit.visualization import plot_circuit_layout
 
 plot_circuit_layout(qc_t_cm_lv1, backend, view='physical')
 ```
 
 ![Circuit Layout for default optimization level](/images/transpile/representing_quantum_computers/circ_layout_lv1.png)
 
-今、レイアウトはリングにあります。  このレイアウトは回路の接続性を尊重しているため、SWAPゲートはありませんので、より優れた回路を実行することができます。
+Now the layout is in a ring.  Because this layout respects the circuit's connectivity, there are no SWAP gates, providing a much better circuit for execution.
 
-## 基底門
+## Basis gates
 
-すべての量子バックエンドは _basis gates_ と呼ばれる限定的な命令セットをサポートしています。  回路内のすべてのゲートは、このセットの要素に変換する必要があります。 このセットは、ユニバーサルゲートセットを提供する単一および2量子ビットのゲートで構成する必要があります。 つまりどんな量子演算でもゲートに分解できるということです  これは、 [BasisTranslator](../api/qiskit/qiskit.transpiler.passes.BasisTranslator)によって行われ、この情報を提供するためにトランスパイラーのキーワード引数として基底ゲートを指定することができます。
+Every quantum backend supports a limited instruction set, called its _basis gates_.  Every gate in the circuit must be translated to the elements of this set. This set should consist of single- and two-qubit gates that provide a universal gates set, meaning that any quantum operation can be decomposed into those gates.  This is done by the [BasisTranslator](../api/qiskit/qiskit.transpiler.passes.BasisTranslator), and the basis gates can be specified as a keyword argument to the transpiler to provide this information.
 
 ```python
 basis_gates = list(target.operation_names)
@@ -116,10 +116,10 @@ print(basis_gates)
 ['rz', 'sx', 'x', 'ecr', 'measure', 'delay']
 ```
 
-_ibm_sherbrooke_ のデフォルトの単一量子ビットゲートは `rz`、`x`、`sx`です。デフォルトの 2 量子ビットゲートは `ecr`で、エコーされたクロス共鳴を表します。 CXゲートは`ecr`ゲートから構築されます。したがって、いくつかのバックエンドでは`ecr`は2量子ベースゲートとして指定され、他では`cx`はデフォルトです。 `ecr`ゲートは、`cx`ゲートの_entangling_部分です。 ベースゲートセットにないゲートを使用したい場合は、format@@0(https://docs.quantum.ibm.com/api/qiskit/qiskit.transpiler.passes.PulseGates#pulsegates)を使用してカスタムゲートの命令を提供できます。 制御ゲートに加えて、「delay」と「measurement」の命令もあります。
+The default single-qubit gates on _ibm_sherbrooke_ are `rz`, `x`, and `sx`, and the default two-qubit gate is `ecr` which stands for echoed cross resonance. CX gates are constructed from `ecr` gates, so on some backends `ecr` is specified as the two-qubit basis gate while on others `cx` is default. The `ecr` gates is the _entangling_ part of the `cx` gate. If one desires to use a gate that is not in the basis gate set, instructions for custom gates can be provided using [pulse gates](https://docs.quantum.ibm.com/api/qiskit/qiskit.transpiler.passes.PulseGates#pulsegates). In addition to the control gates, there are also `delay` and `measurement` instructions.
 
 <Admonition>
-    バックエンドにはデフォルトのベース・ゲートがありますが、任意のゲートを選択できます。 命令またはパルスゲートを追加する限り(format@@0を参照)。 (custom-transpiler-pass)) デフォルトのベース・ゲートは、バックエンドでキャリブレーションが行われているゲートです。したがって、これ以上の命令/パルス・ゲートを提供する必要はありません。 例えば、いくつかのバックエンドの `cx` はデフォルトの 2 量子ビットゲートと `ecr` です。
+    Backends have default basis gates, but you can choose whatever gates you want, as long as you provide the instruction or add pulse gates (See [Create transpiler passes.](custom-transpiler-pass)) The default basis gates are those that calibrations have been done for on the backend, so no further instruction/pulse gate needs to be provided. For example, on some backends `cx` is the default two-qubit gates and `ecr` on others.
 </Admonition>
 
 ```python
@@ -129,23 +129,23 @@ qc_t_cm_bg.draw('mpl', style='iqp', fold=-1, idle_wires=False)
 
 ![Ansatz transpiled to coupling map and basis gates](/images/transpile/representing_quantum_computers/qc_t_cm_bg_lv1.png)
 
-`CXGate`は`ecr`ゲートとシングルキュービットベースゲートに分解されていることに注意してください。
+Note that the `CXGate`s have been decomposed to `ecr` gates and single-qubit basis gates.
 
-## バックエンドエラーを含む
+## Including backend errors
 
-`target` オブジェクトを構築すると、 `coupping_map` と `basis_gates` に加えて、量子ビットのエラー率を考慮することができます。  `target` オブジェクトにはバックエンドをターゲットするために必要なすべてのものが含まれていますが、ここでは限られた量の情報を含むものを構築します。
+Constructing a `target` object lets you consider the qubits' error rates in addition to the `coupling_map` and `basis_gates`.  The `target` object contains everything needed to target a backend, but here we build one that contains a limited amount of information.
 
-以前に `backend.target` から `target` を取得しました。 これはエラー率を含む多くのバックエンド情報が含まれています。 例えば、 qubit 0 と 1 の間のエコーされたクロス共鳴ゲートの命令プロパティ (`ecr`は方向ではありません) は、次のコマンドを実行して取得します。
+We retrieved the `target` from `backend.target` previously. This contains a lot of backend information, including error rates. For example, the instruction properties of the echoed cross resonance gate between qubit 0 and 1 (not that `ecr` is directional) is retrieved by running the following command:
 
 ```python
 target['ecr'][(1, 0)]
 ```
 
 ```
-InstructionProperties(duration=5.3333333333332e-07, error=0.0069730734746021, calibration=PulseQobj)
+InstructionProperties(duration=5.333333333333332e-07, error=0.006969730734746021, calibration=PulseQobj)
 ```
 
-上記の結果は、ゲートが533μsで誤差が0.7%であることを示しています。 トランスパイラーにエラー情報を表示するには 上から `basis_gates` と `coupping_map` を使用して独自のターゲットモデルを構築し、バックエンドの `FakeSherbrooke` からエラー値を入力します。 
+The above result shows that the gate is 533μs with an error of 0.7%. To reveal error information to the transpiler, we will build our own target model with the `basis_gates` and `coupling_map` from above and populate it with error values from the backend `FakeSherbrooke`. 
 
 ```python
 from qiskit.transpiler import Target
@@ -156,7 +156,7 @@ for idx in range(len(target.instructions)):
     err_targ[target.instructions[idx][0].name][target.instructions[idx][1]] = target.instruction_properties(idx)
 ```
 
-新しいターゲット `err_targ` をターゲットにしたトランスパイル: 
+Transpile with our new target `err_targ` as the target: 
 
 ```python
 qc_t_cm_bg_et = transpile(qc, target=err_targ, seed_transpiler=11)
@@ -165,13 +165,13 @@ qc_t_cm_bg_et.draw('mpl', style='iqp', fold=-1, idle_wires=False)
 
 ![Ansatz transpiled to our target model](/images/transpile/representing_quantum_computers/qc_t_cm_bg_et_lv1.png)
 
-エラー情報を含めることで、`VF2PostLayout`パスは使用する最適な量子ビットを見つけようとします。 同じ物理量子ビットを持つ回路を発見しました
+Note that by including the error information, the `VF2PostLayout` pass tries to find the optimal qubits to use, resulting in the same circuit that we found originally with the same physical qubits.
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - 理解する [Transpilation default settings and configuration-options](defaults-and-configuration-options)
-    - [Transpilationに通常使用されるパラメータ](common-parameters) topicを確認してください。 
-    - format@@0(https://learning.quantum.ibm.com/tutorial/submit-transpled-circuits) チュートリアルを試してみてください。
-    - [Transpile API documentation.](/api/qiskit/transpiler)
-</Admonition> を参照してください。
+    - Understand [Transpilation default settings and configuration options.](defaults-and-configuration-options)
+    - Review the [Commonly used parameters for transpilation](common-parameters) topic. 
+    - Try the [Submit transpiled circuits](https://learning.quantum.ibm.com/tutorial/submit-transpiled-circuits) tutorial.
+    - See the [Transpile API documentation.](/api/qiskit/transpiler)
+</Admonition>
