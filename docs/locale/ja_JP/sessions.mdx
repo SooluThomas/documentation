@@ -1,59 +1,59 @@
 ---
-title: セッション
-description: セッションの概要とそれらをいつ使用するか。
+title: Sessions
+description: An overview of sessions and when to use them.
 ---
 
-# Qiskit ランタイムセッション入門
+# Introduction to Qiskit Runtime sessions
 
-セッションは Qiskit Runtime 機能で、量子コンピューター上でマルチジョブの反復ワークロードを効率的に実行できます。 セッションを使用すると、ジョブごとに別々にキューに追加される遅延を回避できます 古典リソースと量子リソースの間の頻繁な通信を必要とする反復タスクに特に有用です。
-
-<Admonition type="note">
-セッション内で最初に送信されたジョブの待ち時間は減少しません。 したがって、セッションは単一のジョブを実行する際に一切の利点を提供しません。
-</Admonition>
-
-## セッションを使用する利点
-
-セッションを使用するにはいくつかの利点があります。
-
--   効率性: 1つのアルゴリズムで実行された複数のジョブを、中断することなく連続的に実行できます。
--   柔軟性: 新しいジョブを開始することなく、アクティブなセッション内でジョブを送信したり、結果を確認したり、新しいジョブを送信したりできます。
-
-## セッションの仕組み
-
-セッションの基本的なワークフローは次のとおりです。
-
-1.  セッションの最初のジョブは通常のキューに入ります。 
-2.  最初のジョブの実行を開始すると、_最大タイムアウト_クロックが開始されます。 
-3.  セッション内のその後のジョブは他のジョブより優先され、待ち時間が短縮されます。
-4.  _interactive timeout_ はセッション内のジョブ間で実行されます。 各セッションにはインタラクティブなタイムアウト値(ITTL、またはライブするインタラクティブな時間)があります。 ITTL ウィンドウ内にキューイングされたセッションジョブがない場合、セッションは一時的に無効化され、通常のジョブ選択が再開されます。 セッションが最大タイムアウト値に達していない場合、次のジョブ<sup>\*</sup> で無効化されたセッションを再開することができます。
-5.  最大タイムアウト値に達した場合、セッションは終了し、残りのキュージョブは失敗します。
+A session is a Qiskit Runtime feature that lets you efficiently run multi-job iterative workloads on quantum computers. Using sessions helps avoid delays caused by queuing each job separately, which can be particularly useful for iterative tasks that require frequent communication between classical and quantum resources.
 
 <Admonition type="note">
-* セッションを再開するには、ジョブは通常のキューを通過する必要があります。
+The queuing time does not decrease for the first job submitted within a session. Therefore, a session does not provide any benefits when running a single job.
 </Admonition>
 
-セッションの最大セッションタイムアウト値を見つけるには、[Determine session details](run-jobs-in-session#session-details)の指示に従ってください。
+## Advantages of using sessions
+
+There are several benefits to using sessions:
+
+-   Efficiency: Multiple jobs from a single algorithm run can be run sequentially without interruptions.
+-   Flexibility: You can submit jobs, check results, and submit new jobs within an active session without needing to start a new one.
+
+## How sessions work
+
+The basic workflow for sessions is as follows:
+
+1.  The first job in a session enters the normal queue. 
+2.  When the first job starts running, the _maximum timeout_ clock starts. 
+3.  Subsequent jobs within the session are prioritized over others, reducing wait times.
+4.  The _interactive timeout_ runs between the jobs in a session. Every session has an interactive timeout value (ITTL, or interactive time to live). If there are no session jobs queued within the ITTL window, the session is temporarily deactivated and normal job selection resumes. A deactivated session can be resumed for the next job<sup>\*</sup> if the session has not reached its maximum timeout value.
+5.  If the maximum timeout value is reached, the sessions end and any remaining queued jobs fail.
 
 <Admonition type="note">
-    お使いのハブがプレミアム、オープン、などによってはITTLの値に制限が課せられる場合があります。 
+* The job must go through the normal queue to reactivate the session.
 </Admonition>
 
-セッションを開始する手順については、format@@0(run-jobs-in-session)を参照してください。
+To find the maximum session timeout value for a session, follow the instructions in [Determine session details](run-jobs-in-session#session-details).
+
+<Admonition type="note">
+    There might be a limit imposed on the ITTL value depending on whether your hub is Premium, Open, and so on. 
+</Admonition>
+
+For instructions to start a session, see [Run a job in a session](run-jobs-in-session).
 
 <span id="ends"></span>
-## セッション終了
+## End a session
 
-セッションは以下の状況で終了できます: 
+A session can end in the following circumstances: 
 
--   最大タイムアウトに達し、すべてのキューに入れられたジョブがキャンセルされます。 
--   セッションは手動でキャンセルされ、キューに入れられたすべてのジョブがキャンセルされます。
--   セッションは手動で閉じられます。  セッションは新しいジョブの受け入れを停止しますが、priority でキューに入れられたジョブを実行し続けます。
+-   The maximum timeout is reached, resulting in the cancelation of all queued jobs. 
+-   The session is manually canceled, resulting in the cancelation of all queued jobs.
+-   The session is manually closed.  The session stops accepting new jobs but continues to run queued jobs with priority.
 
-## 使用パターン
+## Usage patterns
 
-セッションは繰り返し実行されます。  これは、インタラクティブなタイムアウト内で送信されたジョブが即座に処理される、古典的なポスト処理を必要とするアルゴリズムに役立ちます。 代わりに一括でジョブを送信したい場合は、format@@0(run-jobs-batch) を参照してください。
+Sessions run iteratively.  This is useful for algorithms that require classical post-processing, where jobs submitted within the interactive time-out are processed immediately. If you want to submit jobs in a batch instead, see [Run jobs in a batch.](run-jobs-batch)
 
-例: 古典的な Scipy オプティマイザを使用してコスト関数を最小限に抑える反復的なワークロードを実行します。 このモデルでは、SciPYはコスト関数の出力を使用して次の入力を計算します。
+Example: Run an iterative workload that uses the classical SciPy optimizer to minimize a cost function. In this model, SciPy uses the output of the cost function to calculate its next input.
 
 ```python
 def cost_func(params, ansatz, hamiltonian, estimator):
@@ -73,9 +73,9 @@ res = minimize(cost_func, x0, args=(ansatz, hamiltonian, estimator), method="cob
 session.close()
 ```
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-  - [量子近似最適化アルゴリズム(QAOA)](https://learning.quantum.ibm.com/tutorial/quantum-approximate-optimization-algorithm) チュートリアルの例を試してみてください。 
-  - format@@0(https://docs.quantum.ibm.com/api/qiskit-ibm-runtime/qiskit_ibm_runtime.Session) リファレンスを確認してください。
+  - Try an example in the [Quantum approximate optimization algorithm (QAOA)](https://learning.quantum.ibm.com/tutorial/quantum-approximate-optimization-algorithm) tutorial. 
+  - Review the [Session API](https://docs.quantum.ibm.com/api/qiskit-ibm-runtime/qiskit_ibm_runtime.Session) reference.
 </Admonition>
