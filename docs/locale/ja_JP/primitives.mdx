@@ -1,88 +1,90 @@
 ---
-title: プリミティブの紹介
-description: Qiskit および Qiskit Runtime でのプリミティブの紹介と利用可能なプリミティブの説明
+title: Introduction to primitives
+description: Introduction to primitives in Qiskit and Qiskit Runtime, and an explanation of available primitives
 ---
 
-# プリミティブの紹介
+# Introduction to primitives
 
-コンピューティングシステムは複数のレイヤーの **抽象化** 上に構築されています。 抽象化により、手元にあるタスクに関連する
-特定の詳細レベルに焦点を当てることができます。 The closer you get to the hardware,
+Computing systems are built upon multiple layers of **abstraction**. Abstractions allow to focus on a
+particular level of detail relevant to the task at hand. The closer you get to the hardware,
 the lower the level of abstraction you'll need (for example, you could
 want to manipulate electrical signals), and vice versa, the more complex the task you want to perform,
 the higher-level the abstractions will be (for example, you could be using a programming library to perform
 algebraic calculations).
 
-この文脈では、**プリミティブ**は最小の処理命令です。
-が与えられた**抽象レベルに役立つ**何かを作ることができる最も単純なビルディングブロック。
+In this context, a **primitive** is the smallest processing instruction, the simplest building block from which
+one can create something **useful** for a given **abstraction** level.
 
-最近の量子コンピューティングの進歩により、より高い抽象度で動作する必要性が高まっています。
-より大きなシステムやより複雑なワークフローに向かうにつれて、 焦点は、個々の
-量子ビット信号との相互作用から、必要なタスクを実行するシステムとして量子デバイスを表示することに変わります。
+The recent progress in quantum computing has increased the need to work at higher levels of abstraction.
+As we move towards larger systems and more complex workflows, the focus shifts from interacting with individual
+qubit signals to viewing quantum devices as systems that perform tasks we need.
 
-最も一般的なタスクは、量子状態のサンプリングと期待値の計算です。
-これらのタスクは、_最初の 2 つの Qiskit プリミティブ: Sampler と Estimatel_ のデザインを動機づけました。
+The two most common tasks quantum computers are used for are sampling quantum states and calculating expectation values.
+These tasks motivated the design of _the first two Qiskit primitives: Sampler and Estimator_.
 
 In short, the computational model introduced by the Qiskit primitives moves quantum programming one step closer
 to where classical programming is today, where the focus is less on the hardware details and more on the results
 you are trying to achieve.
 
-## Qiskit プリミティブの実装
+## Implementation of Qiskit primitives
 
-Qiskitプリミティブは、異なるプロバイダが独自のサンプラーと推定値の実装を導出できる
-から、オープンソースのプリミティブベースクラスによって定義されます。 Qiskitを使用した実装
-の中で、`qiskit.primitives`モジュールでローカルシミュレーション用の参照実装を見つけることができます。
-IBMのQiskitランタイムのようなプロバイダーは、
-独自のプリミティブのネイティブ実装を通じて適切なバックエンドへのアクセスを可能にします。
+The Qiskit primitives are defined by open-source primitive base-classes, from
+which different providers can derive their own Sampler and Estimator implementations. Among the implementations
+using Qiskit, you can find reference primitive implementations for local simulation in the `qiskit.primitives` module.
+Providers like IBM’s Qiskit Runtime enable access to appropriate backends through native implementations of
+their own primitives.
 
-## Qiskit プリミティブの利点
+## Benefits of Qiskit primitives
 
-Qiskitユーザーの場合、プリミティブは明示的に
-すべての詳細を管理することなく、特定のバックエンド用の量子コードを記述することができます。 In addition, because of the additional layer of abstraction, you may be able to more easily
-access advanced hardware capabilities of a given provider. 例えば、Qiskit Runtime プリミティブの場合`optimization_level` や `resilience_level` などのオプションを切り替えることで、エラー緩和と抑制の最新の進歩を活用できます。 実装を構築するのではありません
+For Qiskit users, primitives allow you to write quantum code for a specific backend without having to explicitly
+manage every detail. In addition, because of the additional layer of abstraction, you may be able to more easily
+access advanced hardware capabilities of a given provider. For example, with Qiskit Runtime primitives,
+you can leverage the latest advancements in error mitigation and suppression by toggling options such as
+`optimization_level` and `resilience_level`, rather than building your own implementation of these techniques.
 
-ハードウェアプロバイダの場合、プリミティブをネイティブに実装するということは、ユーザーにハードウェア機能にアクセスするための「すぐに使える」
-方法を提供することを意味します。 したがって、ユーザーがハードウェアの
-最良の機能から利益を得ることが容易になります。
+For hardware providers, implementing primitives natively means you can provide your users with a more “out-of-the-box”
+way to access your hardware features. It is therefore easier for your users to benefit from your hardware's
+best capabilities.
 
-## 推定値
+## Estimator
 
-Estimate プリミティブは、量子回路によって用意された状態に対する観測可能性の期待値を計算します。
+The Estimator primitive computes expectation values of observables with respect to states prepared by quantum circuits.
 The Estimator receives circuit-observable pairs (with the observable expressed as a
 weighted sum of Pauli operators) as inputs, and returns the computed expectation values per pair, as well as their
-variances. 異なる推定値の実装は、さまざまな設定オプションをサポートしています。 パラメータ値がプリミティブへの入力として提供されている限り、回路
-はパラメータ化することができます。
+variances. Different Estimator implementations support various configuration options. The circuits
+can be parametrized, as long as the parameter values are also provided as input to the primitive.
 
 ## Sampler
 
-量子回路の実行に起因する古典出力レジスタからのサンプラープリミティブサンプル。
-このため、Samplerへの入力は(パラメータ化された)量子回路であり、対応する
-準確率分布を返します。 準確率分布は通常の
-確率と似ていますが、負の値が含まれる場合があり、特定の誤差緩和手法を使用する場合に発生する可能性があります。
+The Sampler primitive samples from the classical output registers resulting from execution of quantum circuits.
+For this reason, the inputs to the Sampler are (parametrized) quantum circuits, for which it returns the corresponding
+quasi-probability distributions of sampled bitstrings. Quasi-probability distributions are similar to regular
+probabilities, except they may include negative values, which can occur when using certain error mitigation techniques.
 
-## Qiskit プリミティブの使い方
+## How to use Qiskit primitives
 
-`qiskit.primitives`モジュールは、プリミティブスタイルの量子プログラムの開発を可能にし、異なる種類のバックエンド間の切り替えを簡素化するように特別に設計された
-。 このモジュールはプリミティブ型ごとに3つのクラス
-を提供します。
+The `qiskit.primitives` module enables the development of primitive-style quantum programs and was specifically
+designed to simplify switching between different types of backends. The module provides three separate classes
+for each primitive type:
 
-1.  `Sampler` と `Estimator`
+1.  `Sampler` and `Estimator`
 
-これらのクラスはプリミティブとQiskitの組み込みシミュレータの両方の参照実装です。 彼らは、Qiskitの「quantum_info」モジュールをバックグラウンドで活用し、理想的な状態ベクトルシミュレーションに基づいて結果を生成します。
+These classes are reference implementations of both primitives and use Qiskit’s built-in simulator. They leverage Qiskit’s `quantum_info` module in the background, producing results based on ideal statevector simulations.
 
-2.  `BaseSampler` と `BaseEstimator`
+2.  `BaseSampler` and `BaseEstimator`
 
-これらは、プリミティブを実装するための共通インターフェイスを定義する抽象基底クラスです。 \`qiskitの他のすべてのクラス。 rimitivesモジュールはこれらの基本クラスから継承されます。 開発者は、特定のバックエンドプロバイダ向けに独自のプリミティブベースの実行モデルを開発することに興味がある場合にこれらを使用する必要があります。 これらのクラスは、高度にカスタマイズされた処理を行い、既存のプリミティブ実装が必要に応じて単純すぎることを発見したい人にとっても有用です。
+These are abstract base classes that define a common interface for implementing primitives. All other classes in the `qiskit.primitives` module inherit from these base classes, and developers should use these if they are interested in developing their own primitives-based execution model for a specific backend provider. These classes may also be useful for those who want to do highly customized processing and find the existing primitives implementations too simple for their needs.
 
-3.  `BackendSampler` と `BackendEstimator`
+3.  `BackendSampler` and `BackendEstimator`
 
-プロバイダがプリミティブをネイティブにサポートしていない場合、これらのクラスを使用して任意のバックエンドをプリミティブに「ラップ」することができます。 ユーザは、プリミティブベースのインターフェイスをまだ持っていないプロバイダに対して、プリミティブスタイルのコードを書くことができます。 これらのクラスは通常のサンプラーや推定値と同様に使用できます。 バックエンドを実行するバックエンドを選択するための追加のバックエンド引数で初期化する必要があります。
+If a provider does not support primitives natively, you can use these classes to “wrap” any backend into a primitive. Users can write primitive-style code for providers that don’t yet have a primitives-based interface. These classes can be used just like the regular Sampler and Estimator, except they should be initialized with an additional backend argument for selecting which backend to run on.
 
-Qiskit Runtime プリミティブは、より高度な実装(エラー軽減など)をクラウドベースのサービスとして提供します。
+The Qiskit Runtime primitives provide a more sophisticated implementation (such as with error mitigation) as a cloud-based service.
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - プリミティブを実装するには、format@@2(primitives-get-started) を読んでください。
+    - Read [Get started with primitives](primitives-get-started) to implement primitives in your work.
     - Review detailed [primitives examples.](primitives-examples)
     - Practice with primitives by working through the [Cost function lesson](https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions#primitives) in IBM Quantum Learning.
 </Admonition>
