@@ -1,99 +1,99 @@
 ---
-title: システム情報
-description: IBM Quantum システムのキャリブレーション、特性、バージョン管理に関する情報
+title: System information
+description: Information about IBM Quantum system calibration, properties, and versioning
 ---
 
-# システム情報
+# System information
 
-IBM Quantumは、幅広い量子システムへのオープンアクセスとプレミアムアクセスの両方を提供します。 IBM Quantum によって導入されたすべての量子システムは、超伝導量子ビット技術に基づいています。 この技術の制御とスケーラビリティがこれらのシステムで量子利点を達成するための 明確な道を開くのです format@@0(https://quantum.ibm.com/services/resources?tab=systems) で、すべての IBM Quantum システムの詳細を確認できます。
+IBM Quantum offers both open and premium access to a wide variety of quantum systems. All quantum systems deployed by IBM Quantum are based on superconducting qubit technology, as the control and scalability of this technology pave a clear path to achieving quantum advantage with these systems. You can see the full details of all IBM Quantum systems on the [Compute resources page.](https://quantum.ibm.com/services/resources?tab=systems)
 
-"system" と "backend" という単語はしばしば相互に使用されることに注意してください。
+Note that the words "system" and "backend" are often used interchangeably.
 
-## システムバージョン管理
+## System versioning
 
-X.Y.Z(major.minor.revision)という形式のバージョン番号があります。 特定のシステムバージョン番号に対してコンパイルされた回路は、そのシステム上で動作することが保証されています。 リビジョン番号が変更された場合、回路は動作を続けます。 メジャー番号またはマイナー番号が変更された場合、回路は動作することが保証されませんが。 バージョン番号が変更される可能性のある条件は以下の通りです。
+Each system has a version number in the form X.Y.Z (major.minor.revision). A circuit compiled for a given system version number is guaranteed to run on that system. If the revision number changes, the circuit will continue to run. If the major or minor number changes, the circuit is not guaranteed to run, although it may do so. The conditions under which a version number may change are listed below:
 
-### メジャーバージョン
+### Major version
 
-メジャーバージョンは次のようなシステム変更の増分になります。
+The major version will increment for system changes such as:
 
--   サンプルの変更。
--   制御電子機器の主な変更.
--   重要な動作が変化した場合、システムを新しい場所に移動します。
+-   Sample changes.
+-   Major changes to the control electronics.
+-   Moving the system to a new location, if significant behavior changes result.
 
-### マイナーバージョン
+### Minor version
 
-マイナーバージョンは以下のような変更の増分になります:
+The minor version will increment for changes such as:
 
--   ウォームアップ/クールダウンサイクル。
--   交換はかなり操作に影響を与える場合、いくつかの電子機器を交換します。
--   制御された NOT ゲートの方向を変更します。
--   キャリブレーションの問題により、しばらくの間ゲートをドロップすることはできません。ソフトウェアでは修正を簡単に行うことはできません。
+-   Warmup / cool-down cycles.
+-   Swapping out some electronics, if the replacement appreciably affects operation.
+-   Changing the direction of a controlled-NOT gate.
+-   Dropping a gate for some duration of time due to calibration issues, and corrections cannot readily be done in software.
 
-### リビジョンのバージョン
+### Revision version
 
-リビジョンバージョン番号は、既存のコンパイル済み回路を壊さない修正の増分になります。 これらの変更は次のとおりです。
+The revision version number will increment for fixes that do not break the existing compiled circuit. These changes include:
 
--   忠実度を向上させるための手動校正。
--   動作に影響を与えない小さな電子機器の変更。
--   システムソフトウェアの更新。
+-   Manual calibrations to improve fidelities.
+-   Small electronics changes that don’t affect operation.
+-   System software updates.
 
-## バックエンド設定値
+## Backend configuration values
 
-以下はIBM Quantumおよび [Qiskit](/api/qiskit/qiskit.providers.models.BackendConfiguration)で利用可能なバックエンド設定値のサブセットです。
+The following is a subset of backend configuration values available in IBM Quantum and from [Qiskit](/api/qiskit/qiskit.providers.models.BackendConfiguration).
 
-これらの値は、format@@0(https://quantum.ibm.com/services/resources?services=systems)のformat@@1タブと各システムの詳細ページの両方に表示されます。
+These values are shown on both the Systems and Simulators tabs of the [Compute resources page](https://quantum.ibm.com/services/resources?services=systems) and the details page for each system.
 
--   **名前** - 特定の量子システムまたはシミュレータに割り当てられた固有の名前。 IBM Cloud®️ でホストされているバックエンドには、`ibmq_*` (新しいシステム) または `ibm_*` (新しいかたシステム) で始まる名前があります。 すべての量子系には、例えば、 `ibmq_johannesburg` という名前が付けられています。 この名前は、実際の量子システムがどこにホストされているかを示しません。 それらは世界中のIBMの場所にちなんで名付けられています。
--   **Qubits** - システム内の qubit 数。 物理量子系の場合、これはデバイス内の物理量子ビットの数です。 シミュレータの場合、この数値は一意に定義する必要はなく、代わりにシミュレーション方法および/または利用可能なメモリ量に依存することができます。
--   **EPLG** - 100 量子ビットのチェーン内の階層ゲートあたりのエラー。 階層ゲートあたりのエラーは、 $N$ キュービットの階層チェーンの平均ゲートプロセス誤差を測定します($N$=100はこちら)。 これは、EPLAN$\_{100}$ = 1-LF${\\frac{1}{99}}$ とレイヤー忠実度は、 $N$ qubit の階層連鎖のプロセス忠実度として知られている同じ量から派生します。 詳細は format@@0(https://arxiv.org/abs/2311.05933) を参照してください。
--   **CLOPS** - 1秒あたりの回路層の演算、およびCLOPS_vとも呼ばれます。 は、QPU(量子処理ユニット)が単位時間ごとに実行できる量子ボリューム回路(仮想回路)のレイヤー数を示します。 この指標の詳細については、論文[品質、速度、スケール:短期量子コンピューターの性能を測定するための3つの主要な属性](https://arxiv.org/abs/2110.14108)を参照してください。
--   **CLOPS_h** -- QPU(量子処理ユニット)を単位時間ごとに実行できる100x100回路(ハードウェア対応回路)のレイヤー数を測定する。
--   **QV** - Quantum volume. この値は、ランダムですべての接続された回路のセットに対して忠実度のしきい値を渡すことに基づくシステム品質のもう一つの指標です。 デバイスのシステムで測定されたピーク値として提供されます。 詳しくは、論文format@@0(https://arxiv.org/abs/1811.12926)を参照してください。
--   **状態** - システムの状態。
--   **合計保留中のジョブ** - このシステムに送信したジョブの合計数。
--   **プロセッサタイプ** - システムトポロジを反映し、おおよその量子ビット数を示します。
--   **機能** - システムに関する追加情報、例えば予約可能かどうか、パルス入力に対応しているかどうかなど。
+-   **Name** - The unique name assigned to a specific quantum system or simulator. Backends hosted on IBM Cloud® have names that begin with `ibmq_*` (older systems) or `ibm_*` (newer systems). All quantum systems are given a city name, e.g., `ibmq_johannesburg`. This name does not indicate where the actual quantum system is hosted. They are named after IBM locations around the world.
+-   **Qubits** - The number of qubits in a system. For physical quantum systems, this is the number of physical qubits in the device. For simulators, this number need not be uniquely defined, and instead can depend on the simulation method and/or the amount of memory available.
+-   **EPLG** - Error per layered gate in a chain of 100 qubits. Error per layered gate measures the average gate process error in a layered chain of $N$ qubits ($N$=100 here). It is derived from a similar quantity known as the layer fidelity (LF) where EPLG$\_{100}$ = 1-LF$^{\\frac{1}{99}}$ and layer fidelity is the process fidelity of the layered chain of $N$ qubits. For details, see the paper [Benchmarking quantum processor performance at scale](https://arxiv.org/abs/2311.05933).
+-   **CLOPS** - Circuit layer operations per second, and also known as CLOPS_v, is a measure of how many layers of a Quantum volume circuit (virtual circuit) a QPU (quantum processing unit) can execute per unit of time. Find more information about this metric in the paper [Quality, Speed, and Scale: three key attributes to measure the performance of near-term quantum computers](https://arxiv.org/abs/2110.14108).
+-   **CLOPS_h** -- A measure of how many layers of a 100x100 circuit (hardware-aware circuit) a QPU (quantum processing unit) can execute per unit of time.
+-   **QV** - Quantum volume. This value is another metric for system quality based on passing a fidelity threshold for a set of random, square all-to-all connected circuits. Provided as the peak value measured on a system of devices. For details, see the paper [Validating quantum computers using randomized model circuits](https://arxiv.org/abs/1811.12926).
+-   **Status** - The system status.
+-   **Total pending jobs** - The total number of jobs that you have submitted to this system.
+-   **Processor type** - Reflects the system topology and indicates the approximate qubit count.
+-   **Features** - Additional information about the system, such as whether it can be reserved and whether it supports pulse inputs.
 
-**各システムの詳細ページに追加情報があります**
+**Additional information available on the details page for each system**
 
-詳細ページにアクセスするには、**Compute resources** ページのシステム名をクリックします。
+To access the details page, click the name of the system on the **Compute resources** page.
 
--   **Version** - `major.minor.revision`という形式のシステムのバージョン番号。 この番号の割り当て方法については、format@@0(#system-versioning) を参照してください。
+-   **Version** - The version number of a system in the form `major.minor.revision`. See [System versioning](#system-versioning) for details on how this number is assigned.
 
--   **校正データ** (システムのみで利用可能) - 校正データをダウンロードしてください。 sv ファイルまたは矢印をクリックすると、トポロジ図、個々の qubit 読み出しグラフ、または Calibration データ テーブルが表示されます。 開いているビューに応じて、表示されるデータをカスタマイズできます。 たとえば、format@@0 ダイアグラムでは、接続とキュービットで表示するデータを選択できます。 ダイアグラムまたはグラフに関連付けられた色付きの棒は、表示される範囲を示し、平均値がマークされています。 システムによって色の最大値と最小値が変更されます。
+-   **Calibration data** (Available for systems only) - Download the calibration data as a .csv file or click the arrow to display the Topology diagram, Individual qubit readout graph, or the Calibration data table. You can customize the data that is shown, depending on the view you have open. For example, on the Topology diagram, you can choose the data you want to see for connections and qubits. The colored bars associated with the diagram or graph indicate the range that is shown, with the average value marked. The color maximum and minimum change depending on the system.
 
-    > -   <span id="coupling-map">**トポロジ図** or **カップリングマップ** </span> - 2量子ゲート操作をサポートする量子ビットのペアを示すダイアグラム。 これは、カップリングマップまたは接続とも呼ばれます。 Qubitsは円として表され、サポートされている2量子ビットゲート操作は、量子ビットを接続する線として表示されます。
-    > -   **個別の qubit プロパティ** - システムの qubit ごとに選択したプロパティを表示します。 周波数、T1、T2、アンハーモニー、確率測定、エラー率などを表示できます。
+    > -   <span id="coupling-map">**Topology diagram** or **coupling map** </span> - A diagram that indicates the pairs of qubits that support two-qubit gate operations between them. This is also called the coupling map or connectivity. Qubits are represented as circles and the supported two-qubit gate operations are displayed as lines connecting the qubits.
+    > -   **Individual qubit properties** - Shows the selected property for each qubit on the system. You can view the frequency, T1, T2, Anharmonicity, probability measurements, error rates, and so on.
 
--   **あなたのアクセスインスタンス** - 使用できるインスタンス。 右側の矢印をクリックして、このセクションを展開または折りたたみます。 各インスタンスについては、以下の情報を参照できます。
+-   **Your access instance** - Instances that you can use. Click the arrow on the right to expand or collapse this section. For each instance, you can see the following information:
 
-    -   **最大ショット** - システム上で1つの回路を実行できる最大回数です。 撮影されたショットの数は、繰り返し実行に対する出力確率分布の精度を決定します。
-    -   **最大回路** - このシステムに一度に送信できる量子回路の最大数です。
-    -   **パルスゲートあたりの最大量子ビット数** - ゲートに許可される最大量子ビット引数の数。
-    -   **パルスゲートあたりの最大チャンネル数** - パルススケジュール内で参照できる最大チャンネル数です。 通常、各量子ビットは駆動チャネル、測定チャネル、取得チャネル、およびクロス共鳴チャネルなどの補助制御チャネルに関連付けられています。
-    -   **使用法** - リンクをクリックして、このシステムで実行したジョブを確認してください。
+    -   **Max shots** - The maximum number of times you can execute a single circuit on a system. The number of shots taken determines the precision of the output probability distribution over repeated executions.
+    -   **Max circuits** - The maximum number of quantum circuits that you can submit to this system at one time.
+    -   **Max qubits per pulse gate** - The maximum number of qubit arguments allowed to a gate.
+    -   **Max channels per pulse gate** - The maximum number of channels you can refer to within a pulse schedule. Typically each qubit is associated with a drive channel, a measure channel, an acquisition channel, and then auxiliary control channels for things like cross resonance.
+    -   **Usage** - Click the link to see the jobs that you have run on this system.
 
-## システム構成を表示
+## View system configuration
 
-format@@0(https://quantum.ibm) でシステムを選択してシステム設定値を表示します。 om/services/resources?services=systems) format@@0セクションの3つのタブでは、キャリブレーションデータの表示方法を選択できます。format@@1ビュータブが自動的に選択されます。
+View system configuration values by selecting a system on the [Compute resources page.](https://quantum.ibm.com/services/resources?services=systems) The three tabs in the Calibration data section let you choose how to view the calibration data; the Map view tab is automatically selected.
 
-![A expanded card for a sample system.](/images/migration/exp-card.png)
+![An expanded card for a sample system.](/images/migration/exp-card.png)
 
-サンプルシステム用の拡張カード。
+An expanded card for a sample system.
 
-任意のタブの右上にあるダウンロードアイコンをクリックして、キャリブレーションデータのCSVファイルをダウンロードします。
+Click the download icon in the upper right of any tab to download a CSV file of calibration data.
 
 ![The graph view tab.](/images/migration/graph-view1.png)
 
-グラフビュータブ。
+The Graph view tab.
 
 ![The table view tab.](/images/migration/table-view.png)
 
-テーブルビュータブ。
+The Table view tab.
 
-## 他のチャンネルからバックエンド情報を探す
+## Find backend information from other channels
 
-**IBM Cloud**で利用可能なシステムとシミュレータを見つけるには、[IBM Cloud Compute resources page] を参照してください。 (https://cloud.ibm.com/quantum/resources/your-resources) 利用可能なコンピューティングリソースを見るにはログインする必要があります。 各バックエンドのスナップショットが表示されます。 詳細を確認するには、バックエンド名をクリックします。 このページからバックエンドを検索することもできます。
+To find your available systems and simulators on **IBM Cloud**, view the [IBM Cloud Compute resources page.](https://cloud.ibm.com/quantum/resources/your-resources) You must be logged in to see your available compute resources. You are shown a snapshot of each backend. To see full details, click the backend name. You can also search for backends from this page.
 
-**IBM Quantum Platform**で利用可能なシステムとシミュレータを見つけるには、[Platform Compute resources page.](https://quantum.ibm.com/services/resources) 各バックエンドのスナップショットが表示されます。 詳細を確認するには、バックエンド名をクリックします。 このページから並べ替え、フィルター、検索することもできます。
+To find your available systems and simulators on **IBM Quantum Platform**, view the [Platform Compute resources page.](https://quantum.ibm.com/services/resources) You are shown a snapshot of each backend. To see full details, click the backend name. You can also sort, filter, and search from this page.
