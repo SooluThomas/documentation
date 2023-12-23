@@ -1,25 +1,25 @@
 ---
-title: OpenQASM 2 と Qiskit
-description: OpenQASM 2 と Qiskit 間のコード変換
+title: OpenQASM 2 and Qiskit
+description: Convert code between OpenQASM 2 and Qiskit
 ---
 
-# OpenQASM 2 と Qiskit
+# OpenQASM 2 and Qiskit
 
-Qiskitは、量子プログラムのOpenQASM表現と [QuantumCircuit](../api/qiskit/qiskit.circuit.QuantumCircuit)クラスの間で変換するためのツールを提供しています。
+Qiskit provides some tools for converting between OpenQASM representations of quantum programs, and the [QuantumCircuit](../api/qiskit/qiskit.circuit.QuantumCircuit) class.
 
-## OpenQASM 2 プログラムを Qiskit にインポート
+## Import an OpenQASM 2 program into Qiskit
 
-現在、OpenQASM 2 から Qiskit へのインポートには 2 つの高レベル関数が利用できます。 これらの関数はファイル名を取る`qasm2.load()`で、プログラム自体を文字列とする`qasm2.loads()`です。 
+Currently two high-level functions are available for importing from OpenQASM 2 into Qiskit. These functions are `qasm2.load()`, which takes a file name, and `qasm2.loads()`, which takes the program itself as a string. 
 
 ```python
 qiskit.qasm2.load(filename, *, include_path=('.',), include_input_directory='append', custom_instructions=(), custom_classical=(), strict=False)
 ```
 
-詳細については、[OpenQASM 2 Qiskit API](/api/qiskit/qasm2) を参照してください。 
+See the [OpenQASM 2 Qiskit API](/api/qiskit/qasm2) for more information. 
 
-### 例: OpenQASM 2 プログラムを文字列としてインポート
+### Example: import an OpenQASM 2 program as a string
 
-OpenQASM 2プログラムを文字列としてQuantumCircuitにインポートするには、`qasm2.loads()`を使用します。
+Use `qasm2.loads()` to import an OpenQASM 2 program as a string into a QuantumCircuit:
 
 ```python
 import qiskit.qasm2
@@ -40,9 +40,9 @@ circuit.draw()
 
 ![output](/images/build/qasm2.png)
 
-### 例: OpenQASM 2 プログラムをファイルからインポート
+### Example: import an OpenQASM 2 program from a file
 
-`load()`を使用して、OpenQASM 2プログラムをファイルからQuantumCircuitにインポートします。
+Use `load()` to import an OpenQASM 2 program from a file into a QuantumCircuit:
 
 ```python
 import qiskit.qasm2
@@ -50,21 +50,21 @@ circuit = qiskit.qasm2.load("myfile.qasm")
 ```
 
 <span id="custom-instructions"></span>
-## カスタム量子命令
+## Custom quantum instructions
 
-`custom_instructions`引数としてカスタム命令に関する情報を反復的に渡すことで、OpenQASM 2言語の量子コンポーネントを拡張できます。 これらの命令に互換性のある定義を持つファイルでは、与えられたコンストラクタは `qiskit.qasm2` 以外の処理を行う代わりに使用されます。  パースされたプログラムで定義された命令とは異なる数のパラメータまたは量子ビットを持つカスタム命令を提供することはできません。 引数の各要素は以下のように特定のデータクラスでなければなりません:
+You can extend the quantum components of the OpenQASM 2 language by passing an iterable of information on custom instructions as the argument `custom_instructions`. In files that have compatible definitions for these instructions, the given constructor will be used in place of whatever other handling `qiskit.qasm2` would have done.  You cannot provide a custom instruction that has a different number of parameters or qubits from a defined instruction in a parsed program. Each element of the argument iterable should be a particular data class as follows:
 
 #### `qiskit.qasm2.CustomInstruction(name, num_params, num_qubits, constructor, builtin=False)`
 
-CustomInstructionクラスは、解析中に定義されるカスタム命令に関する情報を提供します。
+The CustomInstruction class gives information about a custom instruction that should be defined during the parse.
 
-`constructor` フィールドは、シグネチャの `*args -> Instruction` を含む呼び出し可能なオブジェクトでなければなりません。この場合、`num_params` args はそれぞれ浮動小数点値です。 ほとんどの組み込みQiskitゲートクラスはこのフォームを持っています。
+The `constructor` field should be a callable object with signature `*args -> Instruction`, where each of the `num_params` args is a floating-point value. Most of the built-in Qiskit gate classes have this form.
 
-`built`フィールドは任意です。 `true` に設定すると、命令が定義され、パース内で使用可能になります。 含まれている OpenQASM 2 ファイルに定義がない場合でも。 `built`としてマークされた命令は不透明またはゲート宣言を必要としませんが、それらは静かに互換性のある宣言を無視します。
+The `builtin` field is optional. If set to `true`, the instruction will be defined and available within the parsing, even if there is no definition in any included OpenQASM 2 file. Instructions marked as `builtin` do not require an opaque or gate declaration, but they will silently ignore a compatible declaration.
 
-### 例: カスタム量子命令の使用
+### Example: use custom quantum instructions
 
-OpenQASM 2 プログラムを文字列として QuantumCircuit にインポートするには、`qasm2.loads()` を使用しますが、カスタムの量子命令を使用します。  場合によっては、インポーターが指定された命令に対して出力するゲートオブジェクトに影響を与えることもあります。 \`include "qelib1.inc"で定義されたゲートは、適切なQiskit回路ライブラリゲートと自動的に関連付けられますが、これを拡張することができます。
+Use `qasm2.loads()` to import an OpenQASM 2 program as a string into a QuantumCircuit, but use a custom quantum instruction.  Sometimes you might  want to influence the gate objects that the importer emits for given named instructions. Gates that are defined by the statement `include "qelib1.inc"` are automatically associated with a suitable Qiskit circuit-library gate, but you can extend this:
 
 ```python
 from qiskit.circuit import Gate
@@ -93,19 +93,19 @@ circuit = qasm2.loads(program, custom_instructions=customs)
 ```
 
 <span id="custom-classical"></span>
-## カスタム古典関数
+## Custom classical functions
 
-`custom_classical` にiterableを渡すことで、古典式 (gatesへの引数) への処理を拡張できます。 これは名前(有効な OpenQASM 2 識別子)と、引数の数 (num_params) と、関数を実装する Python 呼び出し可能が必要です。 呼び出し可能なPythonは、 `num_params` 位置浮動小数点引数を受け付ける必要があります。 そして、float または integer (floatに変換されます) を返す必要があります。 組み込み関数は上書きできません。 
+You can extend the processing done to classical expressions (arguments to gates) by passing an iterable to the argument `custom_classical`. This needs the name (a valid OpenQASM 2 identifier), the number of parameters it takes (num_params), and a Python callable that implements the function. The Python callable must be able to accept `num_params` positional floating-point arguments, and must return a float or integer (which will be converted to a float). Built-in functions cannot be overridden. 
 
 #### `qiskit.qasm2.CustomClassical`
 
-`CustomClassical` クラスは、数式で定義されるべきカスタム古典関数に関する情報を提供します。
+The `CustomClassical` class gives information about a custom classical function that should be defined in mathematical expressions.
 
-与えられた `callable` は、 `num_params` 浮動小数点数を受け取って float を返すPython関数でなければなりません。 `name` は、OpenQASM 2 プログラム内でそれを参照する識別子です。 これは、定義されたゲートと衝突することはできません。
+The given `callable` must be a Python function that takes `num_params` floats, and returns a float. The `name` is the identifier that refers to it in the OpenQASM 2 program. This cannot clash with any defined gates.
 
-### 例: カスタム古典命令を使用する
+### Example: use custom classical instructions
 
-OpenQASM 2プログラムを文字列としてQuantumCircuitにインポートするには`qasm2.loads()`を使用しますが、カスタムの古典命令を使用します。  ゲートへの引数の説明で使用される新しい古典関数を追加できます。 プログラムの本体(定数で折り畳まれて出てくる)と、定義されたゲート(要求に応じて計算される)の本体内の両方。 ここでは数学的に $\\atan(y/x)$ のPythonバージョンの `atan2(y, x)` を提供しますが、角度の四角と無限大を正しく処理し、カスタムの `add_one` 関数を提供します。
+Use `qasm2.loads()` to import an OpenQASM 2 program as a string into a QuantumCircuit, but use a custom classical instruction.  You can add new classical functions used during the description of arguments to gates, both in the main body of the program (which come out constant-folded) and within the bodies of defined gates (which are computed on demand). Here we provide a Python version of `atan2(y, x)`, which mathematically is $\\atan(y/x)$, but correctly handles angle quadrants and infinities, and a custom `add_one` function:
 
 ```python
 import math
@@ -133,13 +133,13 @@ circuit = qasm2.loads(program, custom_classical=customs)
 <span id="strict"></span>
 ## Strict mode
 
-デフォルトでは、このパーサは公式の仕様よりも少しリラックスしています。 パラメータリストにコンマを続けることができます。不要な (空白文) セミコロン、 `OPENQASM 2. ;` バージョンステートメントを省略する必要があります。その他、エラーを発生させることなく、いくつかの品質向上があります。 しかし、`strict=True`では、"letter-of-the-spec"モードを使うことができます。
+By default, this parser is a little bit more relaxed than the official specification. It allows trailing commas in parameter lists; unnecessary (empty-statement) semicolons; the `OPENQASM 2.0;` version statement to be omitted; and a couple of other quality-of-life improvements without emitting any errors. However, you can use the "letter-of-the-spec" mode with `strict=True`.
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - format@@2(https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer)チュートリアルでOpenQASMコードを生成する方法を学びます。
-    - format@@0(/api/qiskit/qasm2) 参照を参照してください。
-    - format@@0(../verify/) のトピックを確認します。
-    - format@@0(https://openqasm.com/) を参照してください。
+    - Learn how to generate OpenQASM code in the [Explore gates and circuits with the Quantum Composer](https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) tutorial.
+    - See the [OpenQASM 2 Qiskit API](/api/qiskit/qasm2) reference.
+    - Review the [Verify your program](../verify/) topic.
+    - Visit the [OpenQASM Live Specification](https://openqasm.com/).
 </Admonition>
