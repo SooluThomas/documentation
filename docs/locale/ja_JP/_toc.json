@@ -1,37 +1,84 @@
 {
-  "title": "確認する",
+  "title": "Build",
   "collapsed": true,
   "children": [
     {
-      "title": "はじめに",
-      "url": "/verify"
+      "title": "Introduction",
+      "url": "/build"
     },
     {
-      "title": "Qiskit プリミティブによる正確なシミュレーション",
-      "url": "/verify/simulate-with-qiskit-primitives"
-    },
-    {
-      "title": "Qiskit Aer プリミティブによる正確でノイズの多いシミュレーション",
-      "url": "/verify/simulate-with-qiskit-aer"
-    },
-    {
-      "title": "ノイズモデルを構築",
-      "url": "/verify/building_noise_models"
-    },
-    {
-      "title": "Qiskit Aer プリミティブによるスタビライザ回路の効率的なシミュレーション",
-      "url": "/verify/stabilizer-circuit-simulation"
-    },
-    {
-      "title": "IBM Quantum クラウドベースのシミュレーション",
+      "title": "Build circuits with Qiskit",
       "children": [
         {
-          "title": "IBM Quantum クラウドベースのシミュレータの使用",
-          "url": "/verify/using-ibm-quantum-simulator"
+          "title": "Circuit library",
+          "url": "/build/circuit-library"
         },
         {
-          "title": "利用可能なIBM Quantum シミュレーター",
-          "url": "/verify/cloud-based-simulator"
+          "title": "Construct circuits",
+          "url": "/build/circuit-construction"
+        },
+        {
+          "title": "Visualize circuits",
+          "url": "/build/circuit-visualization"
+        },
+        {
+          "title": "Classical feedforward and control flow",
+          "url": "/build/classical-feedforward-and-control-flow"
+        },
+        {
+          "title": "Synthesize unitary operations",
+          "url": "/build/unitary-synthesis"
+        },
+        {
+          "title": "Bit-ordering in Qiskit",
+          "url": "/build/bit-ordering"
+        }
+      ]
+    },
+    {
+      "title": "Build operators with Qiskit",
+      "children": [
+        {
+          "title": "Operators module overview",
+          "url": "/build/operators-overview"
+        },
+        {
+          "title": "Specify observables in the Pauli basis",
+          "url": "/build/specify-observables-pauli"
+        }
+      ]
+    },
+    {
+      "title": "Other circuit-building tools",
+      "children": [
+        {
+          "title": "Pulse schedules",
+          "url": "/build/pulse"
+        },
+        {
+          "title": "OpenQASM",
+          "children": [
+            {
+              "title": "Introduction to OpenQASM",
+              "url": "/build/introduction-to-qasm"
+            },
+            {
+              "title": "OpenQASM 2 and Qiskit",
+              "url": "/build/interoperate-qiskit-qasm2"
+            },
+            {
+              "title": "OpenQASM 3 and Qiskit",
+              "url": "/build/interoperate-qiskit-qasm3"
+            },
+            {
+              "title": "OpenQASM 3 feature table",
+              "url": "/build/qasm-feature-table"
+            },
+            {
+              "title": "OpenQASM 3.x Live Specification",
+              "url": "https://openqasm.com/"
+            }
+          ]
         }
       ]
     }
