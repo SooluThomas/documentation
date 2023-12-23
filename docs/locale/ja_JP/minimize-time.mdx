@@ -1,21 +1,21 @@
 ---
-title: ジョブの実行時間を最小化する
-description: 処理とジョブの実行に費やす量子時間を最小限に抑える方法。
+title: Minimize job run time
+description: How to minimize the amount of quantum time spent processing and running a job.
 ---
 
-# ジョブの実行時間を最小化する
+# Minimize job run time
 
-処理とジョブの実行に費やす量子時間を制限する方法はいくつかあります。
+There are several ways you can limit the amount of quantum time spent processing and running a job:
 
--   必要な数だけ繰り返しとショットを実行します。作業負荷がかかる時間 (そのため) そのコスト)は、セッションで作成するジョブの数と、各ジョブで実行されるショットの数によって異なります。 したがって、必要なだけ多くのジョブやショットを実行することで、コストを管理することができます。
+-   Run only as many iterations and shots as you need: The time your workload takes (and therefore, its cost) depends on how many jobs you create in a session and how many shots are run in each job. Therefore, you can manage your cost by running only as many jobs and shots as you need.
 
--   実行時間に制限を設定します。各ジョブまたはセッションの実行時間を制限できます。  詳細については、「Qiskit Runtime またはsessionの実行時間の最大値」(max-execution-time)を参照してください。
+-   Set limits on execution time:  You can limit how long each job or session runs.  For details, see [Maximum execution time for a Qiskit Runtime job or session](max-execution-time).
 
--   値が大きいほど、ジョブが長く実行される可能性があるため、エラー抑制、エラー軽減、および最適化に必要な設定のみを使用します。 詳細については、format@@0(advanced-runtime-options), format@@1(configure-runtime-compilation), format@@2(configure-error-軽減)を参照してください。
+-   Use only the necessary settings for error suppression, error mitigation, and optimization, because higher values can cause your jobs to run longer. See [Algorithm tuning options](advanced-runtime-options), [Configure runtime compilation](configure-runtime-compilation), and [Configure error mitigation](configure-error-mitigation) for details.
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - format@@2(estimate-job-run-time)
-    - format@@0(https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions)コースでエラー緩和を調べましょう。
+    - [Estimate job run time](estimate-job-run-time).
+    - Explore error mitigation in the  [Cost functions](https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions) course.
 </Admonition>
