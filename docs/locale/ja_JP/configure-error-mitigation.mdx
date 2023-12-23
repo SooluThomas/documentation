@@ -1,132 +1,134 @@
 ---
-title: エラー緩和の設定
-description: Qiskit Runtime でエラー緩和を設定します
+title: Configure error mitigation
+description: Configure error mitigation with Qiskit Runtime
 ---
 
-# Qiskit Runtimeのエラー緩和を設定します
+# Configure error mitigation for Qiskit Runtime
 
-エラー緩和手法により、実行時のデバイスノイズを
-モデリングすることにより、回路エラーを軽減することができます。 通常、
-は、生成されたモデルを使用して生成された結果
-のエラーを軽減するために、モデル訓練と
-古典的な後処理オーバーヘッドに関連する量子前処理のオーバーヘッドを引き起こします。
+Error mitigation techniques allow users to mitigate circuit errors by
+modeling the device noise at the time of execution. This typically
+results in quantum pre-processing overhead related to model training and
+classical post-processing overhead to mitigate errors in the raw results
+by using the generated model.
 
-プリミティブに組み込まれたエラー緩和手法は、高度な
-回復力オプションです。 これらのオプションを指定するには、ジョブを送信するときに `resilience_level`
-オプションを使用します。
+The error mitigation techniques built in to primitives are advanced
+resilience options. To specify these options, use the `resilience_level`
+option when submitting your job.
 
-回復力レベルは、
-エラーに対してどれだけの回復力を構築するかを指定します。 レベルが高いほど、
-処理時間が長くなり、より正確な結果が得られます。 抵抗レベルを使用して、プリミティブ
-クエリにエラー軽減を適用する際の
-コスト/精度トレードオフを設定できます。 エラー緩和は、
-関連回路のコレクションまたはアンサンブルからの出力を処理することによって、結果としてエラー(バイアス)を軽減します。 
-の誤差低減度は、適用される方法によって異なります。 回復力
-レベルは、
-ユーザーが
-アプリケーションに適したコスト/精度取引について理解できるようにするエラー緩和方法の詳細な選択を抽象化します。
+The resilience level specifies how much resilience to build against
+errors. Higher levels generate more accurate results, at the expense of
+longer processing times. Resilience levels can be used to configure the
+cost/accuracy trade-off when applying error mitigation to your primitive
+query. Error mitigation reduces errors (bias) in results by processing
+the outputs from a collection, or ensemble, of related circuits. The
+degree of error reduction depends on the method applied. The resilience
+level abstracts the detailed choice of error mitigation method to allow
+users to reason about the cost/accuracy trade that is appropriate to
+their application.
 
-これを考えると、 それぞれのレベルは、
-が量子サンプリングのオーバーヘッドを増加させる方法やメソッドに対応し、異なる時間精度のトレードオフで
-を実験することができます。 以下の表は、プリミティブごとに使用可能なレベルとメソッドを示しています。
+Given this, each level corresponds to a method or methods with
+increasing level of quantum sampling overhead to enable you experiment
+with different time-accuracy tradeoffs. The following table shows you
+which levels and corresponding methods are available for each of the
+primitives.
 
 <Admonition type="info" title="Attention">
-エラー緩和はタスク固有のもので、
-手法は、分布をサンプリングするか、
-期待値を生成するかどうかによって異なります。
+Error mitigation is task specific so the techniques you are able to
+apply vary based whether you are sampling a distribution or generating
+expectation values.
 </Admonition>
 
-| 耐性レベル            | 定義                                                                                            | 推定値                                                                      | Sampler                                |
-| ---------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | -------------------------------------- |
-| 0                | 緩和なし                                                                                          | なし                                                                       | なし                                     |
-| 1 [Default]      | 最小の緩和コスト: 読み出しエラーに関連するエラーを軽減します。                                                              | Twirled Readout Error eXtinction (TREX)                                  | マトリックスフリー測定緩和(M3)                      |
-| 2                | 中程度の緩和コスト。 通常、推定値のバイアスを減らしますが、バイアスがゼロであることは保証されません。                                           | ゼロノイズ外挿（ZNE）                                                             | -                                      |
-| 3                | レイヤーサンプリングで重い緩和。 理論的にはゼロバイアス推定値を出すことが期待されている。                                                 | 確率的エラーキャンセル (PEC)                                                        | -                                      |
+| Resilience Level | Definition                                                                                            | Estimator                                                                  | Sampler                                 |
+| ---------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------- |
+| 0                | No mitigation                                                                                         | None                                                                       | None                                    |
+| 1 [Default]      | Minimal mitigation costs: Mitigate error associated with readout errors                               | Twirled Readout Error eXtinction  (TREX)                                   | Matrix-free Measurement Mitigation (M3) |
+| 2                | Medium mitigation costs. Typically reduces bias in estimators, but is not guaranteed to be zero-bias. | Zero Noise Extrapolation (ZNE)                                             | -                                       |
+| 3                | Heavy mitigation with layer sampling. Theoretically expected to deliver zero-bias estimators.         | Probabilistic Error Cancellation (PEC)                                     | -                                       |
 
 <Admonition type="info" title="Attention">
 
-抵抗レベルは現在ベータレベルにあるため、サンプリングオーバヘッドと
-ソリューションの品質は回路によって異なります。 新機能、
-高度なオプション、および管理ツールはローリング
-ベースでリリースされます。 具体的なエラー緩和方法が、各レジリエンスレベルで
-適用されることは保証されていません。
+Resilience levels are currently in beta so sampling overhead and
+solution quality will vary from circuit to circuit. New features,
+advanced options, and management tools will be released on a rolling
+basis. Specific error mitigation methods are not guaranteed to be
+applied at each resilience level.
 
 </Admonition>
 
 <Admonition type="note">
-  Q-CTRLパフォーマンス管理が有効なIBM Cloud Qiskit Runtime サービスインスタンスを使用する場合 戦略に自動プリセットが含まれているので、ランタイム最適化や回復力レベルを指定する必要はありません。
+  If using an IBM Cloud Qiskit Runtime service instance with Q-CTRL performance management enabled, there is no need to specify runtime optimization or resilience levels, as the strategy includes an automatic preset.
   
-  `optimization_level` または `resilience_level` を 0 に設定すると、
-  実行エラーになります。 レベル1、2、3は許可されていますが、パフォーマンスに影響を与えることはありません。
-  他のオプションを設定するとパフォーマンスにも影響しなくなり、
-  ランタイム警告が発生する可能性があります。 詳細については、format@@0(https://docs.q-ctrl.com/q-ctrl-embedded)をご覧ください。
+  Setting `optimization_level` or `resilience_level` equal to 0 will result in an
+  execution error. Levels 1, 2, and 3 are permitted but will not impact performance.
+  Setting other options will likewise not impact performance, and it may result in a
+  runtime warning. For more information visit the [Q-CTRL documentation](https://docs.q-ctrl.com/q-ctrl-embedded).
 </Admonition>
 
-## レジリエンスレベルで推定値を設定します
+## Configure the Estimator with resilience levels
 
 <details>
-<summary>レジリエンスレベル 0</summary>
+<summary>Resilience Level 0</summary>
 
-ユーザープログラムにエラー緩和は適用されません。
+No error mitigation is applied to the user program.
 
 </details>
 
 <details>
-<summary>耐性レベル 1</summary>
+<summary>Resilience Level 1</summary>
 
-レベル1は、特に
-読み出しエラーに対処するエラー緩和方法を適用します。 推定値では、Twirled Readout Error eXtinction (TREX) として知られている
-というモデルフリーの手法を適用します。 It reduces measurement error
+Level 1 applies error mitigation methods that particularly address
+readout errors. In the Estimator, we apply a model-free technique known
+as Twirled Readout Error eXtinction (TREX). It reduces measurement error
 by diagonalizing the noise channel associated with measurement by
 randomly flipping qubits through X gates immediately before measurement,
-and flipping the corresponding measured bit if an X gate was applied. 対角ノイズチャネルからの
-再スケーリング用語は、ゼロ状態で初期化されたランダム回路を
-ベンチマークすることによって学習されます。 これにより、
-サービスは
-読み出しノイズに起因する期待値からバイアスを取り除くことができます。 このアプローチは、量子期待値
-(https://arxiv.org/abs/2012.09738)のための[Model-free
-readout-error 軽減策](https://arxiv.org/abs/2012.09738)でさらに説明されています。
+and flipping the corresponding measured bit if an X gate was applied. A
+rescaling term from the diagonal noise channel is learned by
+benchmarking random circuits initialized in the zero state. This allows
+the service to remove bias from expectation values that result from
+readout noise. This approach is described further in [Model-free
+readout-error mitigation for quantum expectation
+values](https://arxiv.org/abs/2012.09738).
 
 </details>
 
 <details>
-<summary>耐性レベル 2</summary>
+<summary>Resilience Level 2</summary>
 
-レベル2では、異なるノイズ要素
-に対して観測可能な
-期待値を計算し、測定された期待値を
-に使用して、ゼロノイズ制限(外挿
-段階)で理想的な期待値を推定します。 このアプローチは期待値の誤差を減らす傾向がありますが、
-は偏りのない結果を生成する保証はありません。
+Level 2 uses the Zero Noise Extrapolation method (ZNE) which computes an
+expectation value of the observable for different noise factors
+(amplification stage) and then uses the measured expectation values to
+infer the ideal expectation value at the zero-noise limit (extrapolation
+stage). This approach tends to reduce errors in expectation values, but
+is not guaranteed to produce an unbiased result.
 
-![ZNEメソッドのイラストレーション](/images/optimize/resiliance-2.png "ZNEメソッドのイラスト")
+![Illustration of the ZNE method](/images/optimize/resiliance-2.png "Illustration of the ZNE method")
 
-この方法のオーバーヘッドは、ノイズ係数の数に応じて拡大します。 
-のデフォルト設定では、3つのノイズ因子で期待値をサンプルします。
-は、この回復力レベルを採用するときのオーバーヘッドが約3倍になります。
+The overhead of this method scales with the number of noise factors. The
+default settings sample the expectation value at three noise factors,
+leading to a roughly 3x overhead when employing this resilience level.
 
 </details>
 
 <details>
-<summary>耐性レベル 3</summary>
+<summary>Resilience Level 3</summary>
 
-レベル3は、確率的なエラーキャンセル(PEC)法を有効にします。 この
-アプローチは、相関するノイズを捕捉することができる疎ノイズモデル
-を学習して反転することによってエラーを軽減します。 学習ノイズモデル
-が緩和時の実際のノイズモデルを忠実に表している限り、PECは偏りのない
-推定値を返します。
+Level 3 enables the Probabilistic Error Cancelation (PEC) method. This
+approach mitigates error by learning and inverting a sparse noise model
+that is able to capture correlated noise. PEC returns an unbiased
+estimate of an expectation value so long as learned noise model
+faithfully represents the actual noise model at the time of mitigation.
 In practice, the experimental procedure for learning the noise model has
 ambiguities due to certain error terms that cannot be independently
-distinguished. これらは対称的な仮定によって解決されます 真の基礎となるノイズに応じて、
-は不完全なノイズモデルを使用することにより、
-の予測値を緩和することができます。
+distinguished. These are resolved by a symmetry assumption, which
+depending on the true underlying noise may lead a biased estimate of the
+mitigated expectation values due to using an imperfect noise model.
 
 The Qiskit Runtime primitive implementation of PEC specifically
 addresses noise in self-inverse two-qubit gates, so it first
 _stratifies_ each input circuit into an alternating sequence of
 simultaneous 1-qubit gates followed by a layer of simultaneous 2-qubit
-gates. 次に、それぞれのユニークな
-2量子ゲート層に関連するノイズモデルを学習します。
+gates. Then it learns the noise model associated with each unique
+2-qubit gate layer.
 
 <figure>
 <img src="/images/optimize/stratified.png" alt="/images/optimize/stratified.png" />
@@ -135,72 +137,73 @@ class="title-ref">stratified</span> circuit, where the layers of
 two-qubit gates are labeled layer 1 through n. Note that each <span
 class="math inline"><em>U</em><sub><em>l</em></sub></span> is composed
 of two-qubit gates on the native connectivity graph of the quantum
-processor. 開いているボックスは任意のシングル量子ビット
-ゲートを表します。</figcaption>
+processor. The open boxes represent arbitrary single-qubit
+gates.</figcaption>
 </figure>
 
-この方法のオーバーヘッドは、ノイズ係数の数に応じて拡大します。 
-のデフォルト設定では、3つのノイズ因子で期待値をサンプルします。
-は、この回復力レベルを採用するときのオーバーヘッドが約3倍になります。
+The overhead of this method scales with the number of noise factors. The
+default settings sample the expectation value at three noise factors,
+leading to a roughly 3x overhead when employing this resilience level.
 
 PEC uses a quasi-probability method to mimic the effect of inverting the
-learned noise. これには、ユーザーの元の回路に関連付けられたランダム化回路ファミリ
-からのサンプリングが必要です。 PECを適用すると、入力回路と
-特性回路の両方で回路あたりの
-サンプル数も増加しない限り、返される期待値の推定値のばらつきが
-増加します。 
-に対抗するために必要なサンプルの量は、緩和回路
-のノイズ強度に応じて指数関数的に拡大します。
+learned noise. This requires sampling from a randomized circuit family
+associated with the user's original circuit. Applying PEC will increase
+the variability of the returned expectation value estimates unless the
+number of samples per circuit is also increased for both input and
+characterization circuits. The amount of samples required to counter
+this variability scales exponentially with the noise strength of the
+mitigated circuit.
 
-これがどのように機能するか:
+How this works:
 
-計算されていないパウリが観測可能な$\\langle P\\rangle$ を推定すると、期待値の
-標準誤差は次のようになります:
+When estimating an unmitigated Pauli observable $\\langle P\\rangle$ the
+standard error in the estimated expectation value is given by
 
 $\\frac{1}{\\sqrt{N\_{\\text{shots}}}}\\left(1- \\langle P\\rangle^2\\right)$
 
-where $N_{\\text{shots}}$ は、
-$\\langle P\\rangle$の推定に使われるショットの数です. PEC緩和を適用する場合 標準エラー
-は
-$\\sqrt{\\frac{S}{N_{\\text{samples}}}\\left(1- \\langle P\\rangle^2\\right)$
-where $N\_{\\text{samples}}$ はPECサンプルの数です。
+where $N_{\\text{shots}}$ is the number of shots used to estimate
+$\\langle P\\rangle$. When applying PEC mitigation, the standard error
+becomes
+$\\sqrt{\\frac{S}{N_{\\text{samples}}}}\\left(1- \\langle P\\rangle^2\\right)$
+where $N\_{\\text{samples}}$ is the number of PEC samples.
 
-が入力回路の集団ノイズを特徴付けるパラメータで、サンプリングオーバーヘッドは指数関数的にスケールします。 As the Qiskit
+The sampling overhead scales exponentially with a parameter that
+characterizes the collective noise of the input circuit. As the Qiskit
 Runtime primitive learns the noise of your circuit, it will return
 metadata about the sampling overhead associated with that particular
-layer. レイヤー $l$ のオーバーヘッドに $\\gamma_l$ のラベルを付けましょう。 次に、回路を軽減するための
-合計サンプリングオーバーヘッドは、
-の積です。つまり、以下のようになります。
+layer. Let's label the overhead of layer $l$ as $\\gamma_l$. Then the
+total sampling overhead for mitigating your circuit is the product of
+all the layer overheads, that is:
 
 $S = \\prod_l \\gamma_l$
 
-推定値が原始的な
-クエリのモデル学習フェーズを完了すると、
-回路の合計サンプリングオーバーヘッドに関するメタデータが返されます。
+When the Estimator completes the model-learning phase of the primitive
+query, it will return metadata about the total sampling overhead for
+circuit.
 
-アプリケーションで必要とされる精度に応じて、それに応じてサンプル数を拡大するには、
-が必要です。 以下のプロット
-は、異なる総サンプリングオーバーヘッドに対する推定誤差と
-回路サンプルの数の関係を示しています。
+Depending on the precision required by your application, you will need
+to scale the number of samples accordingly. The following plot
+illustrates the relationship between estimator error and number of
+circuit samples for different total sampling overheads.
 
-![](/images/optimize/samping-overhead.png)
+![](/images/optimize/sampling-overhead.png)
 
-PECの学習段階で緩和スケーリング
-因子が発見されるため、所望の精度
-を提供するために必要なサンプル数はプリミティブクエリの前には分かっていないことに注意してください。
+Note that the number of samples required to deliver a desired accuracy
+is not known before the primitive query because the mitigation scaling
+factor is discovered during the learning phase of PEC.
 
-より大きな
-問題を試みる前に、PECのサンプリングオーバーヘッドの
-スケーリングの感触を得るための短い深度回路から始めることをお勧めします。
+We suggest starting with short depth circuits to get a feel for the
+scaling of the sampling overhead of PEC before attempting larger
+problems.
 
 </details>
 
-## 例
+## Example
 
-Estimatorインターフェースを使用すると、
-のさまざまなエラー緩和方法とシームレスに連携し、
-オブザベイの期待値の誤差を減らすことができます。 次のコードでは、単に
-`resilience_level 2`を設定するだけでゼロノイズの外挿を使用します。
+The Estimator interface lets users seamlessly work with the variety of
+error mitigation methods to reduce error in expectation values of
+observables. The following code uses Zero Noise Extrapolation by simply
+setting `resilience_level 2`.
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService, Estimator, Options
@@ -218,27 +221,27 @@ psi1_H1 = job.result()
 
 <Admonition type="info" title="Note">
 
-回復力レベルを上げると、結果の精度を向上させるために追加のメソッドを使用することができます。 しかし、各レベルで方法が進歩するために、より正確な期待値を生成するために、サンプリングオーバーヘッド(時間)を追加する必要があります。 弾性レベルが高いほど品質が保証されないことに注意してください。 レベルが高いほどオーバーヘッドが大きくなります。 各方法には長所と短所があります。 例えば、TREX(Twirled Readout Error eXtinct)は読み出しエラーの軽減のため、浅い回路に適しています。 ZNE(ゼロノイズ外挿)は、より深い回路に適しています。 PECは任意のエラーを軽減することができますが、実際には大きなオーバーヘッドのために動作しない可能性があります。
+As you increase the resilience level, you will be able to use additional methods to improve the accuracy of your result. However, because the methods become more advanced with each level, they require additional sampling overhead (time) to generate more accurate expectation values. Note that higher resilience levels do not guarantee better quality. Higher levels only mean greater overhead. Each method has its strengths and weaknesses. For example, TREX (Twirled Readout Error eXtinction) is good for shallow circuits because of its readout error mitigation, whereas ZNE (Zero Noise Extrapolation) is good for deeper circuits. PEC can mitigate arbitrary errors but may not work in practice because of its large overhead.
 
 </Admonition>
 
-## サンプラーを回復力レベルで設定する
+## Configure Sampler with resilience levels
 
-サンプラーのデフォルトの復元力設定(レベル1)では、読み出しエラー
-の緩和を可能にし、ユーザーは緩和された準確率
-分布を生成することができます。
+The Sampler default resilience setting (level 1) enables readout error
+mitigation to allow users to generate mitigated quasi-probability
+distributions.
 
 <details>
-<summary>耐性レベル 1</summary>
+<summary>Resilience Level 1</summary>
 
-レベル1は、
-読み出しエラーを軽減するために、マトリックスフリー測定緩和(M3)ルーチンを使用します。 M3は、ノイズの多い入力
-ビットの文字列によって定義された短い空間で動作します。 Because the number of unique bit
+Level 1 uses matrix-free measurement mitigation (M3) routine to mitigate
+readout error. M3 works in a reduced subspace defined by the noisy input
+bit strings that are to be corrected. Because the number of unique bit
 strings can be much smaller than the dimensionality of the full
 multi-qubit Hilbert space, the resulting linear system of equations is
 nominally much easier to solve.
 
-![M3メソッドのイラストレーション](/images/optimize/m3.png)
+![Illustration of the M3 method](/images/optimize/m3.png)
 
 </details>
 
@@ -254,30 +257,30 @@ backend = service.backend("ibmq_qasm_simulator")
 sampler = Sampler(backend, options=options)
 ```
 
-## 高度な回復力オプション
+## Advanced resilience options
 
-高度なオプションを調整して、回復力戦略
-をさらに設定できます。 These methods can be used alongside resilience levels where you
+You can tune advanced options to configure your resilience strategy
+further. These methods can be used alongside resilience levels where you
 change the specific options of interest and let your previously set
 resilience level manage the rest.
 
 As a part of the beta release of the resilience options, users will be
-able configure ZNE by using the following advanced options. 
-はPECを含む他の回復力レベルを調整するためのオプションを追加します。
+able configure ZNE by using the following advanced options. We will soon
+add options to tune other resilience levels that include PEC.
 
-| オプション                                                                                     | Inputs                          | 説明                                                                                                                      |
-| ----------------------------------------------------------------------------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `options.resilience.noise_anmper(オプション\[str\])` <br/>  増幅戦略を選択します。                        | `TwoQubitAmplifier` [Default]   | すべての実行中のローカルゲート折り畳みノイズを増幅します。                                                                                           |
-|                                                                                           | `CxAmplifier`                   | ローカルゲートの折り畳みを実行することで、すべてのCNOTゲートのノイズを増幅します。                                                                             |
-|                                                                                           | `LocalFoldingAmplifier`         | ローカルゲートの折り畳みを実行することで、すべてのゲートのノイズを増幅します。                                                                                 |
-|                                                                                           | `GlobalFoldingAmplifier`        | 入力回路全体の全体的な折り畳みを行うことによって、入力回路のノイズを増幅します。                                                                                |
-| `options.resilience.noise_factors(Optional[Sequence[float]])`                             | (1, 3, 5)[Default]              | ノイズ増幅因子(ここで [1] はベースラインノイズを表します)。 それらはすべてベースライン以上である必要があります。                                                            |
-| `options.resilience.extraolator(Optional\[str\])`                                         | `LinearExtrapolator`\[Default]  | 次数1の多項式外挿。                                                                                                              |
-|                                                                                           | `2次外挿法`                         | 次数２以下の多項式外挿。                                                                                                            |
-|                                                                                           | `Cubic Extrapolator`            | 次数３以下の多項式外挿。                                                                                                            |
-|                                                                                           | `Quartic Extrapolator`          | 次数４以下の多項式外挿。                                                                                                            |
+| Options                                                                                         | Inputs                          | Description                                                                                                                      |
+| ----------------------------------------------------------------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `options.resilience.noise_amplifier(Optional\[str\])` <br/>  select your amplification strategy | `TwoQubitAmplifier` [Default]   | Amplifies noise of all performing local gate folding.                                                                            |
+|                                                                                                 | `CxAmplifier`                   | Amplifies noise of all CNOT gates by performing local gate folding.                                                              |
+|                                                                                                 | `LocalFoldingAmplifier`         | Amplifies noise of all gates by performing local gate folding.                                                                   |
+|                                                                                                 | `GlobalFoldingAmplifier`        | Amplifies noise of the input circuit by performing global folding of the entire input circuit.                                   |
+| `options.resilience.noise_factors(Optional[Sequence[float]])`                                   | (1, 3, 5)[Default]              | Noise amplification factors, where [1] represents the baseline noise. They all need to be greater than or equal to the baseline. |
+| `options.resilience.extrapolator(Optional\[str\])`                                              | `LinearExtrapolator`\[Default]  | Polynomial extrapolation of degree one.                                                                                          |
+|                                                                                                 | `Quadratic Extrapolator`        | Polynomial extrapolation of degree two and lower.                                                                                |
+|                                                                                                 | `Cubic Extrapolator`            | Polynomial extrapolation of degree three and lower.                                                                              |
+|                                                                                                 | `Quartic Extrapolator`          | Polynomial extrapolation of degree four and lower.                                                                               |
 
-### 推定値プリミティブを使って `resilience_options` を追加する例
+### Example of adding `resilience_options` with the Estimator primitive
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService, Estimator, Options
@@ -296,9 +299,9 @@ job = estimator.run(circuits=[psi1], observables=[H1], parameter_values=[theta1]
 psi1_H1 = job.result()
 ```
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-  - IBM Quantum Learningの[Cost function lesson](https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions#primitives)でエラー緩和を使用する例を紹介します。
-  - [Q-CTRL](https://docs.q-ctrl.com/q-ctrl-embedded) についてもっと知る。
+  - Walk through an example that uses error mitigation in the [Cost function lesson](https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions#primitives) in IBM Quantum Learning.
+  - Learn more about [Q-CTRL](https://docs.q-ctrl.com/q-ctrl-embedded).
 </Admonition>
