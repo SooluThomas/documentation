@@ -1,76 +1,76 @@
 ---
-title: ヘルプを見る
-description: IBM Quantum (プラットフォームまたは IBM Cloud 上) または Qiskit Runtime を使用しているときに発生した質問や問題に対する回答を見つける方法
+title: Getting help
+description: How to find answers to questions or problems you encounter while using IBM Quantum (Platform, or on IBM Cloud) or Qiskit Runtime
 ---
 
-# ヘルプを見る
+# Getting help
 
 ## IBM Quantum Support
 
-IBM Quantum Network のメンバーは、技術的な問題、質問、懸念がある場合は、IBM Quantum Support に連絡することができます。 IBM Quantum サポートの連絡先情報については、管理者またはIBM担当者にお問い合わせください。
+Members of the IBM Quantum Network can reach out to IBM Quantum Support if they have technical difficulties, questions, or concerns. Ask your administrator or IBM representative for IBM Quantum Support contact information.
 
 ## Qiskit
 
-Qiskitのヘルプについては、Slackコミュニティ[Qiskit Slack](https://qisk.it/join-slack)にアクセスしてください。
+For help with Qiskit, access our Slack community: [Qiskit Slack](https://qisk.it/join-slack).
 
 ## Qiskit Runtime
 
--   format@@0(https://qisk.it/join-slack)のqiskit-runtime チャンネルに参加してください。
+-   Join the qiskit-runtime channel within the [Qiskit Slack workspace](https://qisk.it/join-slack).
 
-## オープンソースのガバナンスについて
+## Open-source governance
 
-以下のページは、Qiskitにコードを投稿したい人のためのリソースです。
+The following pages are resources for anyone interested in contributing code to Qiskit.
 
--   format@@0(https://github.com/Qiskit/qiskit/blob/main/CODE_OF_CONDUCT.md)
--   format@@0(https://github.com/Qiskit/qiskit/blob/main/CONTRIBUTING.md)
--   format@@0(https://github.com/Qiskit/qiskit/blob/main/DEPRECATION.md)
--   format@@0(https://github.com/Qiskit/qiskit/blob/main/MAINTAINING.md)
+-   [Code of conduct](https://github.com/Qiskit/qiskit/blob/main/CODE_OF_CONDUCT.md)
+-   [Contributing guide](https://github.com/Qiskit/qiskit/blob/main/CONTRIBUTING.md)
+-   [Deprecation policy](https://github.com/Qiskit/qiskit/blob/main/DEPRECATION.md)
+-   [Maintainers guide](https://github.com/Qiskit/qiskit/blob/main/MAINTAINING.md)
 
-## その他のディスカッション
+## Other discussions
 
-[Quantum Computing Stack Exchange](https://quantumcomputing.stackexchange.com/quants/)サイトで、量子情報科学と開発について議論します。 [How do I ask a good question?](https://quantumcomputing.stackexchange)を必ず読んでください。 om/help/how-to-ask) ガイドと、 `qiskit` 、 `ibm-runtime` 、 `ibm-quantum-services` などのタグを使用して、最良の結果を得ることができます。
+Discuss quantum information science and development with the larger quantum computing field on the [Quantum Computing Stack Exchange](https://quantumcomputing.stackexchange.com/questions/) site. Be sure to read the ["How do I ask a good question?"](https://quantumcomputing.stackexchange.com/help/how-to-ask) guide, and make use of tags such as `qiskit`, `ibm-runtime`, and `ibm-quantum-services` for best results.
 
-プログラミング固有の質問は、[Stack Overflow](https://stackoverflow.com/) を参照して、`qiskit` タグを使用してください。
+For questions specific to programming, visit [Stack Overflow](https://stackoverflow.com/) and use the tag `qiskit`.
 
-## よくある質問
+## Frequently asked questions
 
 <details>
   <summary>
-    Qiskitをリサーチで引用するにはどうすればいいですか？
+    How do I cite Qiskit in my research?
   </summary>
 
-付属の[BibTeXファイル](https://github.com/Qiskit/qiskit/blob/main/CITATION.bib)を使用してQiskitを引用してください。
+Cite Qiskit by using the included [BibTeX file](https://github.com/Qiskit/qiskit/blob/main/CITATION.bib).
 
 </details>
 
 <details>
   <summary>
-    研究でIBM Quantum システムを引用するにはどうすればいいですか?
+    How do I cite an IBM Quantum system in my research?
   </summary>
 
-研究論文では、研究者がIBM Quantumの使用を認めることをお勧めします。
+For research papers, we encourage authors to acknowledge IBM Quantum using:
 
->    我々は,この作業に対するIBM Quantumサービスの利用を認める。 表明された見解は著者のものであり、IBMまたはIBM Quantumチームの公式ポリシーまたは位置を反映していません。
+>    We acknowledge the use of IBM Quantum services for this work. The views expressed are those of the authors, and do not reflect the official policy or position of IBM or the IBM Quantum team.
 
-論文参照は以下のように引用されるべきです:
+Paper references should be cited as follows:
 
 > IBM Quantum. https://<span>quantum.ibm.com</span>/, 2021
 
-論文中のシステムは、固有の名前(すなわち、 `ibmq_vigo`)で参照されるべきであり、必要に応じて
-バージョンを追加します (すなわち、 \`ibmq_v1.0.2)。  また、プロセッサを参照することも奨励します。
-例:
+Systems in the paper should be referenced by their unique name (i.e., `ibmq_vigo`) and optionally
+adding the version (i.e., `ibmq_vigo` v1.0.2).  We also encourage referencing the processor.
+For example:
 
-> この論文では、IBM Quantum Canary プロセッサの 1 つである `ibmq_vigo` を使用しました。
+> In this paper we used `ibmq_vigo`, which is one of the IBM Quantum Canary processors.
 
-IBM Quantum プログラムを引用した例:
+An example of citing an IBM Quantum program:
 
-> IBM Quantum (2022). 推定プリミティブ(Version x.y.z) format@@0。 https://<span>quantum.ibm.com</span>/
+> IBM Quantum (2022). Estimator primitive (Version x.y.z) [computer software]. https://<span>quantum.ibm.com</span>/
 
 </details>
 
 <details>
   <summary>
-    回路に `Save_*`メソッドを使用している場合、エラーメッセージの `AttributeError: QuantumCircuit オブジェクトに 'save_state' 属性がありません。
+    Why do I receive the error message `AttributeError: QuantumCircuit object has no attribute 'save_state'` when using `save_*`method on a circuit?
   </summary>
   
 The `save_*` instructions are part of Qiskit Aer project,
@@ -78,16 +78,16 @@ a high performance simulator for quantum circuits. These instructions do not
 exist outside of Qiskit Aer and are added dynamically to the
 [QuantumCircuit](/api/qiskit/qiskit.circuit.QuantumCircuit#quantumcircuit) class by Qiskit Aer on import. If you would like to
 use these instructions you must first ensure that you have imported
-`qiskit_aer` in your program before trying to call these methods. 
-は Qiskit Aer に含まれるカスタム [qiskit_aer.library]の詳細については、
-(https://qiskit.org/ecosystem/aer/apidocs/aer_library.html) を参照できます。
+`qiskit_aer` in your program before trying to call these methods. You
+can refer to [qiskit_aer.library](https://qiskit.org/ecosystem/aer/apidocs/aer_library.html) for the details of these custom
+instructions included with Qiskit Aer.
 </details>
 
 <details>
   <summary>
-    実際のデバイスと私の結果がシミュレータの結果と異なるのはなぜですか?
+    Why do my results from real devices differ from my results from the simulator?
   </summary>
 
-シミュレータは、ノイズやデコヒーレンスなしで理想的な環境をモデル化します。 実際のデバイス上でジョブが実行される場合、環境やデコヒーレンスからのノイズによって、量子ビットは理想的な環境とは異なる振る舞いをします。
+The simulator models an ideal environment, without noise or decoherence. When jobs are run on the real devices, noise from the environment and decoherence cause the qubits to behave differently than in an ideal environment.
 
 </details>
