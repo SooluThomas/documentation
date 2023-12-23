@@ -1,19 +1,19 @@
 ---
-title: コストの管理
-description: IBM Cloud 上の IBM Quantum の Standard プランを使用する場合、システム上でジョブを実行するコストを管理する方法。
+title: Manage cost
+description: How to manage costs of running jobs on systems when using the Standard plan for IBM Quantum on IBM Cloud.
 ---
 
-# コストの管理
+# Manage cost
 
-IBM Cloud Quantum Standard プランは、シミュレータ上でジョブを実行している場合を除き、無料ではありません。 このトピックの情報を使用して、支払い額とコストを制限する方法を理解するのに役立ちます。
+The IBM Cloud Quantum Standard plan is not free, except when running jobs on simulators. Use the information in this topic to help you understand how much you’re paying and how to limit your costs.
 
 <Admonition type="note">
-  このトピックの情報は、IBM Cloud 上の IBM Quantum の Standard プランを使用している人にのみ適用されます。  IBM Quantum Platform Open プランに関連付けられた費用はありません。
+  The information in this topic only applies to those who are using the Standard plan for IBM Quantum on IBM Cloud.  There are no costs associated with IBM Quantum Platform Open plan.
 </Admonition>
 
-## コストの上限を設定
+## Set a cost limit
 
-インスタンス管理者は、使用した金額を制限できます。 コスト制限を設定するには、[IBM Cloud Instances page](https://cloud.ibm.com/quantum/instances)に移動し、インスタンスをクリックして**コスト制限**を設定してください。 コスト制限は、このインスタンスが作成されてから実行されるすべてのジョブの総コストを指します。 そして、それは常にトータルコスト以上になります。 インスタンスが指定された合計秒数に達すると、それ以上のジョブを実行できなくなり、コストが発生しなくなります。
+An instance administrator can limit how much is spent. To set cost limits, navigate to the [IBM Cloud Instances page](https://cloud.ibm.com/quantum/instances), then click the instance and set the **Cost limit**. The cost limit refers to the total cost of all jobs run with this instance since it was created, and it will always be greater than or equal to the Total cost. After the instance reaches the specified number of total seconds, no further jobs can be run and no more cost is incurred.
 
 ```
 <Admonition type="note">
@@ -21,59 +21,59 @@ IBM Cloud Quantum Standard プランは、シミュレータ上でジョブを�
 </Admonition>
 ```
 
-## コスト制限を削除する方法
+## How to remove a cost limit
 
-インスタンス管理者はコスト制限を削除できます。 これを行うには、[IBM Cloud Instances](https://cloud.ibm.com/quantum/instances)に移動し、インスタンスを開き、**Cost limit**の編集ボタンをクリックします。 値を削除し、**保存**をクリックします。
+An instance administrator can remove the cost limit. To do so, navigate to the [IBM Cloud Instances page](https://cloud.ibm.com/quantum/instances), then open the instance and click the edit button by the **Cost limit**. Delete the value and click **Save**.
 
-### コスト制限に達した場合はどうなりますか？
+### What happens when the cost limit is reached
 
-インスタンスのコスト制限に達すると、現在実行中のジョブは停止されます。 その状態は、蘭が長すぎる理由でキャンセルに設定されています。 利用可能な部分的な結果はすべて保持されます。
+When the instance’s cost limit is reached, the currently running job is stopped. Its status is set to Canceled with a reason of Ran too long. Any available partial results are kept.
 
-コスト制限が増えるまで、このインスタンスを使用することで、さらにジョブを送信することはできません。
+No further jobs can be submitted by using this instance until the cost limit is increased.
 
-## 請求内容を確認する方法
+## How to see what you’re being charged
 
-毎月の請求書が送信され、あなたのリソース料金についての詳細が表示されます。 [IBM Cloud Billing and usage page](https://cloud.ibm.com/billing)でいつでも利用料金を確認できます。
+You are sent a monthly invoice that provides details about your resource charges. You can check how much has been spent at any time on the [IBM Cloud Billing and usage page](https://cloud.ibm.com/billing).
 
-さらに、インスタンスごとまたはジョブごとのコストをいつでも決定できます。
+Additionally, you can determine cost per instance or per job at any time.
 
-### インスタンスのコストを表示
+### View instance cost
 
-format@@0(https://cloud) で、現在の請求サイクル中にインスタンスに請求された金額を決定します。 bm.com/quantum/instances)、インスタンスをクリックして詳細ページを開きます。
+To determine how much has been billed to an instance during the current billing cycle, from the [Instances page](https://cloud.ibm.com/quantum/instances), click the instance to open its details page.
 
-これらは費用に関連する分野です。
+These are the fields relevant to cost:
 
--   **請求周期使用**: 現在の請求期間中にこのインスタンスが使用する_量子時間_ の量。 量子時間とは、量子システムがユーザーの要求を満たすためにコミットしている期間のことです。
--   **請求サイクルコスト**: 現在の請求サイクル中のジョブの実行コストの合計です。
--   **Total usage**: このインスタンスが作成されてから使用される量子時間。 
--   **合計コスト**: 作成されて以来、このインスタンスでジョブを実行する合計コスト。 管理者のみがこの値を設定できます。
+-   **Billing cycle usage**: The amount of _quantum time_ used by this instance during the current billing cycle. Quantum time is the duration a quantum system is committed to fulfilling a user request.
+-   **Billing cycle cost**: The total cost of running jobs during the current billing cycle.
+-   **Total usage**: The amount of quantum time used by this instance since it was created. 
+-   **Total cost**: The total cost of running jobs on this instance since it was created. Only administrators can set this value.
 
-format@@0(https://cloud.ibm.com/billing)で請求サイクルを確認できます。
+You can view your billing cycle on the [Billing and usage page](https://cloud.ibm.com/billing).
 
-### ジョブのコストを表示
+### View job cost
 
-インスタンスに関連付けられた各ジョブに対して、format@@0(https://cloud) から請求された金額を決定します。 bm.com/quantum/instances)、インスタンスをクリックして詳細ページを開きます。 次に、左側のformat@@0をクリックします。
+To determine how much has been billed to each job associated with an instance, from the [Instances page](https://cloud.ibm.com/quantum/instances), click the instance to open its details page. Next, on the left side, click Jobs.
 
-これらは費用に関連する列です。
+These are the columns relevant to cost:
 
--   **使い方**: この仕事で使用される量子時間の量。 量子時間とは、量子システムがユーザーの要求を満たすためにコミットしている期間のことです。
--   **コスト**：このジョブを実行する総コスト。
+-   **Usage**: The amount of quantum time used by this job. Quantum time is the duration a quantum system is committed to fulfilling a user request.
+-   **Cost**: The total cost of running this job.
 
-## コストを見積もってください
+## Estimate the cost
 
-ジョブの実行時間を推定することで、ジョブの実行時間とコストを推定することができます。  詳しくは、format@@0(estimate-job-run-time) のトピックを参照してください。  
+You can estimate how long a job will run, and therefore its cost, by estimating the job run time.  For details, see the [Estimate job run time](estimate-job-run-time) topic.  
 
-## 送金通知の設定
+## Set up spending notifications
 
-アカウントまたは特定のサービスが設定した特定の支出のしきい値に達したときに通知を受け取るために支出通知を設定できます。 詳しくは、[IBM Cloud account Type description](https://cloud.ibm.com/docs/account?topic=account-accounts)を参照してください。 IBM Cloud の支出通知は、いくつかの理由で他のコスト管理方法と一緒に使用する必要があります。
+You can set up spending notifications to get notified when your account or a particular service reaches a specific spending threshold that you set. For information, see the [IBM Cloud account Type description](https://cloud.ibm.com/docs/account?topic=account-accounts). IBM Cloud spending notifications must be used with other methods of cost management for several reasons:
 
--   通知トリガーは _after_ コストのみ指定された制限を超えます。
--   料金は請求システムに時給に提出されます。 そのため、ジョブの送信と支出の通知が送信される間に長い遅延が発生する可能性があります。
--   請求システムは、請求書発行システムに情報を取得するのに数日かかることがあり、通知がさらに遅れる可能性があります。 IBM Cloud 課金システムの仕組みについては、format@@0(https://cloud.ibm.com/docs/billing-usage?topic=billing-usage-spending)を参照してください。
+-   The notifications trigger only _after_ cost surpasses the specified limit.
+-   Cost is submitted to the billing system hourly. Therefore, a long delay might occur between the job submission and the spending notification being sent.
+-   The billing system can take multiple days to get information to the invoicing system, which might cause further delay in notifications. For more information about how the IBM Cloud billing system works, see [Setting spending notifications](https://cloud.ibm.com/docs/billing-usage?topic=billing-usage-spending).
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - IBM Cloud で利用可能な[Qiskit Runtime plans](https://cloud.ibm.com/docs/quantum-computing?topic=quantum-computing-plans)を確認してください。
+    - Review the [Qiskit Runtime plans](https://cloud.ibm.com/docs/quantum-computing?topic=quantum-computing-plans) available on IBM Cloud.
     - Review suggestions to [minimize job quantum time.](minimize-time)
 </Admonition>
