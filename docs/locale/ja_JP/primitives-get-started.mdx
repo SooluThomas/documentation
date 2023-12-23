@@ -1,24 +1,24 @@
 ---
-title: プリミティブを始めましょう
-description: Qiskitランタイム推定値とサンプラーを使用
+title: Get started with primitives
+description: Use Qiskit Runtime Estimator and Sampler
 ---
 
-# プリミティブを始めましょう
+# Get started with primitives
 
-このトピックではプリミティブの設定方法について説明します。 それらを構成するために使用できるオプションを探索し、プログラムでそれらを呼び出します。
+The steps in this topic describes how to set up  primitives, explore the options you can use to configure them, then invoke them in a program.
 
 <Admonition type="note">
-    以下の例はすべて、Qiskit Runtime のプリミティブを使用しますが、代わりに基本プリミティブを使用することができます。 
+    These examples all use the primitives from Qiskit Runtime, but you could use the base primitives instead. 
 </Admonition>
 
 <span id="start-estimator"></span>
-## 見積もりを始める
+## Get started with Estimator
 
-### 1.  アカウントを初期化する
+### 1.  Initialize the account
 
-QisKit Runtime `Estimator`は管理サービスなので、まずアカウントを初期化する必要があります。 次に、期待値を計算するために使用するシミュレータまたは実際のバックエンドを選択できます。
+Since Qiskit Runtime `Estimator` is a managed service, you will first need to initialize your account. You can then select the simulator or real backend you want to use to calculate the expectation value.
 
-アカウントをお持ちでない場合は、format@@0(../start/install) の手順に従ってください。
+Follow the steps in the [Install and set up topic](../start/install) if you don't already have an account.
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -27,9 +27,9 @@ service = QiskitRuntimeService()
 backend = service.backend("ibm_brisbane")
 ```
 
-### 2.  回路と観測可能なものを作成
+### 2.  Create a circuit and an observable
 
-前のセクションと同じように、少なくとも1つの回路と1つの回路が、'見積もり'プリミティブ'への入力として見えるようにする必要があります。
+Just like the section before, you will need at least one circuit and one observable as inputs to the `Estimator` primitive.
 
 ```python
 import numpy as np
@@ -44,11 +44,11 @@ observable = SparsePauliOp("Z" * n_qubits)
 print(f">>> Observable: {observable.paulis}")
 ```
 
-### 3.  Qiskit ランタイム推定値を初期化
+### 3.  Initialize the Qiskit Runtime Estimator
 
-ここでは、Qiskit_ibm_runtime.Estimatel`の代わりに`qiskit_ibm_runtime.Estimatel\` のインスタンスを初期化し、Qiskit Runtimeの推定値の実装を使用します。 
+Here we are initializing an instance of `qiskit_ibm_runtime.Estimator` instead of `qiskit.primitives.Estimator` to use Qiskit Runtime's implementation of the `Estimator`. 
 
-`Estimator` を初期化する際には、先に選択したバックエンドをターゲットデバイス (またはシミュレータ) として渡す必要があります。  これは `session` パラメータ内で行うこともできます。 
+When you initialize the `Estimator`, you'll need to pass in the backend you previously selected as the target device (or simulator).  You could also do this within the `session` parameter. 
 
 ```python
 from qiskit_ibm_runtime import Estimator
@@ -56,31 +56,31 @@ from qiskit_ibm_runtime import Estimator
 estimator = Estimator(backend=backend)
 ```
 
-### 4.  推定値を呼び出して結果を取得する
+### 4.  Invoke the Estimator and get results
 
-次に、`run()`メソッドを呼び出して、入力回路と観測データの期待値を計算します。
+You can then invoke the `run()` method to calculate expectation values for the input circuits and observables.
 
 ```python
 job = estimator.run(circuit, observable)
-print(f">>> ジョブID: {job.job_id()}")
-print(f">>> ジョブステータス: {job.status()}")
+print(f">>> Job ID: {job.job_id()}")
+print(f">>> Job Status: {job.status()}")
 ```
 
 ```python
 result = job.result()
 print(f">>> {result}")
-print(f" > Expectation value: {result.values[0]})
-print(f" > Metadata: {result.metadata[0]}")
+print(f"  > Expectation value: {result.values[0]}")
+print(f"  > Metadata: {result.metadata[0]}")
 ```
 
 <span id="start-sampler"></span>
-## サンプラーで始めよう
+## Get started with Sampler
 
-### 1.  アカウントを初期化する
+### 1.  Initialize the account
 
-QisKit Runtime `Sampler`は管理サービスなので、まずアカウントを初期化する必要があります。 次に、期待値を計算するために使用するシミュレータまたは実際のバックエンドを選択できます。
+Since Qiskit Runtime `Sampler` is a managed service, you will first need to initialize your account. You can then select the simulator or real backend you want to use to calculate the expectation value.
 
-アカウントが設定されていない場合は、format@@0(../start/install) の手順に従ってください。
+Follow the steps in the [Install and set up topic](../start/install) if you don't already have an account set up.
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService
@@ -89,9 +89,9 @@ service = QiskitRuntimeService()
 backend = service.backend("ibm_brisbane")
 ```
 
-### 2.  回路を作成
+### 2.  Create a circuit
 
-前の節と同じように、`Sampler`プリミティブへの入力として少なくとも1つの回路が必要です。
+Just like the section before, you will need at least one circuit as the input to the `Sampler` primitive.
 
 ```python
 import numpy as np
@@ -105,38 +105,38 @@ circuit = IQP(mat)
 circuit.measure_all()
 ```
 
-### 3.  Qiskit Runtime Samplerを初期化する
+### 3.  Initialize the Qiskit Runtime Sampler
 
-ここでは`qiskit_ibm_runtime.Sampler`のインスタンスを初期化し、Qiskit.primitives.Sampler`の代わりに`qiskit_ibm_runtime.Sampler\`の実装を使用します。 
+Here we are initializing an instance of `qiskit_ibm_runtime.Sampler` instead of `qiskit.primitives.Sampler` to use Qiskit Runtime's implementation of the `Sampler`. 
 
-`Sampler` を初期化するときは、先に選択したバックエンドをターゲットデバイス (またはシミュレータ) として渡す必要があります。  これは `session` パラメータ内で行うこともできます。 
+When you initialize the `Sampler`, you'll need to pass in the backend you previously selected as the target device (or simulator).  You could also do this within the `session` parameter. 
 
 ```python
 from qiskit_ibm_runtime import Sampler
 
-samler = Sampler(backend=backend)
+sampler = Sampler(backend=backend)
 ```
 
-### 4.  サンプラーを起動して結果を取得する
+### 4.  Invoke the Sampler and get results
 
-`run()`メソッドを呼び出して、入力回路と量子状態の準確率分布を生成することができます。
+You can then invoke the `run()` method to generate a quasi-probability distribution for the input circuits and quantum states.
 
 ```python
 job = sampler.run(circuit)
-print(f">>> ジョブID: {job.job_id()}")
-print(f">>> ジョブステータス: {job.status()}")
+print(f">>> Job ID: {job.job_id()}")
+print(f">>> Job Status: {job.status()}")
 ```
 
 ```python
 result = job.result()
 print(f">>> {result}")
-print(f" > 準確率分布: {result.quasi_dists[0]}")
-print(f" > Metadata: {result.metadata[0]}")
+print(f"  > Quasi-probability distribution: {result.quasi_dists[0]}")
+print(f"  > Metadata: {result.metadata[0]}")
 ```
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - 詳細なformat@@2format@@3(primitives-examples)
-    - IBM Quantum Learningの[Cost function lesson](https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions#primitives)を介してプリミティブを練習します。
+    - Review detailed [primitives examples.](primitives-examples)
+    - Practice with primitives by working through the [Cost function lesson](https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions#primitives) in IBM Quantum Learning.
 </Admonition>
