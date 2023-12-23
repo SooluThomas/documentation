@@ -1,20 +1,20 @@
 ---
-title: Qiskit プリミティブによる正確なシミュレーション
-description: Qiskit 参照プリミティブを使ってシミュレートします。 Estimate プリミティブで期待値を計算する方法と、サンプラープリミティブで回路の出力確率を計算する方法
+title: Exact simulation with Qiskit primitives
+description: Simulate with Qiskit reference primitives. How to compute an expectation value with the Estimator primitive, and how to compute circuit output probabilities with the Sampler primitive
 ---
 
-# Qiskit プリミティブによる正確なシミュレーション
+# Exact simulation with Qiskit primitives
 
-Qiskit の参照プリミティブはローカルの状態ベクトルシミュレーションを実行することができます。これは迅速なプロトタイピングアルゴリズムに役立ちます。 
+The reference primitives in Qiskit can perform local statevector simulations, which is useful for quickly prototyping algorithms. 
 
-`Estimatel` プリミティブは期待値を計算でき、`Sampler`プリミティブは回路の出力確率を計算できます。 
+The `Estimator` primitive can compute an expectation value, and the `Sampler` primitive can compute circuit output probabilities. 
 
-## `Estimator` プリミティブで期待値を計算する
+## Compute an expectation value with the `Estimator` primitive
 
-これらの指示に従って、[`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) プリミティブを使用して、特定の量子回路に対して観測可能な期待値を取得します。
+Follow these instructions to get the expected value of an observable for a given quantum circuit with the [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) primitive.
 
 <Admonition type="note">
-  このガイドでは Qiskitのリファレンス実装を使用していますが、`Estimator` プリミティブは、[`qiskit.primitives.BackendEstimator`](../api/qiskit/qiskit.primitives.BackendEstiator) を使用して、任意のプロバイダで実行することができます。
+  While this guide uses Qiskit’s reference implementation, the `Estimator` primitive can be run with any provider using [`qiskit.primitives.BackendEstimator`](../api/qiskit/qiskit.primitives.BackendEstimator).
 
 ```python
 from qiskit.primitives import BackendEstimator
@@ -25,27 +25,27 @@ backend = provider.get_backend('backend_name')
 estimator = BackendEstimator(backend)
 ```
 
-  プリミティブをネイティブに実装するプロバイダがいくつかあります(詳細については[Qiskit エコシステムのページ](https://qiskit.github.io/ecosystem/#primitives)を参照してください)。
+  There are some providers that implement primitives natively (see [the Qiskit Ecosystem page](https://qiskit.github.io/ecosystem/#primitives) for more details).
 
 </Admonition>
 
-### 観測可能ファイルを初期化
+### Initialize observables
 
-最初のステップは、予想される値を計算するオブザベーションを定義することです。 それぞれの `BaseOperator` は、[`qiskit.quantum_info`](../api/qiskit/quantum_info) の演算子のように任意です。
-その中では、[`qiskit.quantum_info.SparsePauliOp`](../api/qiskit/qiskit.quantum_info.SparsePauliOp) を使用することが望ましいです。
+The first step is to define the observables whose expected value you want to compute. Each observable can be any `BaseOperator`, like the operators from [`qiskit.quantum_info`](../api/qiskit/quantum_info).
+Among them it is preferable to use [`qiskit.quantum_info.SparsePauliOp`](../api/qiskit/qiskit.quantum_info.SparsePauliOp).
 
 ```python
 from qiskit.quantum_info import SparsePauliOp
 
-observable = SparsePauliOp(["II", "XX", "Y", "ZZ"], coeffs=[1, 1, -1])
+observable = SparsePauliOp(["II", "XX", "YY", "ZZ"], coeffs=[1, 1, -1, 1])
 ```
 
-### QuantumCircuit を初期化
+### Initialize QuantumCircuit
 
-次に、期待値を取得する[`qiskit.circuit`](../api/qiskit/qiskit.circuit.QuantumCircuit)を作成します。
+Next, create the [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit)s for which you want to obtain the expected value.
 
 ```python
-from qisKit import QuantumCircuit
+from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(2)
 qc.h(0)
@@ -53,15 +53,15 @@ qc.cx(0,1)
 qc.draw("mpl")
 ```
 
-![Initial QuantumCircuit](/images/verify/simulate-with-qiskit-primitives/estimaator-initialize.png)
+![Initial QuantumCircuit](/images/verify/simulate-with-qiskit-primitives/estimator-initialize.png)
 
 <Admonition type="note">
-  [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) [`qiskit.primitives.Estimater`](../api/qiskit/qiskit.primitivitives.Estimaator) に渡す測定値を含めてはなりません。
+  The [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) you pass to [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) must not include any measurements.
 </Admonition>
 
-### 「推定値」を初期化する
+### Initialize `Estimator`
 
-次に、[`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) をインスタンス化します。
+Next, instantiate an [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator).
 
 ```python
 from qiskit.primitives import Estimator
@@ -69,11 +69,11 @@ from qiskit.primitives import Estimator
 estimator = Estimator()
 ```
 
-### 実行して結果を取得する
+### Run and get results
 
-`estimator`を定義したので、[`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimaator#run) メソッド
-を呼び出すと、[`qiskit.providers.JobV1`](../api/qiskit/qiskit.providers.JobV1`)のインスタンスが返されます。 ジョブの結果([`qiskit.primitives.EstimaatorResult`](../api/qiskit/qiskit.primitives.EstimaatorResult) オブジェクト)
-[`qiskit.providers.JobV1.result`](../api/qiskit/qiskit.providers.JobV1#result) メソッドの結果を取得できます。
+Now that you have defined your `estimator`, you can run your estimation by calling the [`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run) method,
+which returns an instance of [`qiskit.providers.JobV1`](../api/qiskit/qiskit.providers.JobV1). You can get the results from the job (as a [`qiskit.primitives.EstimatorResult`](../api/qiskit/qiskit.primitives.EstimatorResult) object)
+with the [`qiskit.providers.JobV1.result`](../api/qiskit/qiskit.providers.JobV1#result) method.
 
 ```python
 job = estimator.run(qc, observable)
@@ -85,14 +85,14 @@ print(result)
 EstimatorResult(values=array([4.]), metadata=[{}])
 ```
 
-この例では、1つの[`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) と1つの観測可能なもののみを使用します。 複数の回路と観測値の期待値を取得したい場合は、[`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit/qiskit) の `list` を渡すことができます。 ircuit.QuantumCircuit) [`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimaator#run) メソッドへの `BaseOperator` のリスト。 両方の `list` の長さは同じでなければなりません。
+This example only uses one [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) and one observable. If you want to get expectation values for multiple circuits and observables, you can pass a `list` of [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit)s and a list of `BaseOperator`s to the [`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run) method. Both `list`s must have the same length.
 
-#### 期待値を取得する
+#### Get the expected value
 
-これらの結果から、期待される値を属性 [`qiskit.primitives.EstimaatorResult.values`](../api/qiskit/qiskit.primitives.EstimaatorResult#values) で抽出できます。
+From these results you can extract the expected values with the attribute [`qiskit.primitives.EstimatorResult.values`](../api/qiskit/qiskit.primitives.EstimatorResult#values).
 
-[`qiskit.primitives.EstimaatorResult.values`](../api/qiskit/qiskit.primitives.EstimaatorResult#values) は `numpy を返します。 darray`
-`i`<sup>番目の</sup> 要素は、`i`<sup>番目の</sup> 回路と`i`<sup>番目の</sup> 番目の観測可能に対応する期待値です。
+[`qiskit.primitives.EstimatorResult.values`](../api/qiskit/qiskit.primitives.EstimatorResult#values) returns a `numpy.ndarray`
+whose `i`<sup>th</sup> element is the expectation value corresponding to the `i`<sup>th</sup> circuit and `i`<sup>th</sup> observable.
 
 ```python
 exp_value = result.values[0]
@@ -103,10 +103,10 @@ print(exp_value)
 3.999999999999999
 ```
 
-### 「推定値」によるパラメータ回路
+### Parameterized circuit with `Estimator`
 
-[`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) プリミティブは以下のようなバインドされていないパラメータ回路で実行できます。
-回路のパラメータに手動で値をバインドし、前の例の手順に従うこともできます。
+The [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) primitive can be run with unbound parameterized circuits like the one below.
+You can also manually bind values to the parameters of the circuit and follow the steps of the previous example.
 
 ```python
 from qiskit.circuit import Parameter
@@ -119,15 +119,15 @@ print(param_qc.draw())
 ```
 
 ```
-     <unk> ─────────<unk>
-q_0: <unk> Ry(q) ├────
-     ├──────────
-q_1: ───────────────────<unk> X <unk>
-              ├──────────────────<unk> Aformat@@4
+     ┌───────┐
+q_0: ┤ Ry(θ) ├──■──
+     └───────┘┌─┴─┐
+q_1: ─────────┤ X ├
+              └───┘
 ```
 
-前のケースとの主な違いは、期待値を`float`のリスト`リスト`として評価するパラメータ値のセットを指定する必要があることです。
-外側の `list` の `i`<sup>第</sup> 要素は、`i`<sup>第</sup> 回路に対応するパラメータ値のセットであり、監視可能です。
+The main difference with the previous case is that now you need to specify the sets of parameter values for which you want to evaluate the expectation value as a `list` of `list`s of `float`s.
+The `i`<sup>th</sup> element of the outer `list` is the set of parameter values that corresponds to the `i`<sup>th</sup> circuit and observable.
 
 ```python
 import numpy as np
@@ -142,25 +142,25 @@ for i in range(3):
 ```
 
 ```
-パラメータ: 0.00000 期待値: 2.0
-パラメータ: 0.52360 期待値: 3.0
-パラメータ: 1.57080 期待値: 4.0
+Parameter: 0.00000   Expectation value: 2.0
+Parameter: 0.52360   Expectation value: 3.0
+Parameter: 1.57080   Expectation value: 4.0
 ```
 
-### 実行オプションの変更
+### Change run options
 
-ワークフローでは、ショット数などのプリミティブランオプションのチューニングが必要になる場合があります。
+Your workflow might require tuning primitive run options, such as the number of shots.
 
-デフォルトでは、参照[`qiskit.primitives.Estimaator`](../api/qiskit/qiskit.primitives.Estimaator) クラスは[`qiskit.quantum_info.Statevector`](../api/qiskit/qiskit.quantum_info.Statevector)クラスに基づいて正確な状態ベクトル計算を実行します。 ただし、`shots` の数が設定されている場合、これはショットノイズを含めるように変更することができます。 再現性のために、以下の例では、 `seed` も設定されます。
+By default, the reference [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) class performs an exact statevector calculation based on the [`qiskit.quantum_info.Statevector`](../api/qiskit/qiskit.quantum_info.Statevector) class. However, this can be modified to include shot noise if the number of `shots` is set. For reproducibility purposes, a `seed` will also be set in the following examples.
 
-[`qiskit.primitives.Estimaator`](../api/qiskit/qiskit.primitives.Estimaator)には2つの方法があります。
+There are two main ways of setting options in the [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator):
 
--   [`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run) メソッドにキーワード引数を設定します。
--   [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) オプションを変更します。
+-   Set keyword arguments in the [`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run) method.
+-   Modify [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) options.
 
-#### キーワード引数を[`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run) に設定します。
+#### Set keyword arguments for [`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run)
 
-特定の実行時の設定のみを変更したい場合は、[`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run) メソッドの中でオプションを設定する方が便利です。 キーワード引数として渡すことでこれを行うことができます。
+If you only want to change the settings for a specific run, it can be more convenient to set the options inside the [`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run) method. You can do this by passing them as keyword arguments.
 
 ```python
 job = estimator.run(qc, observable, shots=2048, seed=123)
@@ -180,14 +180,14 @@ print(result.values[0])
 3.999999998697238
 ```
 
-#### [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) オプションを変更する
+#### Modify [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) options
 
-複数の実行時に設定値を保持したい場合は、[`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) オプションを変更することをお勧めします。 これにより、同じ [`qiskit.primitives.Estimaator`](../api/qiskit/qiskit.primitives) を使用できます。 stimator) オブジェクトは、[`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run) を使用するたびに、設定値を
-に書き換えなくても何度もオブジェクトになります。
+If you want to keep some configuration values for several runs, it can be better to change the [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) options. That way you can use the same [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) object as many times as you wish without having to
+rewrite the configuration values every time you use [`qiskit.primitives.Estimator.run`](../api/qiskit/qiskit.primitives.Estimator#run).
 
-#### 既存の[`qiskit.primitives.Estimaator`](../api/qiskit/qiskit.primitives.Estimater)
+#### Modify existing [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator)
 
-すでに定義されている[`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator)のオプションを変更したい場合は、メソッド[`qiskit.primitives.Estimaator.set_options`](../api/qiskit/qiskit.primitives.Estimator#set_options)を使用して、キーワード引数として新しいオプションを導入できます。
+If you prefer to change the options of an already-defined [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator), you can use the method [`qiskit.primitives.Estimator.set_options`](../api/qiskit/qiskit.primitives.Estimator#set_options) and introduce the new options as keyword arguments.
 
 ```python
 estimator.set_options(shots=2048, seed=123)
@@ -209,15 +209,15 @@ print(result.values[0])
 3.999999998697238
 ```
 
-#### 新しい[`qiskit.primitives.Estimater`](../api/qiskit/qiskit.primitives.Estimater) をオプションで定義します。
+#### Define a new [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) with the options
 
-新しいオプションを使って新しい [`qiskit.primitives.Estimaator`](../api/qiskit/qiskit.primitives.Estimaator) を定義する場合は、次のように、 `dict` を定義します。
+If you prefer to define a new [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) with new options, define a `dict` like this one:
 
 ```python
 options = {"shots": 2048, "seed": 123}
 ```
 
-新しい[`qiskit.primitives.Estimatelator`](../api/qiskit/qiskit.primitives.Estimaator) に`options`引数を使って導入することができます。
+You can then introduce it into your new [`qiskit.primitives.Estimator`](../api/qiskit/qiskit.primitives.Estimator) with the `options` argument.
 
 ```python
 estimator = Estimator(options=options)
@@ -239,12 +239,12 @@ print(result.values[0])
 3.999999998697238
 ```
 
-## `Sampler`プリミティブで回路の出力確率を計算する
+## Compute circuit output probabilities with `Sampler` primitive
 
-[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler)の量子回路の確率分布を取得するには、以下の手順に従ってください。
+Follow these instructions to get the probability distribution of a quantum circuit with the [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) primitive.
 
 <Admonition type="note">
-  このガイドでは Qiskitのリファレンス実装を使用していますが、`Sampler` プリミティブは [`qiskit.primitives.BackendSampler`](../api/qiskit/qiskit.primitives.BackendSampler) を使用して任意のプロバイダで実行できます。
+  While this guide uses Qiskit’s reference implementation, the `Sampler` primitive can be run with any provider using [`qiskit.primitives.BackendSampler`](../api/qiskit/qiskit.primitives.BackendSampler).
 
 ```python
 from qiskit.primitives import BackendSampler
@@ -252,19 +252,19 @@ from <some_qiskit_provider> import QiskitProvider
 
 provider = QiskitProvider()
 backend = provider.get_backend('backend_name')
-samler = BackendSampler(backend)
+sampler = BackendSampler(backend)
 ```
 
-  プリミティブをネイティブに実装するいくつかのプロバイダがあります(詳細については、[Qiskit エコシステムのページ](https://qiskit.github.io/ecosystem#providers)を参照してください)。
+  There are some providers that implement primitives natively (see [the Qiskit Ecosystem page](https://qiskit.github.io/ecosystem#providers) for more details).
 
 </Admonition>
 
-### QuantumCircuit を初期化
+### Initialize QuantumCircuit
 
-最初のステップは確率分布を求める[`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit)を作成することです。
+The first step is to create the [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit)s from which you want to obtain the probability distribution.
 
 ```python
-from qisKit import QuantumCircuit
+from qiskit import QuantumCircuit
 
 qc = QuantumCircuit(2)
 qc.h(0)
@@ -276,12 +276,12 @@ qc.draw("mpl")
 ![Initial QuantumCircuit](/images/verify/simulate-with-qiskit-primitives/sampler-initialize.png)
 
 <Admonition type="note">
-[`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler)に渡す場合は、測定値を含める必要があります。
+The [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) you pass to [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) must include measurements.
 </Admonition>
 
-### `Sampler`を初期化
+### Initialize `Sampler`
 
-次に、[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler)インスタンスを作成します。
+Next, create a [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) instance.
 
 ```python
 from qiskit.primitives import Sampler
@@ -289,9 +289,9 @@ from qiskit.primitives import Sampler
 sampler = Sampler()
 ```
 
-### 実行して結果を取得する
+### Run and get results
 
-これで、`sampler`を定義しました。[`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) メソッドを呼び出し、[`qiskit.providers.JobV1`](../api/qiskit/qiskit.providers.JobV1`)のインスタンスを返します。 [`qiskit.primitives.SamplerResult`](../api/qiskit/qiskit.primitives.SamplerResult) オブジェクトとして、[`qiskit.providers.JobV1.result`](../api/qiskit/qiskit.providers.JobV1#result) メソッドを使用して結果を取得できます。
+Now that you have defined your `sampler`, run it by calling the [`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) method, which returns an instance of [`qiskit.providers.JobV1`](../api/qiskit/qiskit.providers.JobV1). You can get the results from the job (as a [`qiskit.primitives.SamplerResult`](../api/qiskit/qiskit.primitives.SamplerResult) object) with the [`qiskit.providers.JobV1.result`](../api/qiskit/qiskit.providers.JobV1#result) method.
 
 ```python
 job = sampler.run(qc)
@@ -303,19 +303,19 @@ print(result)
 SamplerResult(quasi_dists=[{0: 0.4999999999999999, 3: 0.4999999999999999}], metadata=[{}])
 ```
 
-この例では、[`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) [`qiskit.quantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) インスタンスを[`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) メソッドに渡すことで、複数の回路をサンプリングできます。
+While this example only uses one [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit), you can sample multiple circuits by passing a `list` of [`qiskit.circuit.QuantumCircuit`](../api/qiskit/qiskit.circuit.QuantumCircuit) instances to the [`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) method.
 
-### 確率分布を取得する
+### Get the probability distribution
 
-これらの結果から、属性 [`qiskit.primitives.SamplerResult.quasi_dists`](../api/qiskit/qiskit.primitives.SamplerResult#quasi_dists) を使用して、準確率分布を抽出できます。
+From these results you can extract the quasi-probability distributions with the attribute [`qiskit.primitives.SamplerResult.quasi_dists`](../api/qiskit/qiskit.primitives.SamplerResult#quasi_dists).
 
-この例には1つの回路しかありませんが、[`qiskit.primitives.SamplerResult.quasi_dists`](../api/qiskit/qiskit.primitives.SamplerResult#quasi_dists) は[`qiskit.result.QuasiDistribution`](../api/qiskit/qiskit.result.quasiDistribution)のリストを返します。
-`result.quasi_dists[i]` は `i`<sup>第</sup> 回路の準確率分布です。
+Even though there is only one circuit in this example, [`qiskit.primitives.SamplerResult.quasi_dists`](../api/qiskit/qiskit.primitives.SamplerResult#quasi_dists) returns a list of [`qiskit.result.QuasiDistribution`](../api/qiskit/qiskit.result.QuasiDistribution)s.
+`result.quasi_dists[i]` is the quasi-probability distribution of the `i`<sup>th</sup> circuit.
 
 <Admonition type="note">
-準確率分布は、負の値も許容されるという確率分布とは異なります。
-しかし、準確率は1までの確率を合計しなければなりません。
-誤り緩和技術を使用すると、負の準確率が発生する可能性があります。
+A quasi-probability distribution differs from a probability distribution in that negative values are also allowed.
+However, the quasi-probabilities must sum up to 1 like probabilities.
+Negative quasi-probabilities may appear when using error mitigation techniques.
 </Admonition>
 
 ```python
@@ -327,9 +327,9 @@ print(quasi_dist)
 {0: 0.4999999999999999, 3: 0.4999999999999999}
 ```
 
-#### バイナリ出力による確率分布
+#### Probability distribution with binary outputs
 
-出力キーを小数の代わりにバイナリ文字列として見たい場合は、[`qiskit.result.QuasiDistribution.binary_probabibilities`](../api/qiskit/qiskit.result.QuasiDistribution#binary_probabilities) メソッドを使用します。
+If you prefer to see the output keys as binary strings instead of decimal numbers, you can use the [`qiskit.result.QuasiDistribution.binary_probabilities`](../api/qiskit/qiskit.result.QuasiDistribution#binary_probabilities) method.
 
 ```python
 print(quasi_dist.binary_probabilities())
@@ -339,10 +339,10 @@ print(quasi_dist.binary_probabilities())
 {'00': 0.4999999999999999, '11': 0.4999999999999999}
 ```
 
-### `Sampler`によるパラメータ回路
+### Parameterized circuit with `Sampler`
 
-[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) プリミティブは、以下のようなバインドされていないパラメータ回路で実行できます。
-回路のパラメータに手動で値をバインドし、前の例の手順に従うこともできます。
+The [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) primitive can be run with unbound parameterized circuits like the one below.
+You can also manually bind values to the parameters of the circuit and follow the steps of the previous example.
 
 ```python
 from qiskit.circuit import Parameter
@@ -365,7 +365,7 @@ print(param_qc.draw())
                             0  1 
 ```
 
-前のケースとの主な違いは、期待値を`float`のリスト`リスト`として評価するパラメータ値のセットを指定する必要があることです。 外側の `list` の `i`<sup>第</sup> 要素は、`i`<sup>第</sup> 回路に対応するパラメータ値のセットです。
+The main difference from the previous case is that now you need to specify the sets of parameter values for which you want to evaluate the expectation value as a `list` of `list`s of `float`s. The `i`<sup>th</sup> element of the outer `list` is the set of parameter values that corresponds to the `i`<sup>th</sup> circuit.
 
 ```python
 import numpy as np
@@ -380,28 +380,28 @@ for i in range(3):
 ```
 
 ```
-パラメータ: 0.00000確率: {0: 1.0}
-パラメータ: 0.52360 確率: {0: 0.9330127018922194, 3: 0.0669872981077807}
-パラメータ: 1.57080 確率: {0: 0.5000000000000001, 3: 0.4999999999999999}
+Parameter: 0.00000   Probabilities: {0: 1.0}
+Parameter: 0.52360   Probabilities: {0: 0.9330127018922194, 3: 0.0669872981077807}
+Parameter: 1.57080   Probabilities: {0: 0.5000000000000001, 3: 0.4999999999999999}
 ```
 
-### 実行オプションの変更
+### Change run options
 
-ワークフローでは、ショット数などのプリミティブランオプションのチューニングが必要になる場合があります。
+Your workflow might require tuning primitive run options, such as the number of shots.
 
-デフォルトでは、リファレンス[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler)クラスは[`qiskit.quantum_info.Statevector`](../api/qiskit/qiskit.quantum_info.Statevector)クラスに基づいて正確なステートベクトル
-を実行します。 However, this can be
+By default, the reference [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) class performs an exact statevector
+calculation based on the [`qiskit.quantum_info.Statevector`](../api/qiskit/qiskit.quantum_info.Statevector) class. However, this can be
 modified to include shot noise if the number of `shots` is set.
-再現性のために、以下の例では、 `seed` も設定されます。
+For reproducibility purposes, a `seed` will also be set in the following examples.
 
-[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler)にオプションを設定するには2つの主な方法があります。
+There are two main ways of setting options in the [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler):
 
--   [`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) メソッドにキーワード引数を設定します。
--   [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) オプションを変更します。
+-   Set keyword arguments in the [`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) method.
+-   Modify [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) options.
 
-#### キーワード引数を[`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) に設定します。
+#### Set keyword arguments for [`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run)
 
-特定の実行時にのみ設定を変更したい場合は、[`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) メソッド内でオプションを設定する方が便利です。 キーワード引数として渡すことでこれを行うことができます。
+If you only want to change the settings for a specific run, it can be more convenient to set the options inside the [`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) method. You can do this by passing them as keyword arguments.
 
 ```python
 job = sampler.run(qc, shots=2048, seed=123)
@@ -413,13 +413,13 @@ print(result)
 SamplerResult(quasi_dists=[{0: 0.5205078125, 3: 0.4794921875}], metadata=[{'shots': 2048}])
 ```
 
-#### [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) オプションを変更する
+#### Modify [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) options
 
-いくつかの設定値を保持したい場合は、[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) オプションを変更することをお勧めします。 これにより、同じ[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives)を使用できます。 ampler) [`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run) を使用するたびに、設定値を書き換えることなく、望む回数だけオブジェクトを作成します。
+If you want to keep some configuration values for several runs, it can be better to change the [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) options. That way you can use the same [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) object as many times as you wish without having to rewrite the configuration values every time you use [`qiskit.primitives.Sampler.run`](../api/qiskit/qiskit.primitives.Sampler#run).
 
-#### 既存の[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) を変更する
+#### Modify existing [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler)
 
-すでに定義されている[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler)のオプションを変更したい場合は、[`qiskit.primitives.Sampler.set_options`](../api/qiskit/qiskit.primitives.Sampler#set_options)を使用して、キーワード引数として新しいオプションを導入できます。
+If you prefer to change the options of an already-defined [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler), you can use [`qiskit.primitives.Sampler.set_options`](../api/qiskit/qiskit.primitives.Sampler#set_options) and introduce the new options as keyword arguments.
 
 ```python
 sampler.set_options(shots=2048, seed=123)
@@ -433,18 +433,18 @@ print(result)
 SamplerResult(quasi_dists=[{0: 0.5205078125, 3: 0.4794921875}], metadata=[{'shots': 2048}])
 ```
 
-#### 新しい[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) を定義します。
+#### Define a new [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) with the options
 
-新しい[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler)を定義したい場合は、次のような `dict` を定義します。
+If you prefer to define a new [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) with new options, define a `dict` like this one:
 
 ```python
 options = {"shots": 2048, "seed": 123}
 ```
 
-新しい[`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) に `options` 引数を使って導入できます。
+You can then introduce it into your new [`qiskit.primitives.Sampler`](../api/qiskit/qiskit.primitives.Sampler) with the `options` argument.
 
 ```python
-samler = Sampler(options=options)
+sampler = Sampler(options=options)
 
 job = sampler.run(qc)
 result = job.result()
@@ -455,12 +455,12 @@ print(result)
 SamplerResult(quasi_dists=[{0: 0.5205078125, 3: 0.4794921875}], metadata=[{'shots': 2048}])
 ```
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-  - より大きな回路を処理できる高性能シミュレーション用。 または、ノイズモデルをシミュレーションに組み込むには、format@@0(simulate-with-qiskit-aer) を参照してください。
-  - Quantum Composer をシミュレーションに使用する方法については、format@@0(https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) チュートリアルを参照してください。
-  - [Qiskit Estimator API](/api/qiskit/qiskit.primitivities.Estimator) を参照してください。
-  - [Qiskit Sampler API](/api/qiskit/qiskit.primitives.Sampler) 参照を読みます。
-  - [Run](../run) セクションで物理システムでの実行方法を学びます。
+  - For higher-performance simulation that can handle larger circuits, or to incorporate noise models into your simulation, see [Exact and noisy simulation with Qiskit Aer primitives](simulate-with-qiskit-aer).
+  - To learn how to use Quantum Composer for simulation, try the [Explore gates and circuits with the Quantum Composer](https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) tutorial.
+  - Read the [Qiskit Estimator API](/api/qiskit/qiskit.primitives.Estimator) reference.
+  - Read the [Qiskit Sampler API](/api/qiskit/qiskit.primitives.Sampler) reference.
+  - Learn how to run on a physical system in the [Run](../run) section.
 </Admonition>
