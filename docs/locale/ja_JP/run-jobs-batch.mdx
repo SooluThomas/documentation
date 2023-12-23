@@ -1,22 +1,22 @@
 ---
-title: 一括処理でジョブを実行
-description: バッチモードでジョブを実行する方法。
+title: Run jobs in a batch
+description: How to run jobs in batch mode.
 ---
 
-# 一括処理でジョブを実行
+# Run jobs in a batch
 
-最初にすべてのジョブを提供できる場合、バッチモードは処理時間を短縮できます。 繰り返しジョブを送信したい場合は、代わりに [sessions](セッション) を使用してください。  バッチモードを使用すると、次のような利点があります。
+Batch mode can shorten processing time if all jobs can be provided at the outset. If you want to submit iterative jobs, use [sessions](sessions) instead.  Using batch mode has these benefits:
 
--   コンパイルなどのジョブの古典計算は並列に実行されます。 したがって、バッチで複数のジョブを実行すると、直列に実行するよりも大幅に速くなります。 
--   ドリフトを避けるのに役立つ仕事の間に遅延はありません。
+-   The jobs' classical computation, such as compilation, is run in parallel. Thus, running multiple jobs in a batch is significantly faster than running them serially. 
+-   There is no delay between job, which can help avoid drift.
 
 <Admonition type="note">
-    バッチ処理の場合、ジョブが送信される順番で実行されることは保証されません。
+    When batching, jobs are not guaranteed to run in the order they are submitted.
 </Admonition>
 
-![Batch execution diagram.](/images/run/batch.png "図 1: Batch execution")
+![Batch execution diagram.](/images/run/batch.png "Figure 1: Batch execution")
 
-次の例では、長い回路リストを複数のジョブに分割し、並列処理を利用するためにバッチで実行する方法を示します。
+The following example shows how you can divide up a long list of circuits into multiple jobs and run them as a batch to take advantage of the parallel processing.
 
 ```python
 jobs = []
@@ -27,11 +27,11 @@ with Batch(backend) as batch:
         jobs.append(estimator.run(circuits, observables=obs_set))
 ```
 
-完全な例については、次のチュートリアルを参照してください。
+For a full example, see the following tutorials:
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - [CHSH inequality](https://learning.quantum.ibm.com/tutorial/chsh-inequality) チュートリアルをお試しください。
-    - format@@0(https://learning.quantum.ibm.com/tutorial/grovers-algorithm) チュートリアルをお試しください。
+    - Try the [CHSH inequality](https://learning.quantum.ibm.com/tutorial/chsh-inequality) tutorial.
+    - Try the [Grover's algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm) tutorial.
 </Admonition>
