@@ -1,15 +1,15 @@
 ---
-title: セッションでジョブを実行
-description: セッションでジョブを実行
+title: Run jobs in a session
+description: Run a job in a session
 ---
 
-# セッションでジョブを実行
+# Run jobs in a session
 
-[sessions](セッション)の設定と使用方法はいくつかあります。  単一のジョブでセッションを実行しないことをお勧めします。
+There are several ways to set up and use [sessions](sessions).  It is recommended that you do not run a session with a single job in it.
 
-## セッションを使用するよう設定
+## Set up to use sessions
 
-セッションを開始する前に、format@@0(../start/install) とサービスとして初期化する必要があります。
+Before starting a session, you must [set up Qiskit Runtime](../start/install) and initialize it as a service:
 
 ```python
 from qiskit_ibm_runtime import QiskitRuntimeService, Session, Sampler, Estimator
@@ -17,13 +17,13 @@ from qiskit_ibm_runtime import QiskitRuntimeService, Session, Sampler, Estimator
 service = QiskitRuntimeService()
 ```
 
-## セッションを開く
+## Open a session
 
-`with Session(...)` コンテキストマネージャを使用するか、 `Session`
-クラスを初期化することで、ランタイムセッションを開くことができます。 セッションは、最初のジョブが実行を開始すると開始されます。 
+You can open a runtime session by using the context manager `with Session(...)` or by initializing the `Session`
+class. The session starts when its first job begins execution. 
 
 <Admonition type="note" title="Important">
-    最初のセッションジョブがキャンセルされた場合、その後のセッションジョブはすべて失敗します。
+    If the first session job is canceled, subsequent session jobs will all fail.
 </Admonition>
 
 **Session class**
@@ -33,12 +33,12 @@ from qiskit_ibm_runtime import Session, Sampler, Estimator
 
 session = Session(service=service, backend="ibmq_qasm_simulator")
 estimator = Estimator(session=session)
-sampler(session=session)
+sampler = Sampler(session=session)
 ```
 
-**コンテキストマネージャー**
+**Context manager**
 
-コンテキストマネージャは自動的にセッションを開閉します。
+The context manager automatically opens and closes the session.
 
 ```python
 with Session(service=service, backend="ibmq_qasm_simulator"):
@@ -46,40 +46,40 @@ with Session(service=service, backend="ibmq_qasm_simulator"):
   sampler = Sampler()
 ```
 
-セッションを開始するときは、バックエンドを指定する必要があります。 これは、名前を指定するか、バックエンドオブジェクトを渡すことで行うことができます。 
+When you start a session,  you must specify a backend. This can be done by specifying its name or by passing a backend object. 
 
-**バックエンドを名前で指定**
+**Specify a backend by name**
 
 ```python
 service = QiskitRuntimeService()
 with Session(service=service, backend="ibmq_qasm_simulator"):
-...
+    ...
 ```
 
-**バックエンドオブジェクトを渡す** 
+**Pass a backend object** 
 
 ```python
 backend = service.get_backend("ibmq_qasm_simulator")
 with Session(backend=backend):
-...
+  ...
 ```
 
 <span id="specify-length"></span>
-## セッション長
+## Session length
 
-max_timeパラメータで最大セッションタイムアウトを定義できます。 これは、最長のジョブの実行時間を超え、システムの制限内にある必要があります。 
+You can define the maximum session timeout with the max_time parameter. This should exceed the longest job's execution time and be within the system's limits. 
 
 ```python
 with Session(service=service, backend=backend, max_time="25m"):
-...   
+  ...   
 ```
 
-設定できないインタラクティブなタイムアウト値 (ITTL、またはライブまでのインタラクティブな時間) もあります。  そのウィンドウ内でセッションジョブがキューイングされていない場合、セッションは一時的に無効になります。 セッションの ITTL を決定するには、format@@0(#session-details) の指示に従って、`interactive_timeout` 値を探します。
+There is also an interactive timeout value (ITTL, or interactive time to live) that cannot be configured.  If no session jobs are queued within that window, the session is temporarily deactivated. To determine a session's ITTL, follow the instructions in [Determine session details](#session-details) and look for the `interactive_timeout` value.
 
 <span id="close"></span>
-## セッションを閉じる
+## Close a session
 
-コンテキストマネージャを終了すると、セッションが自動的に閉じます。 qiskit-ibm-runtime 0.13 以降のリリースでは、セッションコンテキストマネージャが終了すると、セッションは「進行中で、新しいジョブを受け入れるのではなく」の状態になります。 これは、最大タイムアウト値に達するまで、セッションがすべての実行中またはキューされたジョブの処理を終了することを意味します。 すべてのジョブが完了すると、セッションはすぐに閉じられます。 これにより、スケジューラはセッションのインタラクティブなタイムアウトを待たずに次のジョブを実行することができ、それによって平均ジョブキューイング時間を短縮できます。 閉じたセッションにジョブを送信することはできません。
+A session automatically closes when it exits the context manager. With qiskit-ibm-runtime 0.13 or later releases, when the session context manager is exited, the session is put into "In progress, not accepting new jobs" status. This means that the session finishes processing all running or queued jobs until the maximum timeout value is reached. After all jobs are completed, the session is immediately closed. This allows the scheduler to run the next job without waiting for the session interactive timeout, thereby reducing the average job queuing time. You cannot submit jobs to a closed session.
 
 ```python
 with Session(service=service, backend=backend) as session:
@@ -92,7 +92,7 @@ result = job1.result()
 result2 = job2.result()
 ```
 
-コンテキストマネージャを使用していない場合は、必要な結果がすべて取得されたら手動でセッションを閉じることをお勧めします。 qiskit-ibm-runtime 0.13 以降のリリースでは、`sessionでセッションが閉じられたとき。 lose()`は新しいジョブを受け付けなくなりましたが、すでに送信されたジョブは完了まで実行され、結果を取得することができます。 qiskit-ibm-runtime 0.13 より前のバージョンでは、セッションが `session で閉じられています。 lose()`は、すでに実行されているジョブを実行し続けますが、セッションに残っているキューされたジョブはすべて失敗状態になります。
+If you are not using a context manager, it's good practice to manually close the session once all the necessary results have been retrieved. With qiskit-ibm-runtime 0.13 or later releases, when a session is closed with `session.close()`, it no longer accepts new jobs, but the already submitted jobs will still run until completion and their results can be retrieved. Prior to qiskit-ibm-runtime 0.13, when a session is closed with `session.close()`, any jobs that are already running continue to run, but any queued jobs remaining in the session are put into a failed state.
 
 ```python
 session = Session(backend=backend)
@@ -107,13 +107,13 @@ session.close()
 ```
 
 <Admonition type="caution" title="When the root job is canceled">
-セッションでルートジョブをキャンセルした場合（セッションと同じIDを持つジョブ）に注意してください。 セッションが閉じられ、セッションのキューに入ったジョブが失敗します。
+Note that when you cancel the root job in the session (the job which has the same ID as the session), the session closes and fails any remaining queued jobs in the session.
 </Admonition>
 
 <span id="cancel"></span>
-## セッションをキャンセル
+## Cancel a session
 
-セッションをキャンセルすると、即座に終了し、キューに入れられたすべてのジョブに失敗し、新しい提出を防止します。 セッションをキャンセルするには、`session.cancel()`メソッドを使用します。  すでに実行されているジョブは引き続き実行されますが、キューされたジョブは失敗した状態に追加され、セッションにそれ以上のジョブを送信することはできません。 これはセッション内のすべてのキューに入ったジョブをすばやく失敗させる便利な方法です。 
+Canceling a session immediately closes it, failing all queued jobs and preventing new submission. Use the `session.cancel()` method to cancel a session.  Any jobs that are already running continue to run but queued jobs are put into a failed state and no further jobs can be submitted to the session. This is a convenient way to quickly fail all queued jobs within a session. 
 
 ```python
 with Session(service=service, backend=backend) as session:
@@ -125,9 +125,9 @@ with Session(service=service, backend=backend) as session:
     session.cancel()
 ```
 
-## セッションで複数のプリミティブを呼び出します
+## Invoke multiple primitives in a session
 
-セッションは複数のプリミティブを扱うことができ、1つのセッション内で様々な操作を行うことができます。  以下の例では、`Sampler`クラスのインスタンスと`Estimator`クラスのいずれかを作成し、セッション内で`run()`メソッドを呼び出す方法を示しています。 
+A session can handle multiple primitives, allowing for various operations within a single session.  The following example shows how you can create both an instance of the `Sampler` class and one of the `Estimator` class and invoke their `run()` methods within a session. 
 
 ````python
 from qiskit_ibm_runtime import Session, Sampler, Estimator
@@ -170,11 +170,11 @@ with Session(service=service, backend="ibmq_qasm_simulator") as session:
     print(session.details())
 ````
 
- format@@0(https://quantum.ibm) でセッションの詳細を確認することもできます。 format@@0(https://cloud.ibm.com/quantum/instances)からアクセスできるIBM Cloud Jobs ページまたは。 
+ You can also view session details on the [Quantum Platform Jobs page](https://quantum.ibm.com/jobs) or on the IBM Cloud Jobs page, which you access from your [Instances page](https://cloud.ibm.com/quantum/instances). 
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-  - [量子近似最適化アルゴリズム(QAOA)](https://learning.quantum.ibm.com/tutorial/quantum-approximate-optimization-algorithm) チュートリアルの例を試してみてください。 
-  - format@@0(https://docs.quantum.ibm.com/api/qiskit-ibm-runtime/qiskit_ibm_runtime.Session) リファレンスを確認してください。
+  - Try an example in the [Quantum approximate optimization algorithm (QAOA)](https://learning.quantum.ibm.com/tutorial/quantum-approximate-optimization-algorithm) tutorial. 
+  - Review the [Session API](https://docs.quantum.ibm.com/api/qiskit-ibm-runtime/qiskit_ibm_runtime.Session) reference.
 </Admonition>
