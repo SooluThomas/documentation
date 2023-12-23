@@ -1,60 +1,60 @@
 ---
-title: IBM Quantum チャンネルを選択して設定
-description: IBM Cloud 上の IBM Quantum プラットフォームまたは IBM Quantum のためのインストールとセットアップの手順 Qiskit および Qiskit Runtime jobs を送信する
+title: Select and set up an IBM Quantum channel
+description: Installation and setup instructions for IBM Quantum Platform or IBM Quantum on IBM Cloud to submit Qiskit and Qiskit Runtime jobs
 ---
 
-# IBM Quantum チャンネルを選択して設定
+# Select and set up an IBM Quantum channel
 
-IBM Quantum プラットフォームまたは IBM Cloud チャネルを使用して、IBM Quantum システムにアクセスできます。
+You can access IBM Quantum systems by using the IBM Quantum Platform or IBM Cloud channel.
 
 ### IBM Quantum Platform
 
-IBM Quantum Platformにはオープン(無料アクセス)とプレミアム(エンタープライズサブスクリプション)プランがあります。 詳細は [IBM Quantum access plans](https://www.ibm.com/quantum/access-plans) をご覧ください。
+IBM Quantum Platform has Open (free access) and Premium (enterprise subscription) plans. See [IBM Quantum access plans](https://www.ibm.com/quantum/access-plans) for details.
 
-`qiskit-ibm-runtime` クライアントを使用するか、[IBM Quantum Lab](https://lab)などのクラウドベースの環境でリクエストをローカルに行うことができます。 uantum.ibm.com) (Jupyter Notebook 環境) または [IBM Quantum Composer](https://quantum.ibm.com/composer/files/new) (仮想回路作曲者)。 ローカル環境からのリクエストを行うには QisKit Runtime Client(インストール#local)と[IBM Quantum Platformを使用するように設定]、\[Qiskitをインストールしてセットアップする必要があります。 (#iqp)
+You can make requests locally (on your laptop or other device) using the `qiskit-ibm-runtime` client or use a cloud-based environment, such as [IBM Quantum Lab](https://lab.quantum.ibm.com) (a Jupyter Notebook environment) or [IBM Quantum Composer](https://quantum.ibm.com/composer/files/new) (a virtual circuit composer). To make requests from a local environment, you need to [install and set up Qiskit with the Qiskit Runtime Client](install#local) and [set up to use IBM Quantum Platform.](#iqp)
 
 <Admonition type="note">
-    [IBM Quantum Lab](https://lab.quantum.ibm.com) と [IBM Quantum Composer](https://quantum.ibm.com/composer/files/new) は自己完結型のツールで、セットアップは必要ありません。
+    [IBM Quantum Lab](https://lab.quantum.ibm.com) and [IBM Quantum Composer](https://quantum.ibm.com/composer/files/new) are self-contained tools and require no setup.
 </Admonition>
 
-利用可能なプラン: 
+Available plans: 
 
--   **オープンプラン** - 世界最高の量子システムで量子回路を無料で実行します（月に10分までの量子時間）。
+-   **Open Plan** - Run your quantum circuits on the world's best quantum systems for free (up to 10 minutes quantum time per month).
 
--   **プレミアムプラン** - エンタープライズ量子時間サブスクリプションを使用して、世界最高の量子システムで量子回路を実行します。
+-   **Premium Plan** - Run quantum circuits on the world's best quantum systems using an enterprise quantum time subscription.
 
 ### IBM Cloud
 
-IBM Cloud は有料のアクセスプランを提供しています。 詳細は [IBM Quantum access plans](https://www.ibm.com/quantum/access-plans) をご覧ください。
+IBM Cloud offers pay-as-you-go access plans. See [IBM Quantum access plans](https://www.ibm.com/quantum/access-plans) for details.
 
-IBM Cloud には Lite (無料アクセス) と Standard (有料アクセス) プランがあります。 詳細は、IBM Cloud の [Qiskit Runtime plans](https://cloud.ibm.com/docs/quantum-computing?topic=quantum-computing-plans) を参照してください。
+IBM Cloud has Lite (free access) and Standard (pay-as-you-go access) plans. See [Qiskit Runtime plans](https://cloud.ibm.com/docs/quantum-computing?topic=quantum-computing-plans) on IBM Cloud for details.
 
-このチャネルは、クラウドベースの開発環境をサポートしていません。 そのため、[QiskitとQiskitのRuntimeをインストールしてセットアップする](install#local)と[IBM Cloudを使用する設定](#cloud) が必要になります。
+This channel does not support a cloud-based development environment. Therefore, you will need to [install and set up Qiskit and Qiskit Runtime](install#local) and [set up to use IBM Cloud.](#cloud)
 
-利用可能なプラン:
+Available plans:
 
--   **スタンダードプラン** - 世界最高の量子システムで量子回路を実行し、あなたが使用する量子時間のみを支払います。
+-   **Standard (Pay-as-you-go) Plan** - Run quantum circuits on the world's best quantum systems and pay only for the quantum time you use.
 
--   **Lite plan**: フリーシミュレータを使用して量子回路をデバッグして学びましょう。
+-   **Lite plan**: Debug and learn about quantum circuits using free simulators.
 
 <span id="iqp"></span>
-## IBM Quantum Platformを使用するように設定
+## Set up to use IBM Quantum Platform
 
-クラウドベースの IBM Quantum システムを使用するには、認証情報にアクセスする必要があります。 
+You need access credentials to use cloud-based IBM Quantum systems. 
 
-1.  If you do not already have a user account, get one at the [IBM Quantum login page.](https://quantum.ibm.com/login)  Your user account is associated with one or more [instances](../run/instances) (in the form hub / group / project) that give access to IBM Quantum services. さらに、各アカウントに一意のトークンが割り当てられ、QiskitからIBM Quantumにアクセスすることができます。 このセクションの手順では、デフォルトのインスタンスを使用します。  特定のインスタンスを選択する手順については、format@@0(../run/instances#connect-instance)を参照してください。 
+1.  If you do not already have a user account, get one at the [IBM Quantum login page.](https://quantum.ibm.com/login)  Your user account is associated with one or more [instances](../run/instances) (in the form hub / group / project) that give access to IBM Quantum services. Additionally, a unique token is assigned to each account, allowing for IBM Quantum access from Qiskit. The instructions in this section use our default instance.  For instructions to choose a specific instance, see [Connect to an instance](../run/instances#connect-instance). 
 
     <Admonition type="note">
-      [IBM Quantum account page](https://quantum.ibm.com/account) のインスタンスセクションには、アクセスできるインスタンスが表示されます。
+      The Instances section in your [IBM Quantum account page](https://quantum.ibm.com/account) lists the instances that you can access.
     </Admonition>
 
-2.  [IBM Quantum account page,](https://quantum.ibm.com/account) から IBM Quantum トークンを取得し、Python を起動します。 例:
+2.  Retrieve your IBM Quantum token from the [IBM Quantum account page,](https://quantum.ibm.com/account) then start Python. For example:
 
     ```shell
     python3
     ```
 
-3.  IBM Cloud API キーと CRN で `QiskitRuntimeService` を呼び出してサービスに認証します。
+3.  Authenticate to the service by calling `QiskitRuntimeService` with your IBM Cloud API key and CRN:
 
     ```python
     from qiskit_ibm_runtime import QiskitRuntimeService
@@ -63,7 +63,7 @@ IBM Cloud には Lite (無料アクセス) と Standard (有料アクセス) プ
 
     ```
 
-    または、オプションで `save_account()` メソッドを使用して、サービスを初期化する前に、後で簡単にアクセスできるように認証情報を保存します。
+    Or, optionally use the `save_account()` method to save your credentials for easy access later on, before initializing the service.
 
     ```python
     from qiskit_ibm_runtime import QiskitRuntimeService
@@ -75,21 +75,21 @@ IBM Cloud には Lite (無料アクセス) と Standard (有料アクセス) プ
     service = QiskitRuntimeService()
     ```
 
-    -   ディスクに認証情報を保存する場合は、将来的に `QiskitRuntimeService()` を使用してアカウントを初期化できます。 `channel` パラメータは異なるアカウントの種類を区別します。 チャンネルごとに複数のアカウントを保存している場合は、`name`パラメータを使用して区別することを検討してください。 
-    -   チャンネルごとに複数のアカウントを保存している場合は、`name`パラメータを使用して区別することを検討してください。 
-    -   資格情報は、`$HOME/.qiskit/qiskit-ibm.json`に保存されます。  このファイルを手動で編集しないでください。 
-    -   資格情報を保存しない場合は、新しいセッションを開始するたびにそれらを指定する必要があります。 
-    -   `channel` パラメータは、異なるアカウントの種類を区別することができます。 アカウントを初期化する際には、IBM Quantum PlatformとIBM Cloudアカウントに資格情報を保存している場合に使用されるデフォルトのアカウントになります。
+    -   If you save your credentials to disk, you can use `QiskitRuntimeService()` in the future to initialize your account. The `channel` parameter distinguishes between different account types. If you are saving multiple accounts per channel, consider using the `name` parameter to differentiate them. 
+    -   If you are saving multiple accounts per channel, consider using the `name` parameter to differentiate them. 
+    -   Credentials are saved to `$HOME/.qiskit/qiskit-ibm.json`.  Do not manually edit this file. 
+    -   If you don't save your credentials, you must specify them every time you start a new session. 
+    -   The `channel` parameter allows you to distinguish between different account types. When initializing the account, IBM Cloud is the default account used if have saved credentials for an IBM Quantum Platform and an IBM Cloud account.
 
     <Admonition type="caution">
-       アカウントの資格情報はプレーンテキストで保存されますので、信頼できるデバイスを使用している場合にのみ使用してください。
+       Account credentials are saved in plain text, so only do so if you are using a trusted device.
      </Admonition>
 
     <Admonition type="note">
-     IBM Cloud は、別のチャンネルまたはアカウント名を指定しない場合に使用されるデフォルトのアカウントです。 
+     IBM Cloud is the default account used if you don't specify a different channel or account name. 
      </Admonition>
 
-4.  セットアップをテストします。  サンプラーを使用して簡単な回路を実行して、環境が正しく設定されていることを確認します。
+4.  Test your setup.  Run a simple circuit using Sampler to ensure that your environment is set up properly:
 
     ```python
      from qiskit import QuantumCircuit
@@ -109,31 +109,31 @@ IBM Cloud には Lite (無料アクセス) と Standard (有料アクセス) プ
     ```
 
 <span id="cloud"></span>
-## IBM Cloud を使用するように設定
+## Set up to use IBM Cloud
 
-1.  Start Python. 例:
+1.  Start Python. For example:
 
     ```shell
     python3
     ```
 
-2.  まだお持ちでない場合は、[IBM Cloud Registration page](https://cloud.ibm.com/registration)からIBM Cloud アカウントを設定してください。
+2.  If you do not already have one, set up an IBM Cloud account from the [IBM Cloud Registration page](https://cloud.ibm.com/registration).
 
-3.  必要に応じてサービスインスタンスを作成します。 [IBM Cloud Instances] \(https://cloud.ibm.com/quantum/instances) を開きます。 1つまたは複数のインスタンスが表示されている場合は、次のステップに進みます。 それ以外の場合は、**インスタンスを作成**をクリックします。 インスタンスを作成する際には、インスタンスに名前を付けてタグを付け、そのインスタンスのリソースグループを選択し、パフォーマンス戦略を選択できます。 次に、ページの右下にあるボックスにチェックを入れ、使用許諾契約に同意し、**作成**をクリックします。
+3.  Create a service instance, if necessary. Open your [IBM Cloud Instances page](https://cloud.ibm.com/quantum/instances). If you have one or more instances shown, continue to the next step. Otherwise, click **Create instance**. When creating your instance you can name it, tag it, select a resource group for it, and select a performance strategy. Next, agree to the license agreements by checking the box in the bottom right corner of the page, and click **Create**.
 
     <Admonition type="note">
-      組織の QisKit Runtime を設定する必要がある管理者の場合。 format@@0(https://cloud) を参照してください。 bm.com/docs/quantum-computing?topic=quantum-computing-quickstart-org).
+      If you are an administrator who needs to set up Qiskit Runtime on Cloud for your organization, refer to [Plan Qiskit Runtime for an organization](https://cloud.ibm.com/docs/quantum-computing?topic=quantum-computing-quickstart-org).
     </Admonition>
 
     <Admonition type="note">
-     パフォーマンス戦略を選択する場合、2つのオプションがあります。 IBM(デフォルト)の1つ、Q-CTRLのもう1つ。 IBMのパフォーマンス戦略では、[Qiskit Runtime](../api/qiskit-ibm-runtime)で利用可能なすべての標準オプションを活用でき、Q-CTRL戦略では自動化されたプリセットを使用できます。  Q-CTRLオプションの詳細については、format@@0(https://docs.q.ctrl.com/q-ctrl-embedded)をご覧ください。
+     When selecting a performance strategy there are two options available. One from IBM (default) another from Q-CTRL. The IBM performance strategy allows you to leverage all of the standard options available with [Qiskit Runtime](../api/qiskit-ibm-runtime) and the Q-CTRL strategy uses an automated preset.  To learn more about the Q-CTRL option, visit the [Q-CTRL documentation](https://docs.q-ctrl.com/q-ctrl-embedded).
     </Admonition>
 
-4.  アクセスの資格情報を検索します。
-    1.  API キーを見つけます。 format@@0(https://cloud.ibm.com/iam/apikeys)からAPIキーを表示または作成し、認証に使用できるように安全な場所にコピーします。
-    2.  クラウドリソース名 (CRN) を検索します。 format@@0(https://cloud.ibm.com/quantum/instances)を開き、インスタンスをクリックします。 開いたページで、アイコンをクリックしてCRNをコピーします。 認証に使用できるように、安全な場所に保存してください。
+4.  Find your access credentials.
+    1.  Find your API key. From the [API keys page](https://cloud.ibm.com/iam/apikeys), view or create your API key, then copy it to a secure location so you can use it for authentication.
+    2.  Find your Cloud Resource Name (CRN). Open the [Instances page](https://cloud.ibm.com/quantum/instances) and click your instance. In the page that opens, click the icon to copy your CRN. Save it in a secure location so you can use it for authentication.
 
-5.  `QiskitRuntimeService` を保存した資格情報を使用して、またはIBM Cloud APIキーとCRNを使用してサービスに認証します。
+5.  Authenticate to the service by calling `QiskitRuntimeService` with your saved credentials or with your IBM Cloud API key and CRN:
 
     ```python
     from qiskit_ibm_runtime import QiskitRuntimeService
@@ -142,10 +142,10 @@ IBM Cloud には Lite (無料アクセス) と Standard (有料アクセス) プ
     ```
 
     <Admonition type="note">
-      Q-CTRLのパフォーマンス管理を含めるためにステップ3でインスタンスを設定した場合。 `QiskitRuntimeService()`を初期化するときは、追加の引数`channel_strategy="q-ctrl"`を含める必要があります。 Q-CTRLのパフォーマンス管理戦略の詳細については、format@@0(https://docs.q-ctrl.com/q-ctrl-embedded)をご覧ください。
+      If you set up your instance in step 3 to include Q-CTRL performance management, when initializing the `QiskitRuntimeService()` you should include the additional argument `channel_strategy="q-ctrl"`. To learn more about Q-CTRL performance management strategy visit the [Q-CTRL documentation](https://docs.q-ctrl.com/q-ctrl-embedded).
     </Admonition>
 
-    必要に応じて、 `save_account()` メソッドを使用して、サービスを初期化する前に、認証情報を保存しておくことができます。
+    You can optionally use the `save_account()` method to save your credentials for easy access later on, before initializing the service.
 
     ```python
      from qiskit_ibm_runtime import QiskitRuntimeService
@@ -157,16 +157,16 @@ IBM Cloud には Lite (無料アクセス) と Standard (有料アクセス) プ
      service = QiskitRuntimeService(name="<account-name>")
     ```
 
-    -   ディスクに認証情報を保存する場合は、将来的に `QiskitRuntimeService()` を使用してアカウントを初期化できます。 `channel` パラメータは異なるアカウントの種類を区別します。 アカウントを初期化しているとき。 IBM Cloud は、IBM Quantum Platform および IBM Cloud アカウントの両方に資格情報を保存している場合に使用されるデフォルトのアカウントです。
-    -   チャンネルごとに複数のアカウントを保存している場合は、`name`パラメータを使用して区別することを検討してください。 
-    -   資格情報は、`$HOME/.qiskit/qiskit-ibm.json`に保存されます。  このファイルを手動で編集しないでください。 
-    -   資格情報を保存しない場合は、新しいセッションを開始するたびにそれらを指定する必要があります。 
+    -   If you save your credentials to disk, you can use `QiskitRuntimeService()` in the future to initialize your account. The `channel` parameter distinguishes between different account types. When initializing the account, IBM Cloud is the default account used if you have saved credentials for both an IBM Quantum Platform and an IBM Cloud account.
+    -   If you are saving multiple accounts per channel, consider using the `name` parameter to differentiate them. 
+    -   Credentials are saved to `$HOME/.qiskit/qiskit-ibm.json`.  Do not manually edit this file. 
+    -   If you don't save your credentials, you must specify them every time you start a new session. 
 
     <Admonition type="caution">
-         アカウントの資格情報はプレーンテキストで保存されますので、信頼できるデバイスを使用している場合にのみ使用してください。
+         Account credentials are saved in plain text, so only do so if you are using a trusted device.
      </Admonition>
 
-6.  セットアップをテストします。  サンプラーを使用して簡単な回路を実行して、環境が正しく設定されていることを確認します。
+6.  Test your setup.  Run a simple circuit using Sampler to ensure that your environment is set up properly:
 
 ````python
  from qiskit import QuantumCircuit
