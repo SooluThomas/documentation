@@ -1,22 +1,22 @@
 ---
-title: 高度な実行時オプション
-description: Qiskit ランタイムプリミティブでビルドする際のオプションを指定します
+title: Advanced runtime options
+description: Specify options when building with Qiskit runtime primitives
 ---
 
-# Qiskit ランタイムの高度なオプション
+# Advanced Qiskit Runtime options
 
-プリミティブを呼び出すときは、 `Options` クラスを使用するか、 `run` メソッドを使用してオプションを渡すことができます。 `Options`クラスでは、`resilience_level`のような一般的に使用されるオプションが最初のレベルにあります。 その他のオプションは異なるカテゴリに分類されます:
+When calling the primitives, you can pass in options by using the `Options` class or when using the `run` method. In the `Options` class, commonly used options, such as `resilience_level`, are at the first level. Other options are grouped into different categories:
 
 ![options](/images/build/options.png)
 
 <Admonition type="info" title="Attention">
-    このセクションでは、Qiskit Runtime [Options](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.options.Options) (`qiskit_ibm_runtime` からインポート) に焦点を当てます。 ほとんどの`primitives`インターフェースは実装全体で一般的ですが、ほとんどの`Options`はそうではありません。 Consult the
+    This section focuses on Qiskit Runtime primitive [Options](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.options.Options) (imported from `qiskit_ibm_runtime`). While most of the `primitives` interface is common across implementations, most `Options` are not. Consult the
     corresponding API references for information about the `qiskit.primitives` and `qiskit_aer.primitives` options.
 </Admonition>
 
-## Optionsクラスをインスタンス化
+## Instantiate the Options class
 
-以下の例では、 `Options` クラスのインスタンスを作成します。 `optimization_level` は最初のレベルのオプションで、入力パラメータとして渡すことができます。 実行環境に関連するオプションは `environment` パラメータを使用して渡されます。
+In the example below, we create an instance of the `Options` class. `optimization_level` is a first-level option and can be passed as an input parameter. Options related to the execution environment are passed using the `environment` parameter.
 
 ```python
 from qiskit_ibm_runtime import Options
@@ -24,7 +24,7 @@ from qiskit_ibm_runtime import Options
 options = Options(optimization_level=3, environment={"log_level": "INFO"})
 ```
 
-`Options`クラスは自動補完をサポートします。 `Options`クラスのインスタンスを作成すると、auto-complete を使ってどのようなオプションが利用可能かを確認できます。 カテゴリのいずれかを選択した場合は、再びauto-complete を使用して、そのカテゴリの下で利用可能なオプションを確認できます。 
+The `Options` class supports auto-complete. Once you create an instance of the `Options` class, you can use auto-complete to see what options are available. If you choose one of the categories, you can use auto-complete again to see what options are available under that category. 
 
 ```python
 from qiskit_ibm_runtime import Options
@@ -34,11 +34,11 @@ options.resilience_level = 1
 options.execution.shots = 2048
 ```
 
-## プリミティブにオプションを渡します
+## Pass options to a primitive
 
-### オプションクラス
+### Options class
 
-`見積もり`または`Sampler`クラスのインスタンスを作成する場合は、作成したばかりの`options`を渡すことができます。 これらのオプションは `run()` を使用して計算を実行するときに適用されます。  例 
+When creating an instance of the `Estimator` or `Sampler` class, you can pass in the `options` you just created. Those options will then be applied when you use `run()` to perform the calculation.  Example: 
 
 ```python
 estimator = Estimator(session=backend, options=options)
@@ -46,11 +46,11 @@ result = estimator.run(circuit, observable).result()
 print(f">>> Metadata: {result.metadata[0]}")
 ```
 
-### Run() メソッド
+### Run() method
 
-`run()`メソッドを使うことでオプションを渡すことができます。 これにより、特定の実行のために `Estimator` または `Sampler` インスタンスを作成するときに指定したオプションが上書きされます。 
+You can pass in options by using the `run()` method. This overwrites the options you specified when creating the `Estimator` or `Sampler` instance for that particular execution. 
 
-ほとんどのユーザーはジョブレベルでいくつかのオプションしか上書きしないため、オプションが含まれているカテゴリを指定する必要はありません。 例えば、`execution={"shots": 1024}` の代わりに `shots=1024` を指定します (これは有効です)。 
+Because most users will only overwrite a few options at the job level, it is not necessary to specify the category the options are in. The code below, for example, specifies `shots=1024` instead of `execution={"shots": 1024}` (which is also valid). 
 
 ```python
 estimator = Estimator(session=backend, options=options)
@@ -58,14 +58,14 @@ result = estimator.run(circuit, observable, shots=1024).result()
 print(f">>> Metadata: {result.metadata[0]}")
 ```
 
-## 一般的に使用されるオプション
+## Commonly used options
 
-利用可能なオプションは多数ありますが、最も一般的に使用されるのは以下の通りです:
+There are many available options, but the following are the most commonly used:
 
-### ショット
+### Shots
 
-一部のアルゴリズムでは、特定のショット数を設定することがルーチンの中核となります。 以前は、`backend.run()` の呼び出し中にショットを設定することができました。 例えば、 `backend.run(shots=1024)` です。 これで、この設定は、
-オプションの実行の一部となりました("2番目のレベルのオプション")。 これはプリミティブセットアップ中に行うことができます。
+For some algorithms, setting a specific number of shots is a core part of their routines. Previously, shots could be set during the call to `backend.run()`. For example, `backend.run(shots=1024)`. Now, that setting is part of the execution
+options ("second level option"). This can be done during the primitive setup:
 
 ```python
 from qiskit_ibm_runtime import Estimator, Options
@@ -76,8 +76,8 @@ options.execution.shots = 1024
 estimator = Estimator(session=backend, options=options)
 ```
 
-繰り返し(プリミティブな呼び出し)の間で設定されたショットの数を変更する必要がある場合は、`run()`メソッドで直接
-ショットを設定できます。 初期設定の `shots` を上書きします。
+If you need to modify the number of shots set between iterations (primitive calls), you can set the
+shots directly in the `run()` method. This overwrites the initial `shots` setting.
 
 ```python
 from qiskit_ibm_runtime import Estimator
@@ -88,26 +88,26 @@ estimator.run(circuits=circuits, observables=observables, shots=50)
 
 # other logic
 
-estimator.run(circuits=circuits=circuits=observables, shots=100)
+estimator.run(circuits=circuits, observables=observables, shots=100)
 ```
 
-プリミティブオプションの詳細については、
-[Options class API reference](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.options.Options)を参照してください。
+For more information about the primitive options, refer to the
+[Options class API reference](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.options.Options).
 
-### ランタイムのコンパイル
+### Runtime compilation
 
-QisKit Runtime プリミティブは、ターゲットシステムでの実行に適した回路で呼び出されることを期待します。 これは、ユーザーがすでにターゲットシステムのネイティブゲートセットと接続制約を尊重するように回路を移植していることを意味します。
+The Qiskit Runtime primitives expect to be called with circuits already suitable for execution on the target system. This implies that the user has already transpiled their circuits to respect the native gate set and connectivity constraints of the target system.
 
-QisKit Runtime プリミティブは、最適化レベルオプションによって制御される最適化度を持つ回路を最適化するために、追加のランタイムコンパイルを実行することができます。 選択した最適化レベルはコンパイル戦略に影響し、より高いレベルでより高価または積極的な最適化を呼び出すことができます。
+The Qiskit Runtime primitives may perform additional runtime compilation to optimize circuits, with the degree of optimization controlled by an optimization level option. The optimization level you choose affects the compilation strategy, with higher levels invoking more expensive or aggressive optimizations.
 
-詳細については、
-[Runtime compilation topic](configure-runtime-compilation#set-the-optimization-level) の最適化レベル表を参照してください。
+See the Optimization level table in the
+[Runtime compilation topic](configure-runtime-compilation#set-the-optimization-level) for further details.
 
 <Admonition>
-    現在展開されている Qiskit Runtime プリミティブでは、最適化レベル 2 と 3 は レベル 1 と同じように動作します。 より高度な最適化を使用したい場合は、Qiskit transpiler をローカルで使用し、[`skip_transpilation=True`](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.options.TransspilationOptions#skip_transpilation) を設定し、移調された回路をプリミティブに渡します。  手順については、format@@0(https://learning.quantum.ibm.com/tutorial/submiting-user-transpiled-circuits-using-primitives)チュートリアルを参照してください。
+    In the currently deployed Qiskit Runtime primitives, optimization levels 2 and 3 behave identically to level 1. If you want to use more advanced optimization, use the Qiskit transpiler locally, set [`skip_transpilation=True`](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.options.TranspilationOptions#skip_transpilation), and then pass the transpiled circuits to the primitives.  For instructions see the [Submit pre-transpiled circuits](https://learning.quantum.ibm.com/tutorial/submitting-user-transpiled-circuits-using-primitives) tutorial.
 </Admonition>
 
-最適化レベルのオプションは「ファーストレベルのオプション」で、以下のように設定することができます:
+The optimization level option is a "first-level option", and can be set as follows:
 
 ```python
 from qiskit_ibm_runtime import Estimator, Options
@@ -121,7 +121,7 @@ options.optimization_level = 1
 estimator = Estimator(session=backend, options=options)
 ```
 
-すべてのオプションのランタイムコンパイルステップをオフにするには、次のように「第2レベルのオプション」が必要です。
+Turning off all optional runtime compilation steps requires a "second-level option", as follows:
 
 ```python
 from qiskit_ibm_runtime import Estimator, Options
@@ -129,20 +129,20 @@ from qiskit_ibm_runtime import Estimator, Options
 options = Options()
 options.transpilation.skip_transpilation = True
 
-estimator = Estimatelator(session=backend, options=options)
+estimator = Estimator(session=backend, options=options)
 ```
 
-詳細と高度な移調オプションのリストについては、
-[ランタイム・コンパイル・トピック](configure-runtime-compilation#transpilation-table)の詳細な移調オプションテーブルを参照してください。
+For more information and a complete list of advanced transpilation options, see the Advanced transpilation options table in the
+[Runtime compilation topic](configure-runtime-compilation#transpilation-table).
 
-### エラーの緩和方法
+### Error mitigation
 
-異なるエラー緩和方法を活用し、これらが
-アルゴリズムのパフォーマンスにどのように影響するかを確認することができます。 これらは `resilience_level` オプションで設定することもできます。 `Sampler`と`Estimator`では、レベルごとに
-を選択します。 詳細については、
-[エラー軽減の設定](configure-error-軽減)をご覧ください。
+You might want to leverage different error mitigation methods and see how these affect the performance of your
+algorithm. These can also be set through the `resilience_level` option. The method selected for each level is
+different for `Sampler` and `Estimator`. You can find more information in the
+[Configure error mitigation topic](configure-error-mitigation).
 
-構成は他のオプションと似ています:
+The configuration is similar to the other options:
 
 ```python
 from qiskit_ibm_runtime import Estimator, Options
@@ -157,11 +157,11 @@ options.resilience_level = 2
 estimator = Estimator(session=backend, options=options)
 ```
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - [Estimater API reference](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.Estimaator#estimator)に`Estimaator` メソッドの詳細があります。
-    - format@@0(../api/qiskit-ibm-runtime/qiskit_ibm_runtime.Sampler#sampler)に`Sampler`メソッドの詳細があります。
-    - format@@0(../api/qiskit-ibm-runtime/qiskit_ibm_runtime.options.Options)で利用可能なすべてのオプションを見つけます。
-    - [runtime compilation](../run/configure-runtime-compilation)と[error 軽減](../run/configure-error-軽減)についての詳細を見つけます。
+    - Find more details about the `Estimator` methods in the [Estimator API reference](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.Estimator#estimator).
+    - Find more details about the `Sampler` methods in the [Sampler API reference](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.Sampler#sampler).
+    - Find all available options in the [Options API reference](../api/qiskit-ibm-runtime/qiskit_ibm_runtime.options.Options).
+    - Find details about [runtime compilation](../run/configure-runtime-compilation) and [error mitigation](../run/configure-error-mitigation).
 </Admonition>
