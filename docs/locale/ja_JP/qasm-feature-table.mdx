@@ -1,78 +1,78 @@
 ---
-title: OpenQASM 3 フィーチャーテーブル
-description: OpenQASM 3言語機能のリスト
+title: OpenQASM 3 feature table
+description: A list of the OpenQASM 3 language features
 ---
 
-# OpenQASM 3 フィーチャーテーブル
+# OpenQASM 3 feature table
 
-以下は `OpenQASM 3` の言語機能の一覧です。
+Below is a list of the `OpenQASM 3` language features.
 
-これらの機能の詳細については、format@@0(https://openqasm.com/) を参照してください。
+For more details on these capabilities, see the [OpenQASM 3.X Live Specification](https://openqasm.com/) .
 
-キー:
+Key:
 
--   ❌サポートされていません
--   🟡 部分的なサポート
--   ✅ サポート
+-   ❌ Not supported
+-   🟡 Partial support
+-   ✅ Supported
 
-| 機能                             | サポート    | コメント                                                                                                                  |
-| ------------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------- |
-| コメント                           | ✅       |                                                                                                                       |
-| QASMバージョン文字列                   | ✅       |                                                                                                                       |
-| `include`                      | ✅       |                                                                                                                       |
-| Unicode 名                      | ✅       |                                                                                                                       |
-| `qubit`                        | 🟡      | 物理的な量子ビットのみをサポートし、配列はサポートしません。                                                                                        |
-| `bit`                          | ✅       |                                                                                                                       |
-| `bool`                         | ✅       |                                                                                                                       |
-| `int`                          | ✅       | 整数と鋳造に対する比較のためのいくつかのサポート。                                                                                             |
-| `uint`                         | ❌       |                                                                                                                       |
-| `float`                        | ❌       |                                                                                                                       |
-| `angle`                        | ❌       |                                                                                                                       |
-| `complex`                      | ❌       |                                                                                                                       |
-| `const`                        | ❌       |                                                                                                                       |
-| `pi`/`π`/`tau`/`τ`/`euler`/`Ɛ` | ❌       |                                                                                                                       |
-| エイリアス: let                     | ❌       |                                                                                                                       |
-| 接続の登録                          | ❌       |                                                                                                                       |
-| キャスティング                        | 🟡      | ビット、int、および bool の配列間のキャストがサポートされています                                                                                 |
-| `duration`                     | ✅       |                                                                                                                       |
-| `durationof`                   | ❌       |                                                                                                                       |
-| `ns`/`μs`/`us`/`ms`/`s`/`dt`   | ✅       |                                                                                                                       |
-| `stretch`                      | ❌       |                                                                                                                       |
-| `delay`                        | ✅       |                                                                                                                       |
-| `barrier`                      | ✅       |                                                                                                                       |
-| `box`                          | ❌       |                                                                                                                       |
-| 組み込みの `U`                      | ✅       |                                                                                                                       |
-| `gate`                         | ✅       | 基礎以外のゲートのサポートはありません                                                                                                   |
-| `gphase`                       | ❌       |                                                                                                                       |
-| `ctrl @`/ `negctrl @`          | ❌       |                                                                                                                       |
-| `inv @`                        | ❌       |                                                                                                                       |
-| `pow(k) @`                     | ❌       |                                                                                                                       |
-| `reset`                        | ✅       |                                                                                                                       |
-| `measure`                      | ✅       |                                                                                                                       |
-| ビット操作                          | ✅       |                                                                                                                       |
-| ブール演算子                         | ✅       |                                                                                                                       |
-| 算術式                            | ❌       |                                                                                                                       |
-| 比較                             | ✅       |                                                                                                                       |
-| `もし`                           | ✅       |                                                                                                                       |
-| `else`                         | ✅       |                                                                                                                       |
-| `else if`                      | ❌       |                                                                                                                       |
-| `まで`                           | 🟡      | 離散セットと負のステッピングはサポートされていません。                                                                                           |
-| `以下の間`                         | ❌       |                                                                                                                       |
-| `continue`                     | ❌       |                                                                                                                       |
-| `break`                        | ❌       |                                                                                                                       |
-| `return`                       | ❌       |                                                                                                                       |
-| `extern`                       | 🟡      | バックエンドデバイスによって公開されている特定のextern サブルーチンのみ。 現在、クライアントがこれを提出することはできません。                                                   |
-| `def` サブルーチン（古典）               | ❌       |                                                                                                                       |
-| `def` subroutines (quantum)    | ❌       |                                                                                                                       |
-| `input`                        | ❌       |                                                                                                                       |
-| `output`                       | ❌       |                                                                                                                       |
+| Feature                        | Support | Comments                                                                                                                  |
+| ------------------------------ | ------- | ------------------------------------------------------------------------------------------------------------------------- |
+| comments                       | ✅       |                                                                                                                           |
+| QASM version string            | ✅       |                                                                                                                           |
+| `include`                      | ✅       |                                                                                                                           |
+| unicode names                  | ✅       |                                                                                                                           |
+| `qubit`                        | 🟡      | Only supports physical qubits, and no arrays.                                                                             |
+| `bit`                          | ✅       |                                                                                                                           |
+| `bool`                         | ✅       |                                                                                                                           |
+| `int`                          | ✅       | Some support for comparisons against integers and casting.                                                                |
+| `uint`                         | ❌       |                                                                                                                           |
+| `float`                        | ❌       |                                                                                                                           |
+| `angle`                        | ❌       |                                                                                                                           |
+| `complex`                      | ❌       |                                                                                                                           |
+| `const`                        | ❌       |                                                                                                                           |
+| `pi`/`π`/`tau`/`τ`/`euler`/`ℇ` | ❌       |                                                                                                                           |
+| Aliasing: let                  | ❌       |                                                                                                                           |
+| register concatenation         | ❌       |                                                                                                                           |
+| casting                        | 🟡      | Casting between arrays of bits, int, and bool is supported                                                                |
+| `duration`                     | ✅       |                                                                                                                           |
+| `durationof`                   | ❌       |                                                                                                                           |
+| `ns`/`µs`/`us`/`ms`/`s`/`dt`   | ✅       |                                                                                                                           |
+| `stretch`                      | ❌       |                                                                                                                           |
+| `delay`                        | ✅       |                                                                                                                           |
+| `barrier`                      | ✅       |                                                                                                                           |
+| `box`                          | ❌       |                                                                                                                           |
+| Built-in `U`                   | ✅       |                                                                                                                           |
+| `gate`                         | ✅       | No support for non-basis gates                                                                                            |
+| `gphase`                       | ❌       |                                                                                                                           |
+| `ctrl @`/ `negctrl @`          | ❌       |                                                                                                                           |
+| `inv @`                        | ❌       |                                                                                                                           |
+| `pow(k) @`                     | ❌       |                                                                                                                           |
+| `reset`                        | ✅       |                                                                                                                           |
+| `measure`                      | ✅       |                                                                                                                           |
+| bit operations                 | ✅       |                                                                                                                           |
+| boolean operations             | ✅       |                                                                                                                           |
+| arithmetic expressions         | ❌       |                                                                                                                           |
+| comparisons                    | ✅       |                                                                                                                           |
+| `if`                           | ✅       |                                                                                                                           |
+| `else`                         | ✅       |                                                                                                                           |
+| `else if`                      | ❌       |                                                                                                                           |
+| `for` loops                    | 🟡      | Discrete sets and negative stepping is not supported.                                                                     |
+| `while` loops                  | ❌       |                                                                                                                           |
+| `continue`                     | ❌       |                                                                                                                           |
+| `break`                        | ❌       |                                                                                                                           |
+| `return`                       | ❌       |                                                                                                                           |
+| `extern`                       | 🟡      | Only for certain extern subroutines exposed by backend devices. It is currently not possible for clients to submit these. |
+| `def` subroutines (classical)  | ❌       |                                                                                                                           |
+| `def` subroutines (quantum)    | ❌       |                                                                                                                           |
+| `input`                        | ❌       |                                                                                                                           |
+| `output`                       | ❌       |                                                                                                                           |
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - format@@2(https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer)チュートリアルでOpenQASMコードを生成する方法を学びます。
-    - [OpenQASM 3 Qiskit API](/api/qiskit/qasm3) リファレンスを参照してください。
-    - format@@0(/api/qiskit/qasm2) 参照を参照してください。
-    - format@@0(../verify/) のトピックを確認します。
-    - format@@0(https://openqasm.com/) を参照してください。
+    - Learn how to generate OpenQASM code in the [Explore gates and circuits with the Quantum Composer](https://learning.quantum.ibm.com/tutorial/explore-gates-and-circuits-with-the-quantum-composer) tutorial.
+    - See the [OpenQASM 3 Qiskit API](/api/qiskit/qasm3) reference.
+    - See the [OpenQASM 2 Qiskit API](/api/qiskit/qasm2) reference.
+    - Review the [Verify your program](../verify/) topic.
+    - Visit the [OpenQASM Live Specification](https://openqasm.com/).
 </Admonition>
