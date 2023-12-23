@@ -1,41 +1,41 @@
 ---
-title: システム時間を予約する
-description: IBM Quantum Network メンバとしてシステムで時間を予約する
+title: Reserve system time
+description: Reserve time on a system as an IBM Quantum Network member
 ---
 
-# システム時間を予約する
+# Reserve system time
 
 <Admonition type="tip" title="Important">
-  この機能は、[IBM Quantum Network](https://www.ibm.com/quantum/network)に所属する組織のみが利用できます。 教育者や研究者は、私たちが提供する特別なプログラムのいずれかにサインアップすることで、予約や他のメリットにアクセスすることもできます。 format@@0(https://quantum.ibm.com/programs/educators)またはformat@@1(https://quantum.ibm.com/programs/researchers)にアクセスしてください。
+  This feature is available only to organizations that belong to the [IBM Quantum Network](https://www.ibm.com/quantum/network). Educators and researchers can also make reservations and access other benefits by signing up for one of the special programs we offer. Go to the [Educators program sign-up form](https://quantum.ibm.com/programs/educators) or the [Researchers program sign-up form](https://quantum.ibm.com/programs/researchers) for more information.
 </Admonition>
 
-標準の動作条件では、IBM Quantum システムは、[fair-share queuing system](fair-share-queue) によって割り当てられた動的優先順位に従ってジョブを受け付けます。
+Under standard operating conditions, IBM Quantum systems accept jobs according to the dynamic priority assigned by the [fair-share queuing system](fair-share-queue).
 
-![Normal device queing operation.]\(/images/migration/normal_queue_with_providers1.jpg
+![Normal device queuing operation.](/images/migration/normal_queue_with_providers1.jpg)
 
-このシステムは、すべてのユーザーの利益のためにワークロードのバランスをとろうとしています。 優先度の高い場合に制限時間のアクセスが必要になる場合がよくあります。 IBM Quantum には、指定された期間にわたって特定のシステムへのアクセスを高めるオプションがあります: **専用モード** . ハブの構成に応じて、ハブ管理者またはグループ管理者の場合。 **システム予約** ツールを使用して、特定のシステムを事前に予約できます。
+While this system attempts to balance workloads for the benefit of all users, there are often use cases where you may require limited-time access at a higher priority level. IBM Quantum provides an option to gain elevated access to specific systems over a specified period of time: **Dedicated mode**. Depending on your hub configuration, if you are a hub admin or group admin, you can reserve time in advance on a particular system with the **Systems Reservations** tool.
 
-専用モードの使用例としては、以下のものがあります。
+Example use cases for dedicated mode include the following:
 
--   クラス内のデモ
--   反復アルゴリズムと近時間の計算アルゴリズム
--   詳細なノイズ解析を含むジョブ
--   タイムクリティカルなプロジェクト
+-   In-class demonstrations
+-   Iterative and near-time compute algorithms
+-   Jobs involving detailed noise analysis
+-   Time-critical projects
 
 <Admonition type="info" title="System reservations and fair-share allocation">
-  システム予約時に累積されるシステム時間は、インスタンスのフェアシェア割り当て金額にカウントされます。
+  System time accumulated while using system reservations counts toward an instance’s fair-share allocation amount.
 </Admonition>
 
-特定のインスタンスに対する特定の量子システムへの唯一のアクセスが必要な場合 予約時に専用モードを選択します（[IBM Quantum Network](https://www) bm.com/quantum/network)
+If you need sole access to a specific quantum system for a given instance, select dedicated mode when making a reservation (only available to members of the [IBM Quantum Network](https://www.ibm.com/quantum/network)).
 
-![Dedicated mode with dedicated jobs.]\(/images/migration/dedicated_queue1.jpg
+![Dedicated mode with dedicated jobs.](/images/migration/dedicated_queue1.jpg)
 
-専用モードのインスタンス #2 。
+Instance #2 in dedicated mode.
 
-デバイスが専用モードの場合、標準のフェア共有キューは常にブロックされます。
+The standard fair-share queue is always blocked when the device is in dedicated mode.
 
-![Dedicated mode with no dedicated jobs leave the device idle.](/images/migration/dedicated_queue_no_jobs1.jpg)
+![Dedicated mode with no dedicated jobs leaves the device idle.](/images/migration/dedicated_queue_no_jobs1.jpg)
 
-インスタンス#2の専用ジョブがない専用モードはデバイスをアイドル状態にします。
+Dedicated mode with no dedicated jobs from instance #2 leaves the device idle.
 
-これにより、以前の結果に基づいて入力回路を調整するアルゴリズムを実装することができます。 例えば反復計算メソッドや近時間計算メソッドなど、他のユーザーの結果が処理されるのを待つ必要はありません。 専用のインスタンスに複数のユーザーがいる場合。 実行が最初に実行されるため、単一のユーザーのジョブがインスタンス内の他のユーザーのジョブの後ろにキューに追加される可能性があります。
+This allows users to implement algorithms where input circuits are conditioned on previous results, such as iterative and near-time compute methods, without having to wait for other users’ results to process. If the dedicated instance has multiple users, then a single user’s jobs may be queued behind those of other users in the instance, as the execution is first-in first-out.
