@@ -1,23 +1,23 @@
 ---
-title: プリミティブの例
-description: 原始的な使い方の実用例
+title: Primitives examples
+description: Practical examples of primitive usage
 ---
 
-# プリミティブの例
+# Primitives examples
 
-このセクションの例は、プリミティブを使用するいくつかの一般的な方法を示しています。 これらの例を実行する前に、format@@0(../start/install) の指示に従ってください。
+The examples in this section illustrate some common ways to use primitives. Before running these examples, follow the instructions in [Install and set up.](../start/install)
 
 <Admonition type="note">
-    以下の例はすべて、Qiskit Runtime のプリミティブを使用しますが、代わりに基本プリミティブを使用することができます。 
+    These examples all use the primitives from Qiskit Runtime, but you could use the base primitives instead. 
 </Admonition>
 
-## 見積もりの例
+## Estimator examples
 
-多くのアルゴリズムに必要な量子演算子の期待値を効率的に計算し、解釈します。 分子モデリング、機械学習、および複雑な最適化問題での使用を探求します。
+Efficiently calculate and interpret expectation values of the quantum operators required for many algorithms with Estimator. Explore uses in molecular modeling, machine learning, and complex optimization problems.
 
-### 単一の実験を実行
+### Run a single experiment
 
-推定値を使用して、単一の回路で観測可能なペアの期待値を決定します。
+Use Estimator to determine the expectation value of a single circuit-observable pair.
 
 ```python
 import numpy as np
@@ -44,9 +44,9 @@ print(f" > Expectation value: {result.values}")
 print(f" > Metadata: {result.metadata}")
 ```
 
-### 1つのジョブで複数の実験を実行
+### Run multiple experiments in a single job
 
-推定値を使用して、複数の回路で観測可能なペアの期待値を決定します。
+Use Estimator to determine the expectation values of multiple circuit-observable pairs.
 
 ```python
 import numpy as np
@@ -77,9 +77,9 @@ result = job.result()
 print(f" > Expectation values: {result.values}")
 ```
 
-### パラメータ回路を実行
+### Run parameterized circuits
 
-Estimate を使用して、1 つのジョブで 3 つの実験を実行し、パラメータ値を使用して回路の再利用性を向上させます。
+Use Estimator to run three experiments in a single job, leveraging parameter values to increase circuit reusability.
 
 ```python
 import numpy as np
@@ -106,9 +106,9 @@ result = job.result()
 print(f" > Expectation values: {result.values}")
 ```
 
-### セッションと高度なオプションを使用する
+### Use sessions and advanced options
 
-量子システムの回路性能を最適化するセッションと高度なオプションを探索します。
+Explore sessions and advanced options to optimize circuit performance on quantum systems.
 
 ```python
 import numpy as np
@@ -148,13 +148,13 @@ print(f" > Expectation values job 1: {result.values}")
 print(f" > Expectation values job 2: {another_result.values}")
 ```
 
-## サンプラーの例
+## Sampler examples
 
-量子回路出力からサンプリングされた誤差緩和準確率分布全体を生成します。 GroverのやQVSMのような検索アルゴリズムや分類アルゴリズムにSamplerの機能を活用してください。
+Generate entire error-mitigated quasi-probability distributions sampled from quantum circuit outputs. Leverage Sampler’s capabilities for search and classification algorithms like Grover’s and QVSM.
 
-### 単一の実験を実行
+### Run a single experiment
 
-サンプラーを使用して、単一の回路の準確率分布を決定します。
+Use Sampler to determine the quasi-probability distribution of a single circuit.
 
 ```python
 import numpy as np
@@ -180,9 +180,9 @@ print(f" > Quasi-probability distribution: {result.quasi_dists}")
 print(f" > Metadata: {result.metadata}")
 ```
 
-### 1つのジョブで複数の実験を実行
+### Run multiple experiments in a single job
 
-サンプラーを使用して、1つのジョブで複数の回路の準確率分布を決定します。
+Use Sampler to determine the quasi-probability distributions of multiple circuits in one job.
 
 ```python
 import numpy as np
@@ -209,9 +209,9 @@ result = job.result()
 print(f" > Quasi-probability distribution: {result.quasi_dists}")
 ```
 
-### パラメータ回路を実行
+### Run parameterized circuits
 
-パラメータ値を活用することで、1つのジョブで3つの実験を実行し、回路の再利用性を高めます。
+Run three experiments in a single job, leveraging parameter values to increase circuit reusability.
 
 ```python
 import numpy as np
@@ -237,9 +237,9 @@ result = job.result()
 print(f" > Quasi-probability distribution: {result.quasi_dists}")
 ```
 
-### セッションと高度なオプションを使用する
+### Use sessions and advanced options
 
-量子システムの回路性能を最適化するセッションと高度なオプションを探索します。
+Explore sessions and advanced options to optimize circuit performance on quantum systems.
 
 ```python
 import numpy as np
@@ -279,9 +279,9 @@ print(f" > Quasi-probability distribution job 1: {result.quasi_dists}")
 print(f" > Quasi-probability distribution job 2: {another_result.quasi_dists}")
 ```
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - [高度なランタイムオプションを指定する](advanced-runtime-options)
-    - IBM Quantum Learningの[Cost function lesson](https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions#primitives) を使用してプリミティブを練習します。
+    - [Specify advanced runtime options.](advanced-runtime-options)
+    - Practice with primitives by working through the [Cost function lesson](https://learning.quantum.ibm.com/course/variational-algorithm-design/cost-functions#primitives) in IBM Quantum Learning.
 </Admonition>
