@@ -1,69 +1,69 @@
 ---
-title: Fair-shareのキュー
-description: IBM Quantum fair-share キューが量子システムに送信されるジョブの順序を決定する方法
+title: Fair-share queue
+description: How the IBM Quantum fair-share queue determines order of jobs submitted to quantum systems
 ---
 
-# Fair-shareのキュー
+# Fair-share queue
 
-ジョブを量子システムに送信すると、特定のシステムのスケジューラが入力されます。 そのシステムで実行されるのを待っているすべてのユーザーからのジョブのプールに参加します。 これらのジョブが実行される順序は、デフォルトではフェアシェア式によって決定されます。 以下で説明されているように このアルゴリズムは、割り当てられたシステムアクセス量に従って、指定された時間ウィンドウ上で異なる [instances](インスタンス)間のワークロードのバランスをとることを試みます。 実際には、さまざまなインスタンスからのジョブが些細な方法で絡み合っていることを意味する。 仕事が完了する順序は必ずしも提出された順序ではありません 新しいジョブが到着するとキュー順序が動的に計算されるため、fair-share ジョブがいつ実行されるかを保証することは一般的に不可能です。
+When you submit a job to a quantum system, it enters the scheduler for the specific system, joining the pool of jobs (from all users) that are waiting to be executed on that system. The order in which these jobs are executed is, by default, determined by a fair-share formula. As discussed below, this algorithm attempts to balance the workload between different [instances](instances) according to the allocated system access amount over a given time window. In practice, this means that jobs from various instances are interweaved in a non-trivial manner, and the order in which jobs complete is not necessarily the order in which they were submitted. Because the queue order is calculated dynamically as new jobs arrive, it is generally impossible to guarantee when a fair-share job will be executed.
 
 ## Fair-share terms
 
--   **Provider:** 量子コンピューティングへのアクセスを提供するエンティティ。 IBM Quantum Platform および IBM Cloud®️ は Qiskit Runtime サービスのプロバイダーです。
--   **インスタンス:** hub/group/projectの組み合わせ。
--   **Hub:** 学術、産業、研究パートナーなどの組織のトップレベルを表します。
--   **グループ:** 1つまたは複数のユーザーのコレクション (プロジェクト) のためのハブによってアクセス共有を割り当てることができる中間レベルの構造。
--   **プロジェクト:** オーバーアーチンググループから共有を割り当てられたベースレベルの構築、および直接割り当てられたユーザー。
--   **共有へのアクセス** (このドキュメントでは簡略化された「共有」という用語を使用しています) 特定のハブ、グループ、プロジェクトに割り当てられた IBM Quantum コンピューティング サービスへの相対的なアクセス量。 アクセス部分は、分配された株式総数で割った株式の特定の割当てによって決定されます。 IBM Quantumは各ハブに、IBM Quantum Premium Planの全体的な計算能力のシェアを割り当てます。 Hub 管理者は、各グループに共有プールの分数を割り当てます。 最後に、グループ管理者はそれぞれのプロジェクトに共有プールの分数(株式とも呼ばれます)を割り当てます。
--   **スケジューリングウィンドウ:** フェアシェアアルゴリズムは、ロールタイムウィンドウ上での使用を考慮します。 公平性の目的は、そのウィンドウ内に蓄積された実行時間のみが占められます。 そのウィンドウの長さは現在28日です。 fair-share アルゴリズムが呼び出されると、28 日前から開始される使用状況が考慮されます。
--   **使用時間:** スケジューリングウィンドウ中に、すべてのグループとプロジェクトに対して、 私たちは、IBM Quantum Premium Planのすべてのシステムにおけるすべての使用状況を考慮しています。 これらには、既知の選択エラーを返すジョブだけでなく、すべての成功したジョブも含まれます。 部分的に実行された場合でも、キャンセルされたジョブは考慮されません。
--   **Fair-share algorithm:** 各グループとプロジェクトのために。 スケジューリングウィンドウの期間は、理想的な条件下でインスタンスが受け取る同等の時間に変換するために使用されます。 スケジューリングジョブの基盤として、使用される時間と同等の時間の割合が使用されます。
+-   **Provider:** An entity providing access to quantum computing. IBM Quantum Platform and IBM Cloud® are providers of Qiskit Runtime services.
+-   **Instance:** A combination of hub/group/project.
+-   **Hub:** Represents the top level of an organization such as an academic, industry, or research partner.
+-   **Group:** A mid-level structure to which access shares can be allocated by the hub for one or more collections of users (projects).
+-   **Project:** The base-level construct to which shares are allocated from the overarching group, and to which users are directly assigned.
+-   **Access share:** (This documentation uses the simplified term “share”.) A relative amount of access to IBM Quantum computing services assigned to a specific hub, group and project. The portion of access is determined by the specific allotment of shares divided by the total number of shares distributed. IBM Quantum assigns to each hub a share of the overall computational capacity of the IBM Quantum Premium Plan. Hub administrators then assign fractions of their share pool to each of their groups. Finally, group administrators assign fractions (also called shares) of their share pool to each of their projects.
+-   **Scheduling window:** The fair-share algorithm accounts for usage over a rolling time window. Only execution time accumulated within that window is accounted for the purpose of fairness. The length of that window is currently 28 days. When the fair-share algorithm is invoked, it takes into account usage starting 28 days ago.
+-   **Time used:** For every group and project, during the scheduling window, we account for all usage on all the systems of the IBM Quantum Premium Plan. These include all successful jobs, as well as jobs returning known select errors. It does not account for canceled jobs, even when partially executed.
+-   **Fair-share algorithm:** For each group and project, the duration of the scheduling window is used to convert shares into an equivalent amount of time that an instance would receive under ideal conditions. The ratio between the time used and the shares equivalent time is used as the basis for scheduling jobs.
 
-## 株式および管理
+## Shares and administration
 
-ハブの資格が、IBM Quantum Premium Planの計算能力の比例シェアを決定します。 IBM Quantumはハブに共有を割り当てます。 ハブ管理者は、これらの株式の各グループに割り当てる部分を決定します。 同様に、グループ管理者は各プロジェクトに割り当てる株式の部分を決定します。
+A hub’s entitlement determines its proportional share of the IBM Quantum Premium Plan computational capacity. IBM Quantum assigns shares to hubs. Hub administrators then decide what portion of these shares to assign to each of their groups. Similarly, group administrators will decide what portion of shares to assign to each of their projects.
 
 ![Administrator user interface.](/images/migration/admin-UI1.png)
 
-Hub 管理ユーザー インターフェイス。 これはグループに株式を割り当てるために使用されます。 ハブ共有プール全体が基盤グループに分散されます。 ハブ管理者は、グループごとにシェア値を指定することでパーセント分配を制御できます。 この例では、グループ5はハブシェアプールの2株を受け取り、全グループで合計5株以上を受け取ります。 つまり、グループ5はハブに付与された株式プールの40%を受け取ることになります。
+Hub administration user interface. This is used to assign shares to groups. The entire hub share pool is distributed to the underlying groups, and the hub administrator can control the percent distribution by specifying a share value for each group. In this example, Group 5 receives 2 shares of their hub share pool, over a total of 5 shares across all groups. That means that Group 5 receives 40% of the shares pool that the hub was granted.
 
-フェアシェアアルゴリズムでは、これらの株式がグループやプロジェクト間でどのように分配され、ジョブの優先順位を決定するかを考慮しています。
+The fair-share algorithm takes into consideration how these shares are distributed across groups and projects to determine job prioritization.
 
-スケジューリングアルゴリズムは、グループの株式とハブの株式を組み合わせて、そのグループに割り当てられた計算電力の総割合を決定します。
+The scheduling algorithm combines a group’s shares with the shares of its hub, to determine the total fraction of computational power allocated to that group.
 
-![割り当ての計算方法を説明します](/images/migration/allocation.png)
+![Illustration of how allocation is computed.](/images/migration/allocation.png)
 
-Hub-Aの60%を計算する ハブAの3株から始まり、ハブレベル(3+2=5株)の全株式間で分けます。 これにより、3/5 = 0.6 = 60%となります。 分数をグループごとに計算する場合、各ハブ内で計算を繰り返します。 したがって、グループAとグループBの分数は33%、67%となります。 次に、これらのパーセンテージをハブA分数に適用し、20named@@0になります。
+To compute the 60% for Hub-A, start with the 3 shares of Hub-A and divide between all the shares at the hub level (3 + 2 = 5 shares in total). This results in 3/5 = 0.6 = 60%. When computing the fraction per group, repeat the calculation inside each hub; the fractions for Group-A and Group-B would therefore be 33% and 67%, then apply these percentages to the Hub-A fraction, which results in 20% and 40%.
 
-## フェアシェアキューの仕組み
+## How the fair-share queue works
 
-fair-share スケジューリングアルゴリズムは、量子システム上で動的な順序で実行するジョブを選択します。これにより、インスタンスがシステムを独占できなくなります。 量子システムが追加の作業の準備ができたら、次のジョブをフェアシェアスケジューラに要求します。 スケジューラは、スケジューリングウィンドウ内で最も少ないシェアを使用したグループを最初に識別することで、次のジョブを選択します。 グループに複数のプロジェクトがあり、両方とも実行待ちのジョブがある場合。 スケジューラは、スケジューリングウィンドウで最小限のシェアを使用したプロジェクトを識別します。 最後に、プロジェクトが複数のジョブを送信した場合、スケジューラは最も古いジョブを最初に選択します。 したがって、プロジェクト内では、スケジューラはファーストインファーストアウト(FIFO)ベースで動作します。
+The fair-share scheduling algorithm select jobs to execute on a quantum system in a dynamic order so that no instance can monopolize the system. When a quantum system is ready for additional work, it requests the next job from the fair-share scheduler. The scheduler selects the next job by first identifying the group that has used the least amount of their share within the scheduling window. If the group has more than one project, and both have jobs waiting to be executed, then the scheduler identifies the project that has used the least of their share within the scheduling window. Finally, if the project has submitted more than one job, the scheduler will select the oldest job first. Thus, within a project, the scheduler works on a first-in-first-out (FIFO) basis.
 
-次の例では、2つのハブの間に7つのインスタンスが配置されています。 ジョブがシステムを流れるにつれ、各グループとプロジェクトは効果的に割り当てられたシェアのほんの一部を消費します。 以下の最初の画像は、時t1の状態を示しています。 ブラケットの間には、割り当てられた株式の一部として消費を報告しています。 フェア共有アルゴリズムは最初に、括弧の間に最小の数字を持つグループを識別します。 ブラケットの中で最も少ない数のプロジェクトが最終的にそのプロジェクトによって提出された最も古い仕事を選択します
+In the following example, we have seven instances arranged between two different hubs. As jobs flow through the system, each group and project consumes some fraction of its effective allotted share. The first image below describes the state at time t1. In between brackets we report the consumption as a fraction of the allotted shares. The fair-share algorithm first identifies the group with the smallest number in between brackets, then the project with the least number in the brackets, and finally it selects the oldest job submitted by that project.
 
 ![Fair-share queue example.](/images/migration/fairshare3.png)
 
-割り当てられた共有に対する消費(括弧内)のスナップショットビュー。 このシナリオには、7つの異なるH/G/Pがハブ、グループ、およびプロジェクトに配置されています。 次に選択されたグループまたはプロジェクトは、割り当てられた株式の最小消費割合を持つものです。 この例では、Hub-A/Group-1/Project-Y が選択され、プロジェクト内で最も古いジョブ (最初に送信) が実行されます。
+A snapshot view of consumption (in brackets) relative to the assigned shares. This scenario has seven different H/G/Ps arranged into hubs, groups, and projects. The next selected group and or project is the one with the smallest consumed fraction of the assigned shares. In this example, the Hub-A/Group-1/Project-Y is selected, and the oldest job (first submitted) in the project is executed.
 
-システムが追加のジョブの準備ができたら、選択を繰り返します。 次の画像では、時間t2のキューの状態を表します。 なお、グループAとプロジェクトBの消費量は、t1とt2の間で発生した以前の消費量を考慮して更新されたことに注意してください。
+When the system is ready for an additional job, it repeats the selection. In the following image we represent the state of the queue at time t2. Notice that Group A and Project B consumption were updated to account for the previous consumption accrued between t1 and t2.
 
 ![Fair-share queue example two.](/images/migration/fairshare4.png)
 
-以前のジョブの実行を反映したフェア共有の優先順位を再設定しました。 新しいH/G/P(Hub-B/Group-2/Project-N)が更新された値に基づいて選択されます。
+Recomputed fair-share priorities reflecting the previous job execution. A new H/G/P (Hub-B/Group-2/Project-N) is selected based on these updated values.
 
-ユーザーが特定の IBM Quantum システムにジョブを送信する場合に注意してください。 フェアシェアアルゴリズムアカウントは、公平性を決定する際に、IBM Quantum Premium Plan内のユーザーが利用可能なすべてのシステムで使用されることを考慮します。
+Note that when a user sends jobs to a specific IBM Quantum system, the fair-share algorithm accounts takes into account usage across all systems available to the user in the IBM Quantum Premium Plan when determining fairness.
 
-## キューでの私の仕事の位置は何ですか？
+## What is my job’s position in the queue?
 
-上記のように、同じプロジェクトを通じてスケジューラに送信されたすべてのジョブはFIFO順序で実行されます。 しかし、グローバルな実行順序は、fair-share アルゴリズムによって管理されます。 その結果 ジョブ送信とジョブ実行の間の時間は、システムをアクティブに待機しているインスタンスの使用パターンによって変動する可能性があります。
+As described above, all jobs submitted to the scheduler through the same project will execute in FIFO order. However, global execution order is governed by the fair-share algorithm. Consequently, the time between job submission and job execution can fluctuate depending on usage pattern of the instances which have jobs actively waiting for the system.
 
-待機時間の見積もりは、IBM Quantum PlatformとQiskitを介して提供されます。 計算時間は、1つの可能な実行パターンを予測するスケジューリングシミュレーションの結果です。 システムを待つ全てのジョブの現在の公平な共有順序と各ジョブの大まかな実行状況を考えると fair-share アルゴリズムの動的な性質は、この推定時間が固定されておらず、時には劇的に変動する可能性があることを意味します。 この待ち時間も、Qiskit Runtime ジョブの実行時間の推定に固有の制限の対象となります。 これらのジョブでは、正確な時間の推定が不可能である場合、許容される最大ランタイムがプロキシとして使用されます。 実際には、Qiskit Runtimeジョブの期間を最大8時間まで過大評価できることを意味します。 プレミアムプランをご利用のお客様に、Qiskit Runtimeジョブの最大許容期間を設定します。
+A wait-time estimate is provided through IBM Quantum Platform and via Qiskit. The computed time is the result of a scheduling simulation that predicts one possible execution pattern, given the current fair-share ordering of all the jobs waiting for that system and the approximate runtime of each job. The dynamic nature of the fair-share algorithm means that this estimated time is not fixed and can vary, sometimes dramatically. This wait time is also subject to limitations inherent in estimating the execution time for Qiskit Runtime jobs. For these jobs, where an accurate estimation of time is not feasible, the maximum allowed runtime is used as a proxy. In practice, this means that the duration for a Qiskit Runtime job can be over-estimated by up to eight hours, the maximum allowed Qiskit Runtime job duration for Premium Plan users.
 
-キュー内のジョブの位置は、format@@0(https://quantum.ibm.com/jobs)の**キュー位置**列にリストされています。
+The job’s position in the queue is listed in the **Queue position** column on the [Jobs page](https://quantum.ibm.com/jobs).
 
-## 次のステップ
+## Next steps
 
 <Admonition type="tip" title="Recommendations">
-    - format@@2(https://learning.quantum.ibm.com/tutorial/grovers-algorithm) チュートリアルを試してみてください。
-    - format@@0(monitor-job) の方法を学びます。
+    - Try the [Grover's algorithm](https://learning.quantum.ibm.com/tutorial/grovers-algorithm) tutorial.
+    - Learn how to [Monitor a job](monitor-job).
 </Admonition>
