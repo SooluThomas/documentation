@@ -1,37 +1,37 @@
 ---
 title: AI transpiler passes
-description: AIトランスパイラーのパスと使用方法
+description: What are the AI transpiler passes and how to use them
 ---
 
 # AI transpiler passes
 
-<unk>
-AI搭載トランスパイラーパスは、いくつかのトランスパイラータスクに対して「従来の」qiskitパスのドロップイン代替として機能する実験パスです。 これらは、多くの場合、既存のヒューリスティックアルゴリズムよりも優れた結果を生成します(たとえば、深度が低く、CNOTカウント)。 ブール満足度ソルバーのような最適化アルゴリズムよりもはるかに速いのです AIトランスパイラーはクラウド上で実行され、IBM Quantum Premiumプランのユーザーが利用できます。
+​
+The AI-powered transpiler passes are experimental passes that work as a drop-in replacement of "traditional" qiskit passes for some transpiling tasks. They often produce better results than existing heuristic algorithms (such as lower depth and CNOT count), but are also much faster than optimization algorithms such as Boolean satisfiability solvers. The AI transpiler passes run on the cloud and are available to IBM Quantum Premium Plan users.
 
 <Admonition type="note">
-    これは、IBM Quantum Premium Planでのみ利用可能な実験的機能です。
-    AI搭載トランスパイラーパスはアルファリリース状態になっており、変更されることがあります。
+    This is an experimental feature available only to the IBM Quantum Premium Plan.
+    The AI-powered transpiler passes are in alpha release status, subject to change.
 </Admonition>
 
-現在使用可能なパスは次のとおりです。
+The following passes are currently available:
 
-**ルーティングパス**
+**Routing passes**
 
--   `AIRouting`: レイアウト選択と回路ルーティング
+-   `AIRouting`: Layout selection and circuit routing
 
-以下のパスは、Q1 2024で利用可能になります。
+The following passes will be available in Q1 2024.
 
-**回路合成パス**
+**Circuit synthesis passes**
 
--   `AICliffordSynthesis`: Clifford 回路合成
--   `AILinearFunctionSynthesis`: 線形機能回路合成
--   `AIPermutationSynthesis`: 変異回路合成
+-   `AICliffordSynthesis`: Clifford circuit synthesis
+-   `AILinearFunctionSynthesis`: Linear function circuit synthesis
+-   `AIPermutationSynthesis`: Permutation circuit synthesis
 
-クラウドサービスを通過する AI トランスパイラーを使用するには、`qiskit-transpiler-service` パッケージをインストールします (手順 [here](qiskit-transpiler-service#install-transpiler-service) を参照してください)。
+To use the AI transpiler passes through our cloud services, install the `qiskit-transpiler-service` package (see instructions [here](qiskit-transpiler-service#install-transpiler-service)).
 
-## AIルーティングパス
+## AI routing pass
 
-`AIRouting` パスはレイアウトステージとルーティングステージの両方を行います。 以下のように、`PassManager` 内で使用できます。
+The `AIRouting` pass acts both as a layout stage and a routing stage. It can be used within a `PassManager` as follows:
 
 ```python
 from qiskit.transpiler import PassManager
@@ -47,14 +47,14 @@ circuit = EfficientSU2(120, entanglement="circular", reps=1).decompose()
 transpiled_circuit = ai_passmanager.run(circuit)
 ```
 
-`target` は`optimization_level` (1, 2) のどのバックエンドをルーティングするかを決定します。 または 3) プロセスに費やす計算の労力を決定します (通常、高ければ高いほど結果は良くなりますが、時間がかかります)。 そして、 `layout_mode` はレイアウトの選択方法を指定します。
-`layout_mode` には以下のオプションが含まれています。
+Here, the `target` determines which backend to route for, the `optimization_level` (1, 2, or 3) determines the computational effort to spend in the process (higher usually gives better results but takes longer), and the `layout_mode` specifies how to handle the layout selection.
+The `layout_mode` includes the following options:
 
--   `keep`: 以前の transpiler が設定したレイアウトを考慮します (または設定されていない場合は簡単なレイアウトを使用します)。 これは通常、回路をデバイスの特定の量子ビット上で実行する必要がある場合にのみ使用されます。 最適化の余地が少ないので、結果が悪くなることがよくあります。
--   `improve`: これは、前のトランスパイラーが設定したレイアウトを開始点として使用します。 レイアウトの最初の推測に適した場合に便利です。 例えば回路は装置の結合マップに従うように作られています `AIRouting`パスと組み合わせた他の特定のレイアウトパスを試してみたい場合にも便利です。
--   `optimize`: これはデフォルトのモードです。 レイアウト推測が適切でない一般的な回路に最適です。 このモードは以前のレイアウト選択を無視します。
+-   `keep`: This respects the layout set by the previous transpiler passes (or uses the trivial layout if not set). It is typically only used when the circuit must be run on specific qubits of the device. It often produces worse results because it has less room for optimization.
+-   `improve`: This uses the layout set by the previous transpiler passes as a starting point. It is useful when you have a good initial guess for the layout; for example, for circuits that are built in a way that approximately follows the device's coupling map. It is also useful if you want to try other specific layout passes combined with the `AIRouting` pass.
+-   `optimize`: This is the default mode. It works best for general circuits where you might not have good layout guesses. This mode ignores previous layout selections.
 
 <Admonition type="tip" title="Recommendations">
-    - format@@2format@@3(https://learning.quantum.ibm.com/tutorial/reduce-transpiled-circuit-depth-with-circuit-cuting)チュートリアルのQiskitパターンでトランスパレーションを使用します。
-    - [Qiskit transpiler service API documentation.](https://cloud-transpiler-experimental.quantum-computing.ibm.com/docs)
+    - Use transpilation with Qiskit Patterns in the [Reduce transpiled circuit depth, with circuit cutting](https://learning.quantum.ibm.com/tutorial/reduce-transpiled-circuit-depth-with-circuit-cutting) tutorial.
+    - Review the [Qiskit transpiler service API documentation.](https://cloud-transpiler-experimental.quantum-computing.ibm.com/docs)
 </Admonition>
